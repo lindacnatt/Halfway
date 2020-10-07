@@ -11,11 +11,21 @@ import SwiftUI
 struct SignInView: View {
     var body: some View {
         VStack {
-            Text("Halfway")
+            Spacer()
+            Text("halfway")
+                .font(.largeTitle)
+                .foregroundColor(ColorManager.mainColor)
+                .fontWeight(.bold)
+            Spacer()
             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                Text("Sign in with Apple").padding(10)
-                }
-            .foregroundColor(Color.white).background(ColorManager.mainColor).cornerRadius(20.0)
+                Text("Sign in with Apple")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 80)
+            }
+            .padding()
+            .foregroundColor(Color.black).background(ColorManager.mainColor).cornerRadius(.infinity)
+            Spacer()
         }
     }
 }
