@@ -68,7 +68,7 @@ struct SessionView: View {
                     
                     Spacer()
                 }.padding(.bottom)
-            }.padding()
+            }.padding(.horizontal)
         }
     }
     

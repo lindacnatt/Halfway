@@ -9,28 +9,41 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    var coordinate = CLLocationCoordinate2D(latitude: 59.349820, longitude: 18.070511)
+    var centerCoordinate = CLLocationCoordinate2D(latitude: 59.349820, longitude: 18.070511)
+    var userCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.070581)
+    var friendCoordinate = CLLocationCoordinate2D(latitude: 59.349800, longitude: 18.070501)
+    let screenHeight = UIScreen.main.bounds.height
+    let scrennWidth = UIScreen.main.bounds.width
+    
+    private let pointer = UIImageView(image: UIImage(contentsOfFile: "user2"))
     
     func makeUIView(context: Context) -> MKMapView {
         let mkMapView = MKMapView()
         mkMapView.delegate = context.coordinator
         
-        /* Configure to move the compass button if needed
-        mkMapView.showsCompass = false // hides current compass, which shows only on map turning
+        mkMapView.showsCompass = false
         let compassBtn = MKCompassButton(mapView: mkMapView)
-        compassBtn.frame.origin = CGPoint(x: 400, y: 730) // you may use GeometryReader to replace it's position
-        
-        compassBtn.compassVisibility = .visible // compass will always be on map
+        compassBtn.frame.origin = CGPoint(x: scrennWidth - 50, y: screenHeight - 100)
+        compassBtn.compassVisibility = .adaptive
         mkMapView.addSubview(compassBtn)
-        */
+        
         return mkMapView
     }
     
-    func updateUIView(_ uiView: MKMapView, context: Context) {
+    func updateUIView(_ mapView: MKMapView, context: Context) {
         let span = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.005)
-        let region = MKCoordinateRegion(center: coordinate, span: span)
-        uiView.setRegion(region, animated: true)
+        let region = MKCoordinateRegion(center: centerCoordinate, span: span)
+        mapView.setRegion(region, animated: true)
         
+        let user = MKPointAnnotation()
+        user.coordinate = userCoordinate
+        user.title = "user"
+        mapView.addAnnotation(user)
+        
+        let friend = MKPointAnnotation()
+        friend.coordinate = friendCoordinate
+        friend.title = "friend"
+        mapView.addAnnotation(friend)
     }
     
     func makeCoordinator() -> Coordinator {
