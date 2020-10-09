@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8459641E2530612F0067C6C7 /* FinishedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459641D2530612F0067C6C7 /* FinishedView.swift */; };
 		CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D96252DA90800B1BDF4 /* AppDelegate.swift */; };
 		CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D98252DA90800B1BDF4 /* SceneDelegate.swift */; };
 		CA553D9B252DA90800B1BDF4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D9A252DA90800B1BDF4 /* ContentView.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8459641D2530612F0067C6C7 /* FinishedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishedView.swift; sourceTree = "<group>"; };
 		CA553D93252DA90800B1BDF4 /* Halfway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Halfway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA553D96252DA90800B1BDF4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA553D98252DA90800B1BDF4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				CA553D9C252DA90B00B1BDF4 /* Assets.xcassets */,
 				CA553DA1252DA90B00B1BDF4 /* LaunchScreen.storyboard */,
 				CA553DA4252DA90B00B1BDF4 /* Info.plist */,
+				8459641D2530612F0067C6C7 /* FinishedView.swift */,
 				CA553D9E252DA90B00B1BDF4 /* Preview Content */,
 			);
 			path = Halfway;
@@ -269,6 +272,7 @@
 			files = (
 				CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,
+				8459641E2530612F0067C6C7 /* FinishedView.swift in Sources */,
 				CA553D9B252DA90800B1BDF4 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +370,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +424,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
