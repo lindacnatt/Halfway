@@ -25,8 +25,8 @@ struct SignInView: View {
             }
             .padding()
             .foregroundColor(Color.black).background(ColorManager.mainColor).cornerRadius(.infinity)
-            Spacer()
-        }
+            
+        }.padding(.bottom)
     }
 }
 
