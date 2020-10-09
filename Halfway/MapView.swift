@@ -14,9 +14,18 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mkMapView = MKMapView()
         mkMapView.delegate = context.coordinator
+        
+        /* Configure to move the compass button if needed
+        mkMapView.showsCompass = false // hides current compass, which shows only on map turning
+        let compassBtn = MKCompassButton(mapView: mkMapView)
+        compassBtn.frame.origin = CGPoint(x: 400, y: 730) // you may use GeometryReader to replace it's position
+        
+        compassBtn.compassVisibility = .visible // compass will always be on map
+        mkMapView.addSubview(compassBtn)
+        */
         return mkMapView
     }
-
+    
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let span = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.005)
         let region = MKCoordinateRegion(center: coordinate, span: span)

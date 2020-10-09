@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct SessionView: View {
     @State var showingEndOptions = false
@@ -47,24 +48,23 @@ struct SessionView: View {
                             .font(.headline)
                         Text("9 min away")
                             .font(.footnote)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.orange)
                     }
                     
-                    CircleImage(image: Image("user2"), strokeColor: Color.blue)
+                    CircleImage(image: Image("user2"), strokeColor: Color.orange)
                         
                 }
                 Spacer()
                 HStack{
-                    CircleImage(image: Image("user1"), strokeColor: Color.orange)
+                    CircleImage(image: Image("user1"), strokeColor: Color.blue)
                     VStack(alignment: .leading){
                         Text("You")
                             .bold()
                             .font(.headline)
                         Text("7 min away")
                             .font(.footnote)
-                            .foregroundColor(.orange)
+                            .foregroundColor(.blue)
                     }
-                    //.background(Color.white.opacity(0.6)) Will the text be hard to read?
                     
                     Spacer()
                 }.padding(.bottom)
