@@ -19,11 +19,12 @@ struct FinishedView: View {
             Button(action: {}) {
                 Text("Yes! (end session)")
                     .font(.headline)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(.infinity)
-                
-            }.padding()
+            }
+            .padding()
+            .background(Color.orange)
+            .foregroundColor(.white)
+            .cornerRadius(.infinity)
+            .padding()
             Button(action: {}) {
                 Text("No, not yet")
             }
