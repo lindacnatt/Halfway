@@ -15,6 +15,7 @@
 		CA553DA3252DA90B00B1BDF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA553DA1252DA90B00B1BDF4 /* LaunchScreen.storyboard */; };
 		CA553DAE252DA90C00B1BDF4 /* HalfwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DAD252DA90C00B1BDF4 /* HalfwayTests.swift */; };
 		CA553DB9252DA90C00B1BDF4 /* HalfwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */; };
+		CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEC898E25304C75005975EA /* CreateInviteView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		CA553DB4252DA90C00B1BDF4 /* HalfwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HalfwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfwayUITests.swift; sourceTree = "<group>"; };
 		CA553DBA252DA90C00B1BDF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CAEC898E25304C75005975EA /* CreateInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				CA553D96252DA90800B1BDF4 /* AppDelegate.swift */,
 				CA553D98252DA90800B1BDF4 /* SceneDelegate.swift */,
 				CA553D9A252DA90800B1BDF4 /* ContentView.swift */,
+				CAEC898E25304C75005975EA /* CreateInviteView.swift */,
 				CA553D9C252DA90B00B1BDF4 /* Assets.xcassets */,
 				CA553DA1252DA90B00B1BDF4 /* LaunchScreen.storyboard */,
 				CA553DA4252DA90B00B1BDF4 /* Info.plist */,
@@ -270,6 +273,7 @@
 				CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,
 				CA553D9B252DA90800B1BDF4 /* ContentView.swift in Sources */,
+				CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
