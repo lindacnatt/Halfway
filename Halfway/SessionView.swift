@@ -9,11 +9,16 @@
 import SwiftUI
 import MapKit
 
+
+var userCoordinate = CLLocationCoordinate2D(latitude: 59.339000, longitude: 18.065191)
+var friendCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
+let userAnnotations = [UserAnnotation(title: "user", subtitle: "tjena",coordinate: userCoordinate), UserAnnotation(title: "friend", subtitle: "tjena",coordinate: friendCoordinate)]
+
 struct SessionView: View {
     @State var showingEndOptions = false
     var body: some View {
         ZStack{
-            MapView()
+            MapView(annotations: userAnnotations)
                 .edgesIgnoringSafeArea(.all)
             VStack{
                 HStack{
@@ -41,6 +46,7 @@ struct SessionView: View {
                     
                   
                     Spacer()
+                    /*
                     VStack(alignment: .leading){
                         Text("Friend")
                             .bold()
@@ -50,12 +56,11 @@ struct SessionView: View {
                             .foregroundColor(.orange)
                     }
                     
-                    CircleImage(image: Image("friend"), strokeColor: Color.orange)
-                        
+                        */
                 }
                 Spacer()
+                /*
                 HStack{
-                    CircleImage(image: Image("user"), strokeColor: Color.blue)
                     VStack(alignment: .leading){
                         Text("You")
                             .bold()
@@ -67,6 +72,7 @@ struct SessionView: View {
                     
                     Spacer()
                 }.padding(.bottom)
+ */
             }.padding(.horizontal)
         }
     }

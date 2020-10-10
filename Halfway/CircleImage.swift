@@ -17,18 +17,17 @@ struct CircleImage: View {
         image
             .resizable()
             
-            .scaledToFit()
-            .frame(maxHeight: 100, alignment: .center)
+            .aspectRatio(contentMode: .fill)
             .clipShape(Circle())
+            
             .overlay(
                 Circle().stroke(strokeColor, lineWidth: strokeWidth))
-            .shadow(radius: 10)
-            
+            .frame(width: 100, height: 100, alignment: .center)
     }
 }
 
 struct CircleImage_Previews: PreviewProvider {
     static var previews: some View {
-        CircleImage(image: Image("user1"), strokeColor: Color.orange)
+        CircleImage(image: Image("user"), strokeColor: Color.orange)
     }
 }

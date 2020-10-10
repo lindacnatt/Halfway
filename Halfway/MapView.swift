@@ -8,9 +8,29 @@
 import SwiftUI
 import MapKit
 
+class UserAnnotation: NSObject, MKAnnotation {
+    let title: String?
+    let subtitle: String?
+    let coordinate: CLLocationCoordinate2D
+    
+    init(
+        title: String?,
+        subtitle: String?,
+        coordinate: CLLocationCoordinate2D) {
+            self.title = title
+            self.subtitle = subtitle
+            self.coordinate = coordinate
+    }
+}
+
+
+
+var user = ["name": "Johannes", "timeLeft": "7", "image": "user"]
+let friend = ["name": "Linda", "timeLeft": "5", "image": "friend"]
+
 struct MapView: UIViewRepresentable {
     
-    var centerCoordinate = CLLocationCoordinate2D(latitude: 59.349820, longitude: 18.070511)
+    var centerCoordinate = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
     let screenHeight = UIScreen.main.bounds.height
     let scrennWidth = UIScreen.main.bounds.width
     
@@ -32,10 +52,9 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        let span = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.005)
+        let span = MKCoordinateSpan(latitudeDelta: 0.031, longitudeDelta: 0.019)
         let region = MKCoordinateRegion(center: centerCoordinate, span: span)
         mapView.setRegion(region, animated: true)
-
     }
     
     func makeCoordinator() -> Coordinator {
@@ -45,36 +64,44 @@ struct MapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: "MapViewAnnotation") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "MapViewAnnotation")
-            view.canShowCallout = true
+            view.canShowCallout = false
             
-            view.image = UIImage(named: view.annotation?.title! ?? "user")
+            let annotationView = setAnnotation(view.annotation!)
+            view.image = annotationView.asUIImage()
             
             return view
         
         }
+        
+        func setAnnotation(_ annotation: MKAnnotation) -> some View{
+            
+            var annotationView = AnnotationView(image: Image("user"),
+                                             strokeColor: Color.blue,
+                                             userName: "You",
+                                             timeLeft: "0")
+            
+            if (annotation.title! == "user"){
+                annotationView.image = Image(user["image"] ?? "user")
+                annotationView.strokeColor = Color.blue
+                annotationView.userName = user["name"] ?? "You"
+                annotationView.timeLeft = user["timeLeft"] ?? "0"
+                
+            }else if (annotation.title! == "friend"){
+                annotationView.image = Image(friend["image"] ?? "user")
+                annotationView.strokeColor = Color.orange
+                annotationView.userName = friend["name"] ?? "Friend"
+                annotationView.timeLeft = friend["timeLeft"] ?? "0"
+            }
+            
+            return annotationView
+        }
     }
 }
 
-class UserAnnotation: NSObject, MKAnnotation {
-    let title: String?
-    let subtitle: String?
-    let coordinate: CLLocationCoordinate2D
-    
-init(title: String?,
-     subtitle: String?,
-     coordinate: CLLocationCoordinate2D) {
-        self.title = title
-        self.subtitle = subtitle
-        self.coordinate = coordinate
-    }
-}
 
-var userCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.070581)
-var friendCoordinate = CLLocationCoordinate2D(latitude: 59.349800, longitude: 18.070501)
-let userAnnotations = [UserAnnotation(title: "user", subtitle: "då", coordinate: userCoordinate), UserAnnotation(title: "friend", subtitle: "tjena",coordinate: friendCoordinate)]
 
 struct MapView_Previews: PreviewProvider {
     static var previews: some View {
-        MapView(annotations: userAnnotations)
+        MapView()
     }
 }
