@@ -16,31 +16,32 @@ struct AnnotationView: View {
     var timeLeft: String
     
     var body: some View {
-        HStack{
+        VStack{
             VStack{
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(strokeColor, lineWidth: strokeWidth))
-                .frame(width: 100, height: 100, alignment: .center)
-            Triangle()
-                .fill(strokeColor)
-                .frame(width: 30, height: 30)
-                .rotationEffect(.degrees(180))
-                .offset(y:-8)
-                    
-            }
-            VStack(alignment: .leading){
+                Spacer()
                 Text(userName)
                     .bold()
                     .font(.headline)
                 Text("\(timeLeft) min away")
                     .font(.footnote)
-                
-            }.padding(.bottom, 50)
-        }.padding(5)
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(strokeColor, lineWidth: strokeWidth))
+                    .frame(width: 100, height: 100, alignment: .center)
+                    .offset(y: 8)
+                Triangle()
+                    .fill(strokeColor)
+                    .frame(width: 30, height: 30)
+                    .rotationEffect(.degrees(180))
+                    
+            }.frame(maxHeight: .infinity, alignment: .center)
+            
+            Spacer()
+                .frame(maxHeight: .infinity, alignment: .center)
+        }.padding()
     }
 }
 

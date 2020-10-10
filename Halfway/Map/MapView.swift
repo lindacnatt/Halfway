@@ -12,7 +12,7 @@ var user = ["name": "Johannes", "timeLeft": "7", "image": "user"]
 let friend = ["name": "Linda", "timeLeft": "5", "image": "friend"]
 
 struct MapView: UIViewRepresentable {
-    
+    let locationManager = CLLocationManager()
     var centerCoordinate = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
     let screenHeight = UIScreen.main.bounds.height
     let scrennWidth = UIScreen.main.bounds.width
@@ -35,9 +35,23 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        let span = MKCoordinateSpan(latitudeDelta: 0.031, longitudeDelta: 0.019)
-        let region = MKCoordinateRegion(center: centerCoordinate, span: span)
-        mapView.setRegion(region, animated: true)
+//        let span = MKCoordinateSpan(latitudeDelta: 0.031, longitudeDelta: 0.019)
+//        let region = MKCoordinateRegion(center: centerCoordinate, span: span)
+//        mapView.setRegion(region, animated: true)
+        
+        mapView.showsUserLocation = true
+        let status = CLLocationManager.authorizationStatus()
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
+        
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+            let location: CLLocationCoordinate2D = locationManager.location!.coordinate
+            let span = MKCoordinateSpan(latitudeDelta: 0.009, longitudeDelta: 0.009)
+            let region = MKCoordinateRegion(center: location, span: span)
+            mapView.setRegion(region, animated: true)
+        }
     }
     
     func makeCoordinator() -> Coordinator {
@@ -49,8 +63,10 @@ struct MapView: UIViewRepresentable {
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: "MapViewAnnotation") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "MapViewAnnotation")
             view.canShowCallout = false
             
-            let annotationView = setAnnotation(view.annotation!)
-            view.image = annotationView.asUIImage()
+            if !(view.annotation == nil){
+                let annotationView = setAnnotation(view.annotation!)
+                view.image = annotationView.asUIImage()
+            }
             
             return view
         
@@ -58,18 +74,12 @@ struct MapView: UIViewRepresentable {
         
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
             
-            var annotationView = AnnotationView(image: Image("user"),
+            var annotationView = AnnotationView(image: Image(user["image"] ?? "user"),
                                              strokeColor: Color.blue,
-                                             userName: "You",
-                                             timeLeft: "0")
+                                             userName: user["name"] ?? "You",
+                                             timeLeft: user["timeLeft"] ?? "0")
             
-            if (annotation.title! == "user"){
-                annotationView.image = Image(user["image"] ?? "user")
-                annotationView.strokeColor = Color.blue
-                annotationView.userName = user["name"] ?? "You"
-                annotationView.timeLeft = user["timeLeft"] ?? "0"
-                
-            }else if (annotation.title! == "friend"){
+            if (annotation.title! == "friend"){
                 annotationView.image = Image(friend["image"] ?? "user")
                 annotationView.strokeColor = Color.orange
                 annotationView.userName = friend["name"] ?? "Friend"
@@ -78,6 +88,7 @@ struct MapView: UIViewRepresentable {
             
             return annotationView
         }
+        
     }
 }
 
