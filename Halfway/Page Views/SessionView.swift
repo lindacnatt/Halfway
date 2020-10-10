@@ -28,7 +28,9 @@ struct SessionView: View {
                     }) {
                         Text("End session")
                             .font(.caption)
+                            .foregroundColor(.red)
                     }
+                    
                     .alert(isPresented: $showingEndOptions) {
                         Alert(
                             title: Text("End session?"),
@@ -38,41 +40,14 @@ struct SessionView: View {
                             
                         )
                     }
-                    .foregroundColor(.red)
                     .padding()
                     .background(Color.white)
                     .cornerRadius(15)
                     .shadow(radius: 6, x: 6, y: 6)
                     
-                  
                     Spacer()
-                    /*
-                    VStack(alignment: .leading){
-                        Text("Friend")
-                            .bold()
-                            .font(.headline)
-                        Text("9 min away")
-                            .font(.footnote)
-                            .foregroundColor(.orange)
-                    }
-                    
-                        */
                 }
                 Spacer()
-                /*
-                HStack{
-                    VStack(alignment: .leading){
-                        Text("You")
-                            .bold()
-                            .font(.headline)
-                        Text("7 min away")
-                            .font(.footnote)
-                            .foregroundColor(.blue)
-                    }
-                    
-                    Spacer()
-                }.padding(.bottom)
- */
             }.padding(.horizontal)
         }
     }

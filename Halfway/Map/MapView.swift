@@ -8,23 +8,6 @@
 import SwiftUI
 import MapKit
 
-class UserAnnotation: NSObject, MKAnnotation {
-    let title: String?
-    let subtitle: String?
-    let coordinate: CLLocationCoordinate2D
-    
-    init(
-        title: String?,
-        subtitle: String?,
-        coordinate: CLLocationCoordinate2D) {
-            self.title = title
-            self.subtitle = subtitle
-            self.coordinate = coordinate
-    }
-}
-
-
-
 var user = ["name": "Johannes", "timeLeft": "7", "image": "user"]
 let friend = ["name": "Linda", "timeLeft": "5", "image": "friend"]
 
