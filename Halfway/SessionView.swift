@@ -11,7 +11,6 @@ import MapKit
 
 struct SessionView: View {
     @State var showingEndOptions = false
-    
     var body: some View {
         ZStack{
             MapView()
@@ -51,12 +50,12 @@ struct SessionView: View {
                             .foregroundColor(.orange)
                     }
                     
-                    CircleImage(image: Image("user2"), strokeColor: Color.orange)
+                    CircleImage(image: Image("friend"), strokeColor: Color.orange)
                         
                 }
                 Spacer()
                 HStack{
-                    CircleImage(image: Image("user1"), strokeColor: Color.blue)
+                    CircleImage(image: Image("user"), strokeColor: Color.blue)
                     VStack(alignment: .leading){
                         Text("You")
                             .bold()
