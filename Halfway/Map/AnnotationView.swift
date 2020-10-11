@@ -11,7 +11,6 @@ import SwiftUI
 struct AnnotationView: View {
     var image: Image
     var strokeColor: Color
-    var strokeWidth: CGFloat = 5
     var userName: String
     var timeLeft: String
     
@@ -19,29 +18,27 @@ struct AnnotationView: View {
         VStack{
             VStack{
                 Spacer()
-                Text(userName)
-                    .bold()
-                    .font(.headline)
-                Text("\(timeLeft) min away")
-                    .font(.footnote)
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(strokeColor, lineWidth: strokeWidth))
-                    .frame(width: 100, height: 100, alignment: .center)
+                Group{
+                    Text(userName)
+                        .bold()
+                        .font(.headline)
+                    Text("\(timeLeft) min away")
+                        .font(.footnote)
+                    CircleImage(image: image, width: 80, height: 80, strokeColor: strokeColor)
+                }
                     .offset(y: 8)
+                
                 Triangle()
                     .fill(strokeColor)
-                    .frame(width: 30, height: 30)
+                    .frame(width: 25, height: 25)
                     .rotationEffect(.degrees(180))
                     
             }.frame(maxHeight: .infinity, alignment: .center)
             
             Spacer()
                 .frame(maxHeight: .infinity, alignment: .center)
-        }.padding()
+        }
+            .padding()
     }
 }
 
