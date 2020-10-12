@@ -5,6 +5,7 @@
 //  Created by Johannes on 2020-10-10.
 //  Copyright © 2020 Halfway. All rights reserved.
 //
+//  About: Annotation for users, to be used in array when passing annotations to the map.
 
 import MapKit
 

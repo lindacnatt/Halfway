@@ -5,6 +5,7 @@
 //  Created by Johannes on 2020-10-10.
 //  Copyright © 2020 Halfway. All rights reserved.
 //
+//About: View making the user annotation
 
 import SwiftUI
 
@@ -25,8 +26,8 @@ struct AnnotationView: View {
                     Text("\(timeLeft) min away")
                         .font(.footnote)
                     CircleImage(image: image, width: 80, height: 80, strokeColor: strokeColor)
-                }
-                    .offset(y: 8)
+                    
+                }.offset(y: 8)
                 
                 Triangle()
                     .fill(strokeColor)
@@ -37,8 +38,8 @@ struct AnnotationView: View {
             
             Spacer()
                 .frame(maxHeight: .infinity, alignment: .center)
-        }
-            .padding()
+            
+        }.padding()
     }
 }
 

@@ -5,13 +5,13 @@
 //  Created by Johannes on 2020-10-08.
 //  Copyright © 2020 Halfway. All rights reserved.
 //
+//About: View shown during a session between two users.
 
 import SwiftUI
 import MapKit
 
-
-var userCoordinate = CLLocationCoordinate2D(latitude: 59.339000, longitude: 18.065191)
-var friendCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
+//Temporary static second user annotation data
+let friendCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
 let userAnnotations = [UserAnnotation(title: "friend", subtitle: "tjena",coordinate: friendCoordinate)]
 
 struct SessionView: View {
