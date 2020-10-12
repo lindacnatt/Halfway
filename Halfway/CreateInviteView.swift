@@ -12,31 +12,34 @@ struct CreateInviteView: View {
     @State private var showShareSheet = false
     
     var body: some View {
-        VStack{
-            Spacer()
-            VStack{
-                Text("Halfway")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.orange)
-                Text("Facilitating encounters")
-            }
-            Spacer()
-            Button(action: shareSheet) {
-                Text("Create Invite Link")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 90)
-                    .padding()
-            }
-            .background(Color.orange)
-            .cornerRadius(.infinity)
-            .padding(.bottom)
+        ZStack{
+            MapView(annotations: userAnnotations).edgesIgnoringSafeArea(.all)
+              VStack{
+                        Spacer()
+                        VStack{
+                            Text("Halfway")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.orange)
+                            Text("Facilitating encounters")
+                        }
+                        Spacer()
+                        Button(action: shareSheet) {
+                            Text("Create Invite Link")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 90)
+                                .padding()
+                        }
+                        .background(Color.orange)
+                        .cornerRadius(.infinity)
+                        .padding(.bottom)
+                    }
+                        .padding(.bottom)
+            //            .sheet(isPresented: $showShareSheet) {
+            //                ShareSheet(activityItems: ["Invitation Link"])
+            //            }
         }
-            .padding(.bottom)
-//            .sheet(isPresented: $showShareSheet) {
-//                ShareSheet(activityItems: ["Invitation Link"])
-//            }
     }
     func shareSheet(){
         guard let link = URL(string: "https://www.apple.com") else { return }
