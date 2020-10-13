@@ -14,6 +14,7 @@ struct CreateInviteView: View {
     var body: some View {
         ZStack{
             MapView(annotations: userAnnotations).edgesIgnoringSafeArea(.all)
+            Rectangle().edgesIgnoringSafeArea(.all).foregroundColor(Color.white).opacity(0.4)
               VStack{
                         Spacer()
                         VStack{
