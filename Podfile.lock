@@ -6,6 +6,9 @@ PODS:
     - FirebaseAnalytics (= 6.9.0)
   - Firebase/CoreOnly (6.34.0):
     - FirebaseCore (= 6.10.4)
+  - Firebase/Database (6.34.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 6.6.0)
   - FirebaseAnalytics (6.9.0):
     - FirebaseCore (~> 6.10)
     - FirebaseInstallations (~> 1.7)
@@ -24,6 +27,9 @@ PODS:
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
     - nanopb (~> 1.30906.0)
+  - FirebaseDatabase (6.6.0):
+    - FirebaseCore (~> 6.10)
+    - leveldb-library (~> 1.22)
   - FirebaseInstallations (1.7.0):
     - FirebaseCore (~> 6.10)
     - GoogleUtilities/Environment (~> 6.7)
@@ -56,6 +62,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
+  - leveldb-library (1.22)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -65,6 +72,7 @@ PODS:
 
 DEPENDENCIES:
   - Firebase/Analytics
+  - Firebase/Database
 
 SPEC REPOS:
   trunk:
@@ -72,10 +80,12 @@ SPEC REPOS:
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseDatabase
     - FirebaseInstallations
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
+    - leveldb-library
     - nanopb
     - PromisesObjC
 
@@ -84,13 +94,15 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: 3bb096873ee0d7fa4b6c70f5e9166b6da413cc7f
   FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
+  FirebaseDatabase: 13a865a4b85897462b930eb683bda8f52583713f
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   GoogleAppMeasurement: a6a3a066369828db64eda428cb2856dc1cdc7c4e
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
+  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
 
-PODFILE CHECKSUM: d34b3e10c2e50ec2e2e1169e2975c8de19c11f4a
+PODFILE CHECKSUM: 7a4e7274d334af8c0f20a59193374fc7dbf290f9
 
 COCOAPODS: 1.9.3
