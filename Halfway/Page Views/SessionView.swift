@@ -16,6 +16,7 @@ let userAnnotations = [UserAnnotation(title: "friend", subtitle: "tjena",coordin
 
 struct SessionView: View {
     @State var showingEndOptions = false
+    
     var body: some View {
         ZStack{
             MapView(annotations: userAnnotations)
@@ -26,9 +27,9 @@ struct SessionView: View {
                         print("End session pressed")
                         self.showingEndOptions.toggle()
                     }) {
-                        Text("End session")
-                            .font(.caption)
-                            .foregroundColor(.red)
+                        Image(systemName: "xmark")
+                            .font(.title)
+                            .foregroundColor(Color.black)
                     }
                     
                     .alert(isPresented: $showingEndOptions) {
@@ -42,13 +43,14 @@ struct SessionView: View {
                     }
                     .padding()
                     .background(Color.white)
-                    .cornerRadius(15)
+                    .mask(Circle())
                     .shadow(radius: 6, x: 6, y: 6)
                     
                     Spacer()
                 }
+                
                 Spacer()
-            }.padding(.horizontal)
+            }.padding()
         }
     }
     
