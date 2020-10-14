@@ -9,8 +9,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showModal = false
     var body: some View {
-        Text("Wowzaa")
+        
+        
+        Button("Show Finished-Modal") {self.showModal.toggle()}
+        .sheet(isPresented: $showModal) {
+            FinishedView(showModal: self.$showModal)
+            
+        }
     }
 }
 
