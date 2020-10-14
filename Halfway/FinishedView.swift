@@ -16,10 +16,11 @@ struct FinishedView: View {
             Text("Huzzah!")
                 .font(.largeTitle)
             Text("Looks like you've met...")
+                .padding()
+            Spacer()
             Spacer()
             Button(action: {}) {
                 Text("Yes! End session")
-                .font(.headline)
             }
             .padding()
             .background(Color.orange)
@@ -27,11 +28,11 @@ struct FinishedView: View {
             .cornerRadius(.infinity)
             .padding()
             Button(action: {self.showModal.toggle()}) {
-                Text("No, we have not met yet")
+                Text("No, we haven't met yet")
             }
             Spacer()
         }.foregroundColor(.orange)
-        
+            .font(.headline)
     }
 }
 
