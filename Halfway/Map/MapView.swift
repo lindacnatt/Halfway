@@ -20,18 +20,8 @@ struct MapView: UIViewRepresentable {
         mapView.addAnnotations(self.annotations!)
         
         //MARK: Compass button
-        mapView.showsCompass = false
-        let screenHeight = UIScreen.main.bounds.height
-        let scrennWidth = UIScreen.main.bounds.width
-        let compassBtn = MKCompassButton(mapView: mapView)
-        compassBtn.frame.origin = CGPoint(x: scrennWidth - 50, y: screenHeight - 100)
-        compassBtn.compassVisibility = .adaptive
-        mapView.addSubview(compassBtn)
-
-        return mapView
-    }
-    
-    func updateUIView(_ mapView: MKMapView, context: Context) {
+        addCompass(to: mapView)
+        
         //MARK: User Location Handling
         mapView.showsUserLocation = true
         let status = CLLocationManager.authorizationStatus()
@@ -41,49 +31,41 @@ struct MapView: UIViewRepresentable {
         //TODO: Add bool for setting when the location will be asked for.
         if (status == .authorizedAlways || status == .authorizedWhenInUse) && annotations?.count != 0{
             
-            
-            getHalfWayPoint(startPosition: locationManager.location!.coordinate, endPostition: annotations![0].coordinate){ halfWaypointCoordinates in
+            let userCoordinate = locationManager.location!.coordinate
+            let friendCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
+            getHalfWayPoint(startPosition: userCoordinate, endPostition: friendCoordinate){ halfWaypointCoordinates in
                 
-                let userDirectionRequest = MKDirections.Request()
-                let startP = MKPlacemark(coordinate: locationManager.location!.coordinate)
-                let destinationP = MKPlacemark(coordinate: halfWaypointCoordinates)
-                userDirectionRequest.source = MKMapItem(placemark: startP)
-                userDirectionRequest.destination = MKMapItem(placemark: destinationP)
-                userDirectionRequest.transportType = .walking
-                let userDirections = MKDirections(request: userDirectionRequest)
-                userDirections.calculate { response, error in
-                    guard let response = response else { return }
-                    let route = response.routes[0]
-
-                    let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
-                    print("halfway time: \(time)")
-                    //route.polyline.pointCount/2
-                    print("polyline points: \(route.polyline.pointCount)")
-                    mapView.addOverlay(route.polyline, level: .aboveRoads)
-                    
-                    let midPoint = MKPointAnnotation()
-                    midPoint.title = "Halfway"
-                    midPoint.coordinate = halfWaypointCoordinates
-                    mapView.addAnnotation(midPoint)
-                    
-                    let rect = route.polyline.boundingMapRect
-                    mapView.setVisibleMapRect(rect, edgePadding: .init(top: 50.0, left: 100.0, bottom: 50.0, right: 100.0), animated: true)
+                addPolyline(to: mapView, from: userCoordinate, to: halfWaypointCoordinates, colorId: "blue")
+                addPolyline(to: mapView, from: friendCoordinate, to: halfWaypointCoordinates, colorId: "orange")
+                let midPoint = MKPointAnnotation()
+                midPoint.title = "Halfway"
+                midPoint.coordinate = halfWaypointCoordinates
+                mapView.addAnnotation(midPoint)
+                
+                //mapView.layoutMargins = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
+                
+                //mapView.showAnnotations(mapView.annotations, animated: true)
+                
+                var zoomRect = MKMapRect.null;
+                for annotation in mapView.annotations {
+                    let annotationPoint = MKMapPoint(annotation.coordinate)
+                    let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1);
+                    zoomRect = zoomRect.union(pointRect);
                 }
-        
-            
-//
-//
+                
+                mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 100), animated: true)
+                
+                
+                
+                
            }
-            
-            
         }else if status == .authorizedAlways || status == .authorizedWhenInUse {
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
             var userLocation: CLLocationCoordinate2D = locationManager.location!.coordinate
             userLocation.latitude -= 0.002
             let span = MKCoordinateSpan(latitudeDelta: 0.009, longitudeDelta: 0.009)
             let region = MKCoordinateRegion(center: userLocation, span: span)
             mapView.setRegion(region, animated: true)
+            
         }else{
             //Used when user location is not set (Views other than SessionView)
             let centerCoordinate = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
@@ -92,7 +74,44 @@ struct MapView: UIViewRepresentable {
             mapView.setRegion(region, animated: true)
         }
         
-       
+        return mapView
+    }
+    
+    func updateUIView(_ mapView: MKMapView, context: Context) {
+        
+    }
+    
+    func addCompass(to mapView: MKMapView) -> (){
+        mapView.showsCompass = false
+        let screenHeight = UIScreen.main.bounds.height
+        let scrennWidth = UIScreen.main.bounds.width
+        let compassBtn = MKCompassButton(mapView: mapView)
+        compassBtn.frame.origin = CGPoint(x: scrennWidth - 60, y: screenHeight - 110)
+        compassBtn.compassVisibility = .adaptive
+        mapView.addSubview(compassBtn)
+    }
+    
+    func addPolyline(to mapView: MKMapView, from startPosition: CLLocationCoordinate2D, to endPostition: CLLocationCoordinate2D, colorId: String) -> (){
+        let directionRequest = MKDirections.Request()
+        let startPlacemark = MKPlacemark(coordinate: startPosition)
+        let endPlacemark = MKPlacemark(coordinate: endPostition)
+        
+        directionRequest.source = MKMapItem(placemark: startPlacemark)
+        directionRequest.destination = MKMapItem(placemark: endPlacemark)
+        directionRequest.transportType = .walking
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { response, error in
+            guard let response = response else { return }
+            let route = response.routes[0]
+            
+            let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
+            print("halfway time: \(time)")
+            print("polyline points: \(route.polyline.pointCount)")
+            route.polyline.title = colorId
+            mapView.addOverlay(route.polyline, level: .aboveRoads)
+            
+        }
     }
     
     func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPostition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
@@ -133,6 +152,8 @@ struct MapView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, MKMapViewDelegate {
+        var polyLineColor: UIColor = .blue
+        
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             //MARK: Annotation handling
             let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: "MapViewAnnotation") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "MapViewAnnotation")
@@ -148,10 +169,14 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-                let polyline = MKPolylineRenderer(overlay: overlay)
+            let polyline = MKPolylineRenderer(overlay: overlay)
+            if overlay.title == "blue"{
+                polyline.strokeColor = .blue
+            }else if (overlay.title == "orange"){
                 polyline.strokeColor = .orange
-                polyline.lineWidth = 4.0
-                return polyline
+            }
+            polyline.lineWidth = 5.0
+            return polyline
         }
         
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
