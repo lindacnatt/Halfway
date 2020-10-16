@@ -21,6 +21,7 @@
 		CA553DA3252DA90B00B1BDF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA553DA1252DA90B00B1BDF4 /* LaunchScreen.storyboard */; };
 		CA553DAE252DA90C00B1BDF4 /* HalfwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DAD252DA90C00B1BDF4 /* HalfwayTests.swift */; };
 		CA553DB9252DA90C00B1BDF4 /* HalfwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */; };
+		CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */; };
 		CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEC898E25304C75005975EA /* CreateInviteView.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		CA553DB4252DA90C00B1BDF4 /* HalfwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HalfwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfwayUITests.swift; sourceTree = "<group>"; };
 		CA553DBA252DA90C00B1BDF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteViewModel.swift; sourceTree = "<group>"; };
 		CAEC898E25304C75005975EA /* CreateInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,6 +150,7 @@
 		CA553D95252DA90800B1BDF4 /* Halfway */ = {
 			isa = PBXGroup;
 			children = (
+				CAB2142A2539D65C00F8290C /* ViewModels */,
 				CAEC898E25304C75005975EA /* CreateInviteView.swift */,
 				8F6043FF25324D6600949011 /* Page Views */,
 				8F6043FA25324BEC00949011 /* Map */,
@@ -187,6 +190,14 @@
 				CA553DBA252DA90C00B1BDF4 /* Info.plist */,
 			);
 			path = HalfwayUITests;
+			sourceTree = "<group>";
+		};
+		CAB2142A2539D65C00F8290C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */,
+				CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */,
 				8F6043F625322C2300949011 /* AnnotationView.swift in Sources */,
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
 				8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */,
