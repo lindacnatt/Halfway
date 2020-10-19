@@ -34,6 +34,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    
+    func handleIncomingDynamicLink(_ dynamicLink: DynamicLink) {
+        guard let url = dynamicLink.url else {
+            print("The Dynamic Link has no url")
+            return
+        }
+        print("Link parameter is \(url.absoluteString)")
+    }
+    
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if let incomingURL = userActivity.webpageURL {
+            print("incoming URL is \(incomingURL)")
+            let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
+                guard error == nil else {
+                    print("found an error! \(error!.localizedDescription)")
+                    return
+                }
+                if let dynamicLink = dynamicLink {
+                    self.handleIncomingDynamicLink(dynamicLink)
+                }
+            }
+            if linkHandled {
+                return true
+            } else {
+               // Maybe do other things with incoming links
+                return false
+            }
+        }
+        return false
+    }
 
 
 }
