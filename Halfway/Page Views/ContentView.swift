@@ -9,8 +9,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var data = UserRepository()
+    
     var body: some View {
-        DatePicker(selection: /*@START_MENU_TOKEN@*/.constant(Date())/*@END_MENU_TOKEN@*/, label: { /*@START_MENU_TOKEN@*/Text("Date")/*@END_MENU_TOKEN@*/ })
+        List(data.users){ user in
+            Text(user.name).font(.largeTitle)
+            Text(user.city)
+            Text(user.food)
+            
+        }.onAppear(){
+            self.data.load()
+        }
     }
 }
 
