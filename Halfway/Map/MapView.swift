@@ -156,10 +156,12 @@ struct MapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             //MARK: Annotation handling
-            let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: "MapViewAnnotation") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "MapViewAnnotation")
+            let annotationId = annotation.title ?? "NoTitleId"
+            
+            let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationId!) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
             MKAnnView.canShowCallout = false
             
-            if !(MKAnnView.annotation == nil){
+            if (MKAnnView.image == nil){
                 let SwiftUIAnnView = setAnnotation(MKAnnView.annotation!)
                 MKAnnView.image = SwiftUIAnnView.asUIImage()
             }
