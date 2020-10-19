@@ -32,20 +32,16 @@ struct MapView: UIViewRepresentable {
         if (status == .authorizedAlways || status == .authorizedWhenInUse) && annotations?.count != 0{
             
             let userCoordinate = locationManager.location!.coordinate
-            let friendCoordinate = CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
-            getHalfWayPoint(startPosition: userCoordinate, endPostition: friendCoordinate){ halfWaypointCoordinates in
+            let friendCoordinate = annotations?[0].coordinate
+            getHalfWayPoint(startPosition: userCoordinate, endPostition: friendCoordinate!){ halfWaypointCoordinates in
                 
                 addPolyline(to: mapView, from: userCoordinate, to: halfWaypointCoordinates, colorId: "blue")
-                addPolyline(to: mapView, from: friendCoordinate, to: halfWaypointCoordinates, colorId: "orange")
+                addPolyline(to: mapView, from: friendCoordinate!, to: halfWaypointCoordinates, colorId: "orange")
                 let midPoint = MKPointAnnotation()
                 midPoint.title = "Halfway"
                 midPoint.coordinate = halfWaypointCoordinates
                 mapView.addAnnotation(midPoint)
-                
-                //mapView.layoutMargins = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
-                
-                //mapView.showAnnotations(mapView.annotations, animated: true)
-                
+
                 var zoomRect = MKMapRect.null;
                 for annotation in mapView.annotations {
                     let annotationPoint = MKMapPoint(annotation.coordinate)
@@ -54,9 +50,6 @@ struct MapView: UIViewRepresentable {
                 }
                 
                 mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 100), animated: true)
-                
-                
-                
                 
            }
         }else if status == .authorizedAlways || status == .authorizedWhenInUse {
@@ -131,7 +124,6 @@ struct MapView: UIViewRepresentable {
             print("Full route time: \(time)")
             let midPolylinePointIndex = route.polyline.pointCount/2
             let halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
-            //print(route.polyline.pointCount)
             completion(halfwayCoordinates)
             
         }
@@ -171,14 +163,35 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            let polyline = MKPolylineRenderer(overlay: overlay)
-            if overlay.title == "blue"{
-                polyline.strokeColor = .blue
-            }else if (overlay.title == "orange"){
-                polyline.strokeColor = .orange
+            //MARK - Polyline Colors
+            if #available(iOS 14.0, *) {
+                let polyline = MKGradientPolylineRenderer(overlay: overlay)
+                var gradientStartColor: UIColor = .black
+                
+                if overlay.title == "blue"{
+                    gradientStartColor = UIColor(Color.blue)
+                }else if (overlay.title == "orange"){
+                    gradientStartColor = UIColor(Color.orange)
+                }
+                polyline.setColors([gradientStartColor, .darkGray], locations: polyline.locations)
+                polyline.lineWidth = 5.0
+                
+                return polyline
+                
+            } else {
+                let polyline = MKPolylineRenderer(overlay: overlay)
+                polyline.lineWidth = 5.0
+                
+                if overlay.title == "blue"{
+                    polyline.strokeColor = .blue
+                }else if (overlay.title == "orange"){
+                    polyline.strokeColor = .orange
+                }
+                
+                return polyline
             }
-            polyline.lineWidth = 5.0
-            return polyline
+            
+            
         }
         
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
