@@ -66,6 +66,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return false
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("I have received a URL through a custom scheme! \(url.absoluteString)")
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+            self.handleIncomingDynamicLink(dynamicLink)
+            return true
+        } else {
+            // Maybe handle sign in with Apple here?
+            return false
+        }
+    }
 
 
 }
