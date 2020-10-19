@@ -9,8 +9,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var data = UserRepository()
+    
     var body: some View {
-        Text("Wowzaa")
+        List(data.users){ user in
+            Text(user.name).font(.largeTitle)
+            Text(user.city)
+            Text(user.food)
+            
+        }.onAppear(){
+            self.data.load()
+        }
     }
 }
 
