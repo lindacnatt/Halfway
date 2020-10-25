@@ -23,6 +23,8 @@
 		CA553DA3252DA90B00B1BDF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA553DA1252DA90B00B1BDF4 /* LaunchScreen.storyboard */; };
 		CA553DAE252DA90C00B1BDF4 /* HalfwayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DAD252DA90C00B1BDF4 /* HalfwayTests.swift */; };
 		CA553DB9252DA90C00B1BDF4 /* HalfwayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */; };
+		CAAAEA0C2545BE4F00838BAC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */; };
+		CAAAEA0E2545C24900838BAC /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAAEA0D2545C24900838BAC /* UserProfileView.swift */; };
 		CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */; };
 		CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142D2539E6DB00F8290C /* UserModel.swift */; };
 		CAB214322539EA3000F8290C /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB214312539EA3000F8290C /* UserRepository.swift */; };
@@ -77,6 +79,8 @@
 		CA553DB4252DA90C00B1BDF4 /* HalfwayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HalfwayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA553DB8252DA90C00B1BDF4 /* HalfwayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfwayUITests.swift; sourceTree = "<group>"; };
 		CA553DBA252DA90C00B1BDF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		CAAAEA0D2545C24900838BAC /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteViewModel.swift; sourceTree = "<group>"; };
 		CAB2142D2539E6DB00F8290C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		CAB214312539EA3000F8290C /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				8F0C8C0B252F5F4700B595A3 /* SessionView.swift */,
+				CAAAEA0D2545C24900838BAC /* UserProfileView.swift */,
 			);
 			path = "Page Views";
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */,
+				CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -496,8 +502,10 @@
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
 				8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,
+				CAAAEA0C2545BE4F00838BAC /* ImagePicker.swift in Sources */,
 				8F6043E92531F7A600949011 /* ViewToUIImage.swift in Sources */,
 				8FDB0409253250BA00FED70E /* UserAnnotation.swift in Sources */,
+				CAAAEA0E2545C24900838BAC /* UserProfileView.swift in Sources */,
 				8F0C8C16252F98AD00B595A3 /* CircleImage.swift in Sources */,
 				8F6043F125322B9900949011 /* Triangle.swift in Sources */,
 				CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */,
