@@ -22,22 +22,28 @@ struct UserProfileView: View {
             ZStack {
                 Circle()
                     .fill(Color.gray)
-                
-                //either image or text on top of background circle
+                    .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
+                    .overlay(Circle()
+                        .stroke(Color.blue, lineWidth: 6))
                 if image != nil {
                     image?
                         .resizable()
-                        .scaledToFit()
+                        .aspectRatio(contentMode: .fill)
                         .clipShape(Circle())
+                        .overlay(Circle()
+                        .stroke(Color.blue, lineWidth: 6))
                 } else {
                     Text("Select image")
                 }
-               
+                
             }
+            .frame(width: 200, height: 200).padding()
             .onTapGesture {
                 self.showImagePicker = true
-            }.frame(width: 200, height: 200).padding()
+            }
             Text(" \(username)").font(.headline)
+            Divider()
+            TextField("Enter firstname", text: $username)
             Divider()
             TextField("Enter username", text: $username)
             Divider()
