@@ -24,26 +24,27 @@ struct UserProfileView: View {
                 ZStack {
                     Circle()
                         .fill(Color.gray)
-                        .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
+                        .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
                         .overlay(Circle()
-                            .stroke(Color.blue, lineWidth: 6))
+                            .stroke(Color.orange, lineWidth: 4))
                     if image != nil {
                         image?
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .clipShape(Circle())
                             .overlay(Circle()
-                                .stroke(Color.blue, lineWidth: 6))
+                                .stroke(Color.orange, lineWidth: 4))
                     } else {
-                        Image(systemName: "person").resizable().frame(width: 50, height: 50).foregroundColor(Color.white)
+                        Image(systemName: "person").resizable().frame(width: 40, height: 40).foregroundColor(Color.white)
                     }
                 }
-                .frame(width: 200, height: 200).padding()
+                .frame(width: 150, height: 150).padding()
                 Text("Select image").foregroundColor(Color.blue)
                 
             }.onTapGesture {
                 self.showImagePicker = true
             }
+            imageSuggestions()
             NameFields()
             Spacer()
             
@@ -70,20 +71,49 @@ struct NameFields: View{
     @State var firstName: String = ""
     @State var lastName: String = ""
     var body: some View {
-        VStack {
-            Text("  \(firstName) \(lastName)").font(.headline).padding()
+        VStack{
             Divider()
             HStack{
                 Text("Firstname").padding(.trailing)
-                TextField("Enter firstname", text: $firstName)
+                VStack {
+                    TextField("Enter firstname", text: $firstName).padding(.top)
+                    Divider()
+                }
             }
-            Divider()
+           
             HStack{
                 Text("Lastname").padding(.trailing)
                 TextField("Enter lastname", text: $lastName)
             }
             Divider()
+            Spacer()
         }
         
+    }
+}
+
+struct imageSuggestions : View{
+    let emojis = ["😘","😞","😎","😘","😎"]
+    
+    var body: some View{
+        VStack(alignment: .leading) {
+            Divider()
+            Text("Choose avatar").padding(.top)
+            GeometryReader { geometry in
+                ScrollView(.horizontal, showsIndicators: false){
+                    HStack {
+                        ForEach(0..<self.emojis.count){i in
+                            ZStack{
+                            Circle().foregroundColor(Color.blue)
+                                .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
+                              Text(self.emojis[i])
+                                
+                            }
+
+                        }
+                    }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
+                }
+            }.frame(height: 150)
+        }
     }
 }
