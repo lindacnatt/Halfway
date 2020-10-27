@@ -33,8 +33,8 @@ struct MapView: UIViewRepresentable {
             
             let userCoordinate = locationManager.location!.coordinate
             let friendCoordinate = annotations?[0].coordinate
-            getHalfWayPoint(startPosition: userCoordinate, endPostition: friendCoordinate!){ halfWaypointCoordinates in
-                
+            
+            getHalfWayPoint(startPosition: userCoordinate, endPosition: friendCoordinate!){ halfWaypointCoordinates in
                 addPolyline(to: mapView, from: userCoordinate, to: halfWaypointCoordinates, colorId: "blue")
                 addPolyline(to: mapView, from: friendCoordinate!, to: halfWaypointCoordinates, colorId: "orange")
                 let midPoint = MKPointAnnotation()
@@ -49,7 +49,7 @@ struct MapView: UIViewRepresentable {
                     zoomRect = zoomRect.union(pointRect);
                 }
                 
-                mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 100), animated: true)
+                mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
                 
            }
         }else if status == .authorizedAlways || status == .authorizedWhenInUse {
@@ -60,7 +60,7 @@ struct MapView: UIViewRepresentable {
             mapView.setRegion(region, animated: true)
             
         }else{
-            //Used when user location is not set (Views other than SessionView)
+            //Used when user location is not set (In views other than SessionView)
             let centerCoordinate = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
             let span = MKCoordinateSpan(latitudeDelta: 0.031, longitudeDelta: 0.019)
             let region = MKCoordinateRegion(center: centerCoordinate, span: span)
@@ -97,32 +97,38 @@ struct MapView: UIViewRepresentable {
         directions.calculate { response, error in
             guard let response = response else { return }
             let route = response.routes[0]
-            
-            let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
-            print("halfway time: \(time)")
-            print("polyline points: \(route.polyline.pointCount)")
             route.polyline.title = colorId
+            let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
+            print("\(route.polyline.title!) halfway time: \(time)")
             mapView.addOverlay(route.polyline, level: .aboveRoads)
             
         }
     }
     
-    func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPostition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
+    func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
         let startPlacemark = MKPlacemark(coordinate: startPosition)
-        let destinationPlacemark = MKPlacemark(coordinate: endPostition)
+        let destinationPlacemark = MKPlacemark(coordinate: endPosition)
         let fullwayDirectionRequest = MKDirections.Request()
-        
+
         fullwayDirectionRequest.source = MKMapItem(placemark: startPlacemark)
         fullwayDirectionRequest.destination = MKMapItem(placemark: destinationPlacemark)
         fullwayDirectionRequest.transportType = .walking
+        
         let fullwayDirections = MKDirections(request: fullwayDirectionRequest)
         fullwayDirections.calculate { response, error in
             guard let response = response else { return }
             let route = response.routes[0]
             
-            let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
-            print("Full route time: \(time)")
-            let midPolylinePointIndex = route.polyline.pointCount/2
+            var midPolylinePointIndex = 0
+            for pointIndex in 0...route.polyline.pointCount - 1 {
+                let distanceToUser = route.polyline.points()[pointIndex].distance(to: MKMapPoint(startPosition))
+                let distanceToFriend = route.polyline.points()[pointIndex].distance(to: MKMapPoint(endPosition))
+                
+                if distanceToUser > distanceToFriend{
+                    midPolylinePointIndex = pointIndex
+                    break
+                }
+            }
             let halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
             completion(halfwayCoordinates)
             
@@ -130,6 +136,27 @@ struct MapView: UIViewRepresentable {
         
     }
     
+    func getHalfWayETA(startPosition: MKPlacemark, endPosition: MKPlacemark, completion: @escaping (TimeInterval) -> Void){
+        
+        let halfwayDirectionRequest = MKDirections.Request()
+        halfwayDirectionRequest.source = MKMapItem(placemark: startPosition)
+        halfwayDirectionRequest.destination = MKMapItem(placemark: endPosition)
+        halfwayDirectionRequest.transportType = .walking
+        let halfwayDirections = MKDirections(request: halfwayDirectionRequest)
+
+        halfwayDirections.calculateETA { response, error in
+            guard let response = response else { return }
+            let halfwayETA = response.expectedTravelTime
+            completion(halfwayETA)
+            
+        }
+        
+        
+        
+        
+        
+        
+    }
     func getTimeInMinutesAndSeconds(seconds: Double) -> String{
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
