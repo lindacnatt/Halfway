@@ -98,7 +98,7 @@ struct MapView: UIViewRepresentable {
             guard let response = response else { return }
             let route = response.routes[0]
             route.polyline.title = colorId
-            let time = getTimeInMinutesAndSeconds(seconds: route.expectedTravelTime)
+            let time = convertSecondsToHoursAndMinutes(seconds: route.expectedTravelTime)
             print("\(route.polyline.title!) halfway time: \(time)")
             mapView.addOverlay(route.polyline, level: .aboveRoads)
             
@@ -119,6 +119,7 @@ struct MapView: UIViewRepresentable {
             guard let response = response else { return }
             let route = response.routes[0]
             
+            //Finds the approximate midpoint in terms of distance
             var midPolylinePointIndex = 0
             for pointIndex in 0...route.polyline.pointCount - 1 {
                 let distanceToUser = route.polyline.points()[pointIndex].distance(to: MKMapPoint(startPosition))
@@ -129,6 +130,7 @@ struct MapView: UIViewRepresentable {
                     break
                 }
             }
+            
             let halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
             completion(halfwayCoordinates)
             
@@ -136,8 +138,8 @@ struct MapView: UIViewRepresentable {
         
     }
     
+    //To be used when updating the time left for users
     func getHalfWayETA(startPosition: MKPlacemark, endPosition: MKPlacemark, completion: @escaping (TimeInterval) -> Void){
-        
         let halfwayDirectionRequest = MKDirections.Request()
         halfwayDirectionRequest.source = MKMapItem(placemark: startPosition)
         halfwayDirectionRequest.destination = MKMapItem(placemark: endPosition)
@@ -148,18 +150,12 @@ struct MapView: UIViewRepresentable {
             guard let response = response else { return }
             let halfwayETA = response.expectedTravelTime
             completion(halfwayETA)
-            
         }
-        
-        
-        
-        
-        
-        
     }
-    func getTimeInMinutesAndSeconds(seconds: Double) -> String{
+    
+    func convertSecondsToHoursAndMinutes(seconds: Double) -> String{
         let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .abbreviated
 
         let formattedString = formatter.string(from: TimeInterval(seconds))!
@@ -173,17 +169,21 @@ struct MapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         var polyLineColor: UIColor = .blue
         
+        
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             //MARK: Annotation handling
             let annotationId = annotation.title ?? "NoTitleId"
             
+            //Checks for old annotations to reuse
             let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationId!) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
-            MKAnnView.canShowCallout = false
             
+            //Sets new annotations
             if (MKAnnView.image == nil){
                 let SwiftUIAnnView = setAnnotation(MKAnnView.annotation!)
                 MKAnnView.image = SwiftUIAnnView.asUIImage()
             }
+            
+            MKAnnView.canShowCallout = false
             
             return MKAnnView
         
@@ -217,8 +217,6 @@ struct MapView: UIViewRepresentable {
                 
                 return polyline
             }
-            
-            
         }
         
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
@@ -228,28 +226,33 @@ struct MapView: UIViewRepresentable {
             let user = ["name": "Johannes", "timeLeft": "7 min away", "image": "user"]
             let friend = ["name": "Linda", "timeLeft": "5 min away", "image": "friend"]
             
-            //Changing the annotationView depanding on the title (used as Id)
+            var image: Image
+            var strokeColor: Color
+            var userName: String
+            var timeLeft: String
+            
+            //Changing the annotationView depanding on the title (used as Id) or type
             if annotation is MKUserLocation{
-                let userAnnotation = AnnotationView(image: Image(user["image"] ?? "user"),
-                                                 strokeColor: Color.blue,
-                                                 userName: user["name"] ?? "Friend",
-                                                 timeLeft: user["timeLeft"] ?? "0")
-                return userAnnotation
-            }
-            else if (annotation.title! == "friend"){
-                let friendAnnotation = AnnotationView(image: Image(friend["image"] ?? "user"),
-                                                 strokeColor: Color.orange,
-                                                 userName: friend["name"] ?? "Friend",
-                                                 timeLeft: friend["timeLeft"] ?? "0")
-                return friendAnnotation
+                image = Image(user["image"] ?? "user")
+                strokeColor = Color.blue
+                userName = user["name"] ?? "Friend"
+                timeLeft = user["timeLeft"] ?? "0"
+                
+            }else if (annotation.title! == "friend"){
+                image = Image(friend["image"] ?? "user")
+                strokeColor = Color.orange
+                userName = friend["name"] ?? "Friend"
+                timeLeft = friend["timeLeft"] ?? "0"
                 
             }else{
-                let otherAnnotation = AnnotationView(image: Image(systemName: "flag.circle.fill"),
-                                                      strokeColor: Color.black,
-                                                      userName: (annotation.title)! ?? "",
-                                                      timeLeft: (annotation.subtitle)! ?? "")
-                return otherAnnotation
+                image = Image(systemName: "flag.circle.fill")
+                strokeColor = Color.black
+                userName = (annotation.title)! ?? ""
+                timeLeft = (annotation.subtitle)! ?? ""
             }
+            
+            let annotation = AnnotationView(image: image, strokeColor: strokeColor, userName: userName, timeLeft: timeLeft)
+            return annotation
             
         }
         
