@@ -11,9 +11,9 @@ import SwiftUI
 import MapKit
 
 //Temporary static second user annotation data
-let friendCoordinate = CLLocationCoordinate2D(latitude: 59.331860041777944, longitude: 18.03530908143972) //CLLocationCoordinate2D(latitude: 59.348550, longitude: 18.073581)
-let userAnnotations = [UserAnnotation(title: "friend", subtitle: "tjena",coordinate: friendCoordinate)]
-//UserAnnotation(title: "", subtitle: "",coordinate: CLLocationCoordinate2D(latitude: 59.331860041777944, longitude: 18.03530908143972))
+let friendCoordinate = CLLocationCoordinate2D(latitude: 59.331860041777944, longitude: 18.03530908143972)
+let userAnnotations = [UserAnnotation(title: "friend", subtitle: nil, coordinate: friendCoordinate)]
+
 struct SessionView: View {
     @State var showingEndOptions = false
     

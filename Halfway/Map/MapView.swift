@@ -29,6 +29,7 @@ struct MapView: UIViewRepresentable {
         locationManager.requestWhenInUseAuthorization()
         
         //TODO: Add bool for setting when the location will be asked for.
+        //Sets the zoom and polylines depending on access to location and annotations
         if (status == .authorizedAlways || status == .authorizedWhenInUse) && annotations?.count != 0{
             
             let userCoordinate = locationManager.location!.coordinate
@@ -71,7 +72,7 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        
+        //Used to update the map when for example clicking a "find me on the map" button
     }
     
     func addCompass(to mapView: MKMapView) -> (){
@@ -139,10 +140,13 @@ struct MapView: UIViewRepresentable {
     }
     
     //To be used when updating the time left for users
-    func getHalfWayETA(startPosition: MKPlacemark, endPosition: MKPlacemark, completion: @escaping (TimeInterval) -> Void){
+    func getHalfWayETA(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (TimeInterval) -> Void){
+        let startPlacemark = MKPlacemark(coordinate: startPosition)
+        let destinationPlacemark = MKPlacemark(coordinate: endPosition)
         let halfwayDirectionRequest = MKDirections.Request()
-        halfwayDirectionRequest.source = MKMapItem(placemark: startPosition)
-        halfwayDirectionRequest.destination = MKMapItem(placemark: endPosition)
+        
+        halfwayDirectionRequest.source = MKMapItem(placemark: startPlacemark)
+        halfwayDirectionRequest.destination = MKMapItem(placemark: destinationPlacemark)
         halfwayDirectionRequest.transportType = .walking
         let halfwayDirections = MKDirections(request: halfwayDirectionRequest)
 
@@ -168,7 +172,6 @@ struct MapView: UIViewRepresentable {
     
     class Coordinator: NSObject, MKMapViewDelegate {
         var polyLineColor: UIColor = .blue
-        
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             //MARK: Annotation handling
@@ -223,8 +226,8 @@ struct MapView: UIViewRepresentable {
             //MARK: Setting annotation
             
             //Temporary data, will be replaced by database data
-            let user = ["name": "Johannes", "timeLeft": "7 min away", "image": "user"]
-            let friend = ["name": "Linda", "timeLeft": "5 min away", "image": "friend"]
+            let user = ["name": "Johannes", "timeLeft": "", "image": "user"]
+            let friend = ["name": "Linda", "timeLeft": "", "image": "friend"]
             
             var image: Image
             var strokeColor: Color
