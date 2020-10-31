@@ -77,7 +77,6 @@ struct UserProfileView: View {
                                 .fixedSize()
                                 .onTapGesture {
                                     self.showImagePicker = true
-                                    self.profilepic.emojipic = ""
                             }
                             ForEach(self.viewModel.imageCards){ card in
                                 ImageCardView(imageCard: card)
@@ -107,6 +106,8 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         image = Image(uiImage: inputImage)
+        profilepic.emojipic = ""
+        
     }
 }
 
