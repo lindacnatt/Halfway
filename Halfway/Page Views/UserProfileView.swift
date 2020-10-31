@@ -4,9 +4,14 @@
 //
 //  Created by Linda Cnattingius on 2020-10-25.
 //  Copyright © 2020 Halfway. All rights reserved.
-//
+
+
+
 
 import SwiftUI
+
+//Hello! Gör dig redo för väldigt mycket och väldigt ful kod. Enjoy ;)
+
 class ImagePic: ObservableObject{
     private init(){}
     
@@ -17,75 +22,88 @@ class ImagePic: ObservableObject{
 struct UserProfileView: View {
     
     @State private var image: Image?
+    
     @ObservedObject var profilepic: ImagePic = .shared
     
     
     @State private var showImagePicker = false
-    @State private var selected = false
     @State private var inputImage: UIImage?
     
     @ObservedObject var viewModel: EmojiProfileImage
     
-    
-    
-    
     var body: some View {
         VStack{
-            VStack {
-                ZStack {
-                    Circle()
-                        .fill(Color.gray)
-                        .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
-                        .overlay(Circle()
-                            .stroke(Color.orange, lineWidth: 4))
-                    Text(profilepic.emojipic).frame(width: 40, height: 40)
-                    if image != nil {
-                        image?
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .clipShape(Circle())
+            //Display ProfileImage
+                GeometryReader{ g in
+                    ZStack {
+                        Circle()
+                            .fill(Color.gray.opacity(0.15))
+                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
                             .overlay(Circle()
                                 .stroke(Color.orange, lineWidth: 4))
+                        //Show Emoji
+                        Text(self.profilepic.emojipic).font(.system(size: g.size.height > g.size.width ? g.size.width * 0.4: g.size.height * 0.4))
+                        //Show Image if image is not empty
+                        if self.image != nil {
+                            self.image?
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle())
+                                .overlay(Circle()
+                                    .stroke(Color.orange, lineWidth: 4))
+                        }
+                        //If both Image and Emoji is empty show default image
+                        if self.image == nil && self.profilepic.emojipic == "" {
+                            Image(systemName: "person").resizable().frame(width: 40, height: 40).opacity(0.5)
+                        }
                     }
-                    if image == nil && profilepic.emojipic == "" {
-                        Image(systemName: "person").resizable().frame(width: 40, height: 40).foregroundColor(Color.white)
-                    }
-                }
-                .frame(width: 150, height: 150).padding()
-                Text("Select image").foregroundColor(Color.blue)
-                
-            }.onTapGesture {
+                    .frame(width: 150, height: 150).padding()
+                //Tap to show the Imagepicker
+                }.onTapGesture {
                 self.showImagePicker = true
             }
-            //            imageSuggestions(viewModel: EmojiProfileImage())
+            //Choose emoji avatars
             VStack(alignment: .leading) {
                 Divider()
                 Text("Choose avatar").padding(.top)
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack {
+                            Text("+")
+                                .padding()
+                                .font(.title)
+                                .padding()
+                                .background(Circle().stroke(Color.gray.opacity(0.5)))
+                                .fixedSize()
+                                .onTapGesture {
+                                    self.showImagePicker = true
+                                    self.profilepic.emojipic = ""
+                            }
                             ForEach(self.viewModel.imageCards){ card in
                                 ImageCardView(imageCard: card)
                                     .onTapGesture {
                                         self.viewModel.choose(card: card)
                                         self.profilepic.emojipic = card.content
+                                        self.image = nil
                                 }
                             }
-                        }
+                        }.fixedSize()
                     }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
                 }.frame(height: 150)
             }
+            //Namefields
             NameFields()
             Spacer()
-            
+            //Finish button
+            Button(action: {}){
+                Text("Done").foregroundColor(Color.blue)
+            }.frame(alignment: .trailing)
+        //Imagepicker over the whole view
         }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
             ImagePicker(image: self.$inputImage)
         }.padding()
         
     }
-    
-    
-    
     func loadImage(){
         guard let inputImage = inputImage else {return}
         image = Image(uiImage: inputImage)
@@ -115,28 +133,6 @@ struct NameFields: View{
     }
 }
 
-//struct imageSuggestions : View{
-//let emojis = ["😘","😞","😎","😘","😎"]
-//    @ObservedObject var viewModel: EmojiProfileImage
-
-//    var body: some View{
-//        VStack(alignment: .leading) {
-//            Divider()
-//            Text("Choose avatar").padding(.top)
-//            GeometryReader { geometry in
-//                ScrollView(.horizontal, showsIndicators: false){
-//                    HStack {
-//                        ForEach(self.viewModel.imageCards){ card in
-//                            ImageCardView(imageCard: card).onTapGesture {
-//                                self.viewModel.choose(card:card)
-//                            }
-//                        }
-//                    }
-//                }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
-//            }.frame(height: 150)
-//        }
-//    }
-//}
 struct ImageCardView: View{
     var imageCard: ProfileImage<String>.ImageCard
     @ObservedObject var profilepic: ImagePic = .shared
@@ -144,14 +140,9 @@ struct ImageCardView: View{
     var body: some View{
         ZStack {
             Circle().foregroundColor(Color.blue)
-                .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
+                .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
             Text(imageCard.content)
-            if imageCard.isSelected {
-                Circle().fill(Color.black.opacity(0))
-                    .overlay(Circle()
-                        .stroke(Color.orange, lineWidth: 4))
-            }
-        }
+        }.fixedSize()
     }
     
 }

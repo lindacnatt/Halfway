@@ -153,6 +153,7 @@
 		8F6043FF25324D6600949011 /* Page Views */ = {
 			isa = PBXGroup;
 			children = (
+				CAEC898E25304C75005975EA /* CreateInviteView.swift */,
 				8F0C8C0B252F5F4700B595A3 /* SessionView.swift */,
 				CAAAEA0D2545C24900838BAC /* UserProfileView.swift */,
 			);
@@ -206,7 +207,6 @@
 			isa = PBXGroup;
 			children = (
 				CAB2142A2539D65C00F8290C /* ViewModels */,
-				CAEC898E25304C75005975EA /* CreateInviteView.swift */,
 				8F6043FF25324D6600949011 /* Page Views */,
 				8F6043FA25324BEC00949011 /* Map */,
 				8F6043FE25324D3B00949011 /* Components */,

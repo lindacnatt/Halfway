@@ -12,7 +12,7 @@ class EmojiProfileImage: ObservableObject{
     @Published private var model: ProfileImage<String> = EmojiProfileImage.createProfileImages()
     
     static func createProfileImages() -> ProfileImage<String> {
-        let images: Array<String> = ["😎","😘","😞","😘","😎"]
+        let images: Array<String> = ["🥳","😎","😈","🥰","🤩", "😇", "😂", "🤯","😘"]
         return ProfileImage<String>(numberOfPairsOfCards: images.count){ index in
             return images[index]
         }
