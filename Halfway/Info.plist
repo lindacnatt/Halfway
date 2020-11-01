@@ -53,6 +53,8 @@
 	<string>Used to help your friends find you during a session</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Used to help your friends find you during a session</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to help your friends find you during a session</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

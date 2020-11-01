@@ -23,7 +23,7 @@ struct AnnotationView: View {
                     Text(userName)
                         .bold()
                         .font(.headline)
-                    Text("\(timeLeft) min away")
+                    Text("\(timeLeft)")
                         .font(.footnote)
                     CircleImage(image: image, width: 80, height: 80, strokeColor: strokeColor)
                     
