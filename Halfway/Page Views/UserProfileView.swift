@@ -34,15 +34,15 @@ struct UserProfileView: View {
     var body: some View {
         VStack{
             //Display ProfileImage
-                GeometryReader{ g in
+                GeometryReader{ gView in
                     ZStack {
                         Circle()
-                            .fill(Color.gray.opacity(0.15))
-                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: 5, y: 5)
+                            .fill(Color.gray.opacity(0.1))
                             .overlay(Circle()
                                 .stroke(Color.orange, lineWidth: 4))
+                            
                         //Show Emoji
-                        Text(self.profilepic.emojipic).font(.system(size: g.size.height > g.size.width ? g.size.width * 0.4: g.size.height * 0.4))
+                        Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width * 0.5: gView.size.height * 0.5))
                         //Show Image if image is not empty
                         if self.image != nil {
                             self.image?
@@ -53,7 +53,7 @@ struct UserProfileView: View {
                                     .stroke(Color.orange, lineWidth: 4))
                         }
                         //If both Image and Emoji is empty show default image
-                        if self.image == nil && self.profilepic.emojipic == "" {
+                         else if self.profilepic.emojipic == "" {
                             Image(systemName: "person").resizable().frame(width: 40, height: 40).opacity(0.5)
                         }
                     }
@@ -69,11 +69,11 @@ struct UserProfileView: View {
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack {
-                            Text("+")
+                            Image(systemName: "camera")
                                 .padding()
                                 .font(.title)
                                 .padding()
-                                .background(Circle().stroke(Color.gray.opacity(0.5)))
+                                .background(Circle().stroke(Color.gray.opacity(0.50)))
                                 .fixedSize()
                                 .onTapGesture {
                                     self.showImagePicker = true
@@ -94,6 +94,7 @@ struct UserProfileView: View {
             NameFields()
             Spacer()
             //Finish button
+            //TODO: Send the input from the image and namefields to firebase and mapView
             Button(action: {}){
                 Text("Done").foregroundColor(Color.blue)
             }.frame(alignment: .trailing)
@@ -143,7 +144,7 @@ struct ImageCardView: View{
             Circle().foregroundColor(Color.blue)
                 .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
             Text(imageCard.content)
-        }.fixedSize()
+        }.aspectRatio(contentMode: .fit)
     }
     
 }
