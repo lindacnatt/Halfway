@@ -33,6 +33,15 @@ struct UserProfileView: View {
     
     var body: some View {
         VStack{
+            HStack{
+                Spacer()
+                //Finish button
+                //TODO: Send the input from the image and namefields to firebase and mapView
+                Button(action: {}){
+                    Text("Done").foregroundColor(Color.blue)
+                }.padding(.trailing)
+            }
+           
             //Display ProfileImage
                 GeometryReader{ gView in
                     ZStack {
@@ -40,28 +49,29 @@ struct UserProfileView: View {
                             .fill(Color.gray.opacity(0.1))
                             .overlay(Circle()
                                 .stroke(Color.orange, lineWidth: 4))
-                            
-                        //Show Emoji
-                        Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width * 0.5: gView.size.height * 0.5))
                         //Show Image if image is not empty
                         if self.image != nil {
-                            self.image?
+                            CircleImage(image: self.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
+                        }
+                         else if self.profilepic.emojipic != "" {
+                            //Show Emoji if emojistring is not empty
+                            Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width *  0.7: gView.size.height *  0.7))
+                         }
+                         else{
+                            //If both Image and Emoji is empty show default image
+                            Image(systemName: "person")
                                 .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .clipShape(Circle())
-                                .overlay(Circle()
-                                    .stroke(Color.orange, lineWidth: 4))
-                        }
-                        //If both Image and Emoji is empty show default image
-                         else if self.profilepic.emojipic == "" {
-                            Image(systemName: "person").resizable().frame(width: 40, height: 40).opacity(0.5)
-                        }
+                                .frame(width: gView.size.height * 0.5, height: gView.size.height * 0.5)
+                                .opacity(0.5)
+                         }
                     }
-                    .frame(width: 150, height: 150).padding()
+                }
+                .padding()
                 //Tap to show the Imagepicker
-                }.onTapGesture {
-                self.showImagePicker = true
-            }
+                .onTapGesture {
+                    self.showImagePicker = true
+                }
+            
             //Choose emoji avatars
             VStack(alignment: .leading) {
                 Divider()
@@ -92,12 +102,7 @@ struct UserProfileView: View {
             }
             //Namefields
             NameFields()
-            Spacer()
-            //Finish button
-            //TODO: Send the input from the image and namefields to firebase and mapView
-            Button(action: {}){
-                Text("Done").foregroundColor(Color.blue)
-            }.frame(alignment: .trailing)
+            
         //Imagepicker over the whole view
         }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
             ImagePicker(image: self.$inputImage)
@@ -141,7 +146,7 @@ struct ImageCardView: View{
     
     var body: some View{
         ZStack {
-            Circle().foregroundColor(Color.blue)
+            Circle().foregroundColor(Color.blue.opacity(0.15))
                 .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
             Text(imageCard.content)
         }.aspectRatio(contentMode: .fit)
