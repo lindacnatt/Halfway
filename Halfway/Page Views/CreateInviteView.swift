@@ -22,7 +22,7 @@ struct CreateInviteView: View {
                     Text("Halfway")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(Color.orange)
+                        .foregroundColor(ColorManager.orange)
                     Text("Facilitating encounters")
                 }
                 Spacer()
@@ -33,7 +33,8 @@ struct CreateInviteView: View {
                         .padding(.horizontal, 90)
                         .padding()
                 }
-                .background(Color.orange).cornerRadius(50)
+                .background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
+                .cornerRadius(50)
                 .padding(.bottom)
                 .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
             }
