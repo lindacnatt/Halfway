@@ -8,9 +8,7 @@
 
 import Foundation
 
-struct User: Identifiable {
+struct User: Identifiable, Codable {
     var id: String = UUID().uuidString
     var name: String
-    var city: String
-    var food: String
 }

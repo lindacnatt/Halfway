@@ -31,6 +31,8 @@
 		CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142D2539E6DB00F8290C /* UserModel.swift */; };
 		CAB214322539EA3000F8290C /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB214312539EA3000F8290C /* UserRepository.swift */; };
 		CAB77A642534DE5800E27365 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAB77A632534DE5800E27365 /* GoogleService-Info.plist */; };
+		CAC3CE7D255577C2009C606F /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC3CE7C255577C2009C606F /* UserViewModel.swift */; };
+		CAC3CE82255577FE009C606F /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC3CE81255577FE009C606F /* TestView.swift */; };
 		CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEC898E25304C75005975EA /* CreateInviteView.swift */; };
 		D77144377BF530DB639A40B5 /* Pods_HalfwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CEBE38DEA775D726A2160F0 /* Pods_HalfwayTests.framework */; };
 /* End PBXBuildFile section */
@@ -89,6 +91,8 @@
 		CAB2142D2539E6DB00F8290C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		CAB214312539EA3000F8290C /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		CAB77A632534DE5800E27365 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CAC3CE7C255577C2009C606F /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		CAC3CE81255577FE009C606F /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		CAEC898E25304C75005975EA /* CreateInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteView.swift; sourceTree = "<group>"; };
 		E6C4A53B9B59912F8527C6E5 /* Pods-HalfwayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.debug.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +160,7 @@
 				CAEC898E25304C75005975EA /* CreateInviteView.swift */,
 				8F0C8C0B252F5F4700B595A3 /* SessionView.swift */,
 				CAAAEA0D2545C24900838BAC /* UserProfileView.swift */,
+				CAC3CE81255577FE009C606F /* TestView.swift */,
 			);
 			path = "Page Views";
 			sourceTree = "<group>";
@@ -257,6 +262,7 @@
 				CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */,
 				CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */,
 				CA7231BF254768B000F91D36 /* ProfileImageViewModel.swift */,
+				CAC3CE7C255577C2009C606F /* UserViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -508,6 +514,7 @@
 				8F6043F625322C2300949011 /* AnnotationView.swift in Sources */,
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
 				8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */,
+				CAC3CE7D255577C2009C606F /* UserViewModel.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,
 				CA7231BE254764DA00F91D36 /* ProfileImageModel.swift in Sources */,
 				CAAAEA0C2545BE4F00838BAC /* ImagePicker.swift in Sources */,
@@ -515,6 +522,7 @@
 				8FDB0409253250BA00FED70E /* UserAnnotation.swift in Sources */,
 				CAAAEA0E2545C24900838BAC /* UserProfileView.swift in Sources */,
 				8F0C8C16252F98AD00B595A3 /* CircleImage.swift in Sources */,
+				CAC3CE82255577FE009C606F /* TestView.swift in Sources */,
 				8F6043F125322B9900949011 /* Triangle.swift in Sources */,
 				CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */,
 				CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */,
