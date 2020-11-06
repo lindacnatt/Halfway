@@ -199,11 +199,11 @@ struct MapView: UIViewRepresentable {
                 var gradientStartColor: UIColor = .black
                 
                 if overlay.title == "blue"{
-                    gradientStartColor = UIColor(Color.blue)
+                    gradientStartColor = UIColor(ColorManager.blue)
                 }else if (overlay.title == "orange"){
-                    gradientStartColor = UIColor(Color.orange)
+                    gradientStartColor = UIColor(ColorManager.orange)
                 }
-                polyline.setColors([gradientStartColor, .darkGray], locations: polyline.locations)
+                polyline.setColors([gradientStartColor, UIColor(ColorManager.inbetweenPurple)], locations: polyline.locations)
                 polyline.lineWidth = 5.0
                 
                 return polyline
@@ -237,13 +237,13 @@ struct MapView: UIViewRepresentable {
             //Changing the annotationView depanding on the title (used as Id) or type
             if annotation is MKUserLocation{
                 image = Image(user["image"] ?? "user")
-                strokeColor = Color.blue
+                strokeColor = ColorManager.blue
                 userName = user["name"] ?? "Friend"
                 timeLeft = user["timeLeft"] ?? "0"
                 
             }else if (annotation.title! == "friend"){
                 image = Image(friend["image"] ?? "user")
-                strokeColor = Color.orange
+                strokeColor = ColorManager.orange
                 userName = friend["name"] ?? "Friend"
                 timeLeft = friend["timeLeft"] ?? "0"
                 
