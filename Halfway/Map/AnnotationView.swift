@@ -33,8 +33,9 @@ struct AnnotationView: View {
                     .fill(strokeColor)
                     .frame(width: 25, height: 25)
                     .rotationEffect(.degrees(180))
+                Circle().fill(strokeColor).frame(width: 20, height: 20)
                     
-            }.frame(maxHeight: .infinity, alignment: .center)
+            }.frame(maxHeight: .infinity, alignment: .center).shadow(color: Color.black.opacity(0.15), radius: 8, x: 5, y: 5)
             
             Spacer()
                 .frame(maxHeight: .infinity, alignment: .center)
