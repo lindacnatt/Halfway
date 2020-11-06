@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Firebase
+import UIKit
 
 class CreateInviteViewModel {
     
@@ -32,6 +33,26 @@ class CreateInviteViewModel {
         shareLink.socialMetaTagParameters?.descriptionText = "Meet your friends half-way with the Halfway app!"
         shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://images.unsplash.com/photo-1473216635433-38f7100ae658?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2148&q=80")
 
+        guard let longURL = shareLink.url else { return }
+        print("The long dynamic link is \(longURL.absoluteString)")
+        
+        shareLink.shorten { [weak self] (url, warnings, error) in
+            if let error = error {
+                print("Oh no, there was an error! \(error)")
+            }
+            if let warnings = warnings {
+                for warning in warnings {
+                    print ("FDL warning: \(warning)")
+                }
+            }
+            guard let url = url else { return }
+            print("I have a short URL to share! \(url.absoluteString)")
+            self?.showShareSheet(url: url)
+        }
+    }
+    func showShareSheet(url: URL) {
+        let promoText = "Name wants to meet you half-way using the halfway app! Click the link to accept."
+        let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
         
     }
 }
