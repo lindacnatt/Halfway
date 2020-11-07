@@ -15,12 +15,19 @@ class CreateInviteViewModel {
     
     func shareSheet(){
         
-        guard let sessionlink = URL(string: "https://www.apple.com") else { return }
+        guard let sessionlink: String? = "12345" else { return }
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "halfwayapplication.page.link"
+        components.path = "/SessionView"
+        let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
+        components.queryItems = [sessionIDQueryItem]
         
-        let av = UIActivityViewController(activityItems: [sessionlink], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
+        guard let linkParameter = components.url else { return }
+        print("I am sharing \(linkParameter.absoluteString)")
+     
         
-        guard let shareLink = DynamicLinkComponents.init(link: sessionlink, domainURIPrefix: "https://halfwayapplication.page.link") else {
+        guard let shareLink = DynamicLinkComponents.init(link: linkParameter, domainURIPrefix: "https://halfwayapplication.page.link") else {
             print("Couldn't create FDL components")
             return
         }
@@ -31,7 +38,7 @@ class CreateInviteViewModel {
         shareLink.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
         shareLink.socialMetaTagParameters?.title = "Halfway"
         shareLink.socialMetaTagParameters?.descriptionText = "Meet your friends half-way with the Halfway app!"
-        shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://images.unsplash.com/photo-1473216635433-38f7100ae658?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2148&q=80")
+        
 
         guard let longURL = shareLink.url else { return }
         print("The long dynamic link is \(longURL.absoluteString)")
@@ -49,12 +56,28 @@ class CreateInviteViewModel {
             print("I have a short URL to share! \(url.absoluteString)")
             self?.showShareSheet(url: url)
         }
-    }
-    func showShareSheet(url: URL) {
-        let promoText = "Name wants to meet you half-way using the halfway app! Click the link to accept."
-        let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
         
     }
+    
+    func showShareSheet(url: URL) {
+        
+        //guard let sessionlink = URL(string: "https://www.apple.com") else { return }
+        
+        let promoText = "Someone wants to meet you half-way using the halfway app! Follow the link to accept."
+        let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController?
+            .present(activityVC, animated: true, completion: nil)
+        
+       
+        //let av = UIActivityViewController(activityItems: [sessionlink], applicationActivities: nil)
+        //UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
+        
+        
+        
+    }
+    //func showShareSheet(url: URL) {
+      //  let promoText = "Name wants to meet you half-way using the halfway app! Click the link to accept."
+        //let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)}
 }
 
 
