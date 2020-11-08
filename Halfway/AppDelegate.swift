@@ -42,6 +42,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         print("Link parameter is \(url.absoluteString)")
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let queryItems = components.queryItems else { return }
+        for queryItem in queryItems {
+            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
+        }
     }
     
     
