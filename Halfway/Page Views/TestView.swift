@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TestView: View {
     @ObservedObject private var viewModel = UsersViewModel() // so that the view doe not rewrite it self when data is updated.
-    var body: some View {
+    var body: some View{
         VStack {
             List(viewModel.users){ user in
                 VStack{
