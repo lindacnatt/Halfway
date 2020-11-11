@@ -15,11 +15,14 @@ struct TestView: View {
             List(viewModel.users){ user in
                 VStack{
                     Text(user.name)
+                    Text(String(user.long))
+                    Text(String(user.lat))
                 }
                 
             }.onAppear(){
                 self.viewModel.fetchData()
             }
+            
         }
     }
 }
