@@ -15,10 +15,11 @@ class CreateInviteViewModel {
     
     func shareSheet(){
         
-        guard let sessionlink: String? = "12345" else { return }
+        
+        let sessionlink = UUID().uuidString
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "halfwayapplication.page.link"
+        components.host = "www.google.com"
         components.path = "/SessionView"
         let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
         components.queryItems = [sessionIDQueryItem]
