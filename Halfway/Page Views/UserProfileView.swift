@@ -17,6 +17,8 @@ class ImagePic: ObservableObject{
     
     static let shared = ImagePic()
     @Published var emojipic = ""
+    
+
 }
 
 struct UserProfileView: View {
@@ -113,6 +115,9 @@ struct UserProfileView: View {
         guard let inputImage = inputImage else {return}
         image = Image(uiImage: inputImage)
         profilepic.emojipic = ""
+        
+    }
+    func addUser(Name: String){
         
     }
 }
