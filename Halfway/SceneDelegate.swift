@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let image = EmojiProfileImage()
 //        let  testView = UserProfileView(viewModel: image)
         
-        let contentView = TestView()
+        let contentView = SessionView()
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
