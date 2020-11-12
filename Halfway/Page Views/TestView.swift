@@ -17,6 +17,7 @@ struct TestView: View {
                     Text(user.name)
                     Text(String(user.long))
                     Text(String(user.lat))
+                    Text(String(user.minLeft))
                 }
                 
             }.onAppear(){

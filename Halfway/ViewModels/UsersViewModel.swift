@@ -16,7 +16,7 @@ class UsersViewModel: ObservableObject {
     private var database = Firestore.firestore()
     
     func fetchData(){
-        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("user").addSnapshotListener{(querySnapshot, error) in
+        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").addSnapshotListener{(querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
                 print("No documents")
                 return
@@ -24,12 +24,13 @@ class UsersViewModel: ObservableObject {
             self.users = documents.map{ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()
                 
-                let name = data["Name"] as? String ?? "default name"
+                let name = data["Name"] as? String ?? "No name"
                 let long = data["Long"] as? Double ?? 1.00
                 let lat = data["Lat"] as? Double ?? 1.00
+                let minLeft = data["MinLeft"] as? Int ?? 0
 
                 
-                return User(name: name, long: long, lat:lat)
+                return User(name: name, long: long, lat:lat, minLeft: minLeft)
                 
             }
             
