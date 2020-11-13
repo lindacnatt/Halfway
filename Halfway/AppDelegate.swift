@@ -13,6 +13,7 @@ import Firebase
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
     @Published var sessionID: String = ""
+    @Published var userID: String = ""
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -48,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
 //            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
             let session = queryItems[0].value
         self.sessionID = session ?? ""
-        
+        self.userID = "user2" 
         
     }
     
