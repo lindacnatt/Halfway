@@ -55,14 +55,16 @@ struct MapView: UIViewRepresentable {
                 mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
                 
            }
-        }else if status == .authorizedAlways || status == .authorizedWhenInUse {
+        }
+        else if status == .authorizedAlways || status == .authorizedWhenInUse {
             var userLocation: CLLocationCoordinate2D = locationManager.location!.coordinate
             userLocation.latitude -= 0.002
             let span = MKCoordinateSpan(latitudeDelta: 0.009, longitudeDelta: 0.009)
             let region = MKCoordinateRegion(center: userLocation, span: span)
             mapView.setRegion(region, animated: true)
-            
-        }else{
+
+        }
+        else{
             //Used when user location is not set (In views other than SessionView)
             let centerCoordinate = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
             let span = MKCoordinateSpan(latitudeDelta: 0.031, longitudeDelta: 0.019)
@@ -76,13 +78,19 @@ struct MapView: UIViewRepresentable {
     func updateUIView(_ mapView: MKMapView, context: Context) {
         //Used to update the map when for example clicking a "find me on the map" button
         let userTwoAnnotation = mapView.annotations.first { $0.title == "user2" }
+        let halfWayPoint = mapView.annotations.first { $0.title == "Halfway" }
         if users != nil && userTwoAnnotation != nil{
             let newAnnotations = getUsersAsAnnotations(from: users!)
             let newUserTwoAnnotation = newAnnotations.first { $0.title == "user2" }
+            
             if userTwoAnnotation!.coordinate.longitude != newUserTwoAnnotation!.coordinate.longitude
             || userTwoAnnotation!.coordinate.latitude != newUserTwoAnnotation!.coordinate.latitude{
                 mapView.removeAnnotation(userTwoAnnotation!)
                 mapView.addAnnotation(newUserTwoAnnotation!)
+                let userTwoPolyline = mapView.overlays.first { $0.title!! == "orange" }
+                
+                mapView.removeOverlay(userTwoPolyline!)
+                addPolyline(to: mapView, from: newUserTwoAnnotation!.coordinate, to: halfWayPoint!.coordinate, colorId: "orange")
             }
         }
         
@@ -142,7 +150,7 @@ struct MapView: UIViewRepresentable {
         let fullwayDirections = MKDirections(request: fullwayDirectionRequest)
         fullwayDirections.calculate { response, error in
             guard let response = response else {
-                print("no response")
+                print("no response when calculating halfwaypoint")
                 return
                 
             }
