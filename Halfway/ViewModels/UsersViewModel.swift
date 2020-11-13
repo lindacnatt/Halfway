@@ -28,7 +28,7 @@ class UsersViewModel: ObservableObject {
                 let long = data["Long"] as? Double ?? 1.00
                 let lat = data["Lat"] as? Double ?? 1.00
                 let minLeft = data["MinLeft"] as? Int ?? 0
-
+                
                 
                 return User(name: name, long: long, lat:lat, minLeft: minLeft)
                 

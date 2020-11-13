@@ -24,6 +24,7 @@ pod 'Firebase/Analytics'
 pod 'Firebase/Database'
 pod 'Firebase/DynamicLinks'
 pod 'Firebase/Firestore'
+pod 'Firebase/Storage'
 	
 end
 
