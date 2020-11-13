@@ -11,8 +11,8 @@ import Firebase
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
+    @Published var sessionID: String = ""
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -44,9 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Link parameter is \(url.absoluteString)")
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
             let queryItems = components.queryItems else { return }
-        for queryItem in queryItems {
-            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
-        }
+//        for queryItem in queryItems {
+//            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
+            let session = queryItems[0].value
+        self.sessionID = session ?? ""
+        
+        
     }
     
     
