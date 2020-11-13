@@ -11,6 +11,7 @@ import Foundation
 struct User: Identifiable {
     var id: String = UUID().uuidString
     var name: String
-    var city: String
-    var food: String
+    var long: Double
+    var lat: Double
+    var minLeft: Int
 }
