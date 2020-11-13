@@ -75,7 +75,17 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
         //Used to update the map when for example clicking a "find me on the map" button
-
+        let userTwoAnnotation = mapView.annotations.first { $0.title == "user2" }
+        if users != nil && userTwoAnnotation != nil{
+            let newAnnotations = getUsersAsAnnotations(from: users!)
+            let newUserTwoAnnotation = newAnnotations.first { $0.title == "user2" }
+            if userTwoAnnotation!.coordinate.longitude != newUserTwoAnnotation!.coordinate.longitude
+            || userTwoAnnotation!.coordinate.latitude != newUserTwoAnnotation!.coordinate.latitude{
+                mapView.removeAnnotation(userTwoAnnotation!)
+                mapView.addAnnotation(newUserTwoAnnotation!)
+            }
+        }
+        
     }
     
     func getUsersAsAnnotations (from users: [User]) -> [MKAnnotation]{
@@ -202,7 +212,7 @@ struct MapView: UIViewRepresentable {
             let annotationId = annotation.title ?? "NoTitleId"
             //Checks for old annotations to reuse
             let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationId!) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
-            
+           
             //Sets new annotations
             if (MKAnnView.image == nil){
                 let SwiftUIAnnView = setAnnotation(MKAnnView.annotation!)
