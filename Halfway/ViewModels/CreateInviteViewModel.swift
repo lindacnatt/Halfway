@@ -38,7 +38,7 @@ class CreateInviteViewModel {
         shareLink.iOSParameters?.appStoreID = "962194608" //Change later
         shareLink.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
         shareLink.socialMetaTagParameters?.title = "Halfway"
-        
+        shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://images.unsplash.com/photo-1519614356164-43acba9cb25d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60")
         shareLink.socialMetaTagParameters?.descriptionText = "Meet your friends half-way with the Halfway app!"
         
 
