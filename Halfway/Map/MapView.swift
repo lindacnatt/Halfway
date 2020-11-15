@@ -64,7 +64,7 @@ struct MapView: UIViewRepresentable {
                 setHalfWayPoint(on: mapView)
                 
             }else{
-                updateUserAnnotation(withid: "user2", withColor: "orange", on: mapView)
+                updateUserAnnotation(withid: "friend", withColor: "orange", on: mapView)
                 
             }
         }
@@ -178,7 +178,7 @@ struct MapView: UIViewRepresentable {
     func setHalfWayPoint(on mapView: MKMapView) {
         let userAnnotations = getUsersAsAnnotations(from: viewModel!.users)
         let userOneCoordinate = locationManager.location!.coordinate
-        let userTwoCoordinate = userAnnotations.first(where: {$0.title == "user2"})?.coordinate
+        let userTwoCoordinate = userAnnotations.first(where: {$0.title == "friend"})?.coordinate
         getHalfWayPoint(startPosition: userOneCoordinate, endPosition: userTwoCoordinate!){ halfWaypointCoordinates in
             self.halfwayPointCoordinates = halfWaypointCoordinates
             addPolyline(to: mapView, from: userOneCoordinate, to: halfWaypointCoordinates, colorId: "blue")
@@ -235,7 +235,7 @@ struct MapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         var polyLineColor: UIColor = .blue
         var parent: MapView
-        var lastUserLocation: MKUserLocation = MKUserLocation()
+        var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         
         init(_ parent: MapView) {
             self.parent = parent
@@ -292,19 +292,13 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-            if lastUserLocation.location != nil{
-                let walkedDistance = userLocation.location!.distance(from: lastUserLocation.location!)
-                if walkedDistance > 10 {
-                    let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
-                    parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
-                    lastUserLocation = userLocation
-                    //parent.viewModel?.sendData() Send new data here
-                }
-            }else{
-                lastUserLocation = userLocation
-            }
-            
-            
+            let walkedDistance = userLocation.location!.distance(from: CLLocation(latitude: lastUserLocationCoordinates.latitude, longitude: lastUserLocationCoordinates.longitude))
+            if walkedDistance > 20 {
+                let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
+                parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
+                lastUserLocationCoordinates = userLocation.coordinate
+                //parent.viewModel?.sendData() Send new data here
+            }  
         }
         
         
@@ -322,10 +316,10 @@ struct MapView: UIViewRepresentable {
                 userName = "Johannes"
                 timeLeft = ""
                 
-            }else if (annotation.title! == "user2"){
+            }else if (annotation.title! == "friend"){
                 image = Image("friend")
                 strokeColor = ColorManager.orange
-                userName = (parent.viewModel?.users[0].name)!
+                userName = parent.viewModel?.users[0].name ?? "friend"
                 timeLeft = "\(annotation.subtitle!!) min away"
                 
             }else{

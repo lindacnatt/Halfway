@@ -13,7 +13,7 @@ import FirebaseFirestore
 class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
-    
+    let currentUser = "user1"
     func fetchData(){
         print("fetching data")
         database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").addSnapshotListener{(querySnapshot, error) in
@@ -21,7 +21,7 @@ class UsersViewModel: ObservableObject {
                 print("No documents")
                 return
             }
-            self.users = documents.map{ (queryDocumentSnapshot) -> User in
+            var users = documents.map{ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()
                 
                 let userId = queryDocumentSnapshot.documentID
@@ -32,9 +32,16 @@ class UsersViewModel: ObservableObject {
 
                 return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft)
                 
-            }.filter({$0.id != "user1"})
+            }.filter({$0.id != self.currentUser})
+            
+            if users.count != 0{
+                users[0].id = "friend"
+                self.users = users
+            }
+            
             
         }
+        
         print("finished fetching data")
     }
 
