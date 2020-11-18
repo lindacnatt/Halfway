@@ -15,11 +15,11 @@ struct SessionView: View {
     @ObservedObject private var viewModel = UsersViewModel()
     var body: some View {
         ZStack{
-            if (viewModel.users.count != 0){
+            if (viewModel.users.count == 1 && viewModel.userDataInitilized){
                 MapView(viewModel: viewModel)
                     .edgesIgnoringSafeArea(.all)
             }else{
-               Text("Waiting for your friend")
+               Text("Waiting for friend")
             }
             VStack{
                 HStack{

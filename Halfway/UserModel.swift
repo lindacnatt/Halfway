@@ -13,5 +13,5 @@ struct User: Identifiable {
     var name: String
     var long: Double
     var lat: Double
-    var minLeft: Int
+    var minLeft: String
 }
