@@ -9,6 +9,7 @@
 
 
 import SwiftUI
+import FirebaseStorage
 
 //Hello! Gör dig redo för väldigt mycket och väldigt ful kod. Enjoy ;)
 
@@ -22,6 +23,8 @@ class ImagePic: ObservableObject{
 }
 
 struct UserProfileView: View {
+    
+    @State var imgID = ""
     
     @State private var image: Image?
     
@@ -39,7 +42,15 @@ struct UserProfileView: View {
                 Spacer()
                 //Finish button
                 //TODO: Send the input from the image and namefields to firebase and mapView
-                Button(action: {}){
+                Button(action: {
+                    if let profileImage = self.inputImage{
+                        storeImage(image: profileImage)
+                    }
+                    else{
+                        print("Problem with profile Image")
+                    }
+                    
+                }){
                     Text("Done").foregroundColor(Color.blue)
                 }.padding(.trailing)
             }
@@ -117,8 +128,25 @@ struct UserProfileView: View {
         profilepic.emojipic = ""
         
     }
-    func addUser(Name: String){
+    func storeImage(image: UIImage){
+        randomID()
+        if let imageData = image.jpegData(compressionQuality: 1){
+            let storage = Storage.storage()
+            storage.reference().child(imgID).putData(imageData, metadata: nil) {
+                (_, err) in
+                if let err = err {
+                    print("Error occurred! \(err)")
+                } else {
+                    print("Upload successful")
+                }
+            }
+            
+        }
         
+    }
+    func randomID(){
+        let id = UUID().uuidString
+        imgID = id
     }
 }
 
