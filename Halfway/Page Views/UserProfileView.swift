@@ -10,8 +10,6 @@
 
 import SwiftUI
 import FirebaseStorage
-import FirebaseFirestore
-
 
 class ImagePic: ObservableObject{
     private init(){}
@@ -24,6 +22,7 @@ class ImagePic: ObservableObject{
 }
 
 struct UserProfileView: View {
+    @ObservedObject private var FirebaseViewModel = UsersViewModel()
     
     @State var imgID = ""
     
@@ -138,16 +137,6 @@ struct UserProfileView: View {
         profilepic.emojipic = ""
         
     }
-    func setImageReferance(imageID: String){
-        let database = Firestore.firestore()
-        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").document("user1").updateData(["imageRef" : imageID]){ err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
     func storeImage(image: UIImage){
         let id = randomID()
         if let imageData = image.jpegData(compressionQuality: 1){
@@ -158,7 +147,7 @@ struct UserProfileView: View {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
-                    setImageReferance(imageID: id)
+                    FirebaseViewModel.setImageReferance(imageID: id)
                 }
             }
         }
