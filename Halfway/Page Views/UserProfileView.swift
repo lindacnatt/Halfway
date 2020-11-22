@@ -11,22 +11,21 @@
 import SwiftUI
 import FirebaseStorage
 
-//Hello! Gör dig redo för väldigt mycket och väldigt ful kod. Enjoy ;)
 
 class ImagePic: ObservableObject{
     private init(){}
     
     static let shared = ImagePic()
     @Published var emojipic = ""
+    @Published var image: Image?
     
-
+    
 }
 
 struct UserProfileView: View {
     
     @State var imgID = ""
     
-    @State private var image: Image?
     
     @ObservedObject var profilepic: ImagePic = .shared
     
@@ -37,46 +36,54 @@ struct UserProfileView: View {
     @ObservedObject var viewModel: EmojiProfileImage
     
     var body: some View {
-        VStack{
-            HStack{
-                Spacer()
-                //Finish button
-                //TODO: Send the input from the image and namefields to firebase and mapView
-                Button(action: {
-                    if let profileImage = self.inputImage{
-                        storeImage(image: profileImage)
+        NavigationView{
+            
+            VStack{
+                HStack{
+                    Spacer()
+                    //Finish button
+                    //TODO: Send the input from the image and namefields to firebase and mapView
+                    NavigationLink(destination: MapView().navigationBarBackButtonHidden(true)
+                        .navigationBarHidden(true)
+                        .edgesIgnoringSafeArea(.all)){
+                        Text("Map")
+                        
                     }
-                    else{
-                        print("Problem with profile Image")
-                    }
-                    
-                }){
-                    Text("Done").foregroundColor(Color.blue)
-                }.padding(.trailing)
-            }
-           
-            //Display ProfileImage
+                    Button(action: {
+                        if let profileImage = self.inputImage{
+                            storeImage(image: profileImage)
+                        }
+                        else{
+                            print("Problem with profile Image")
+                        }
+                        
+                    }){
+                        Text("Done").foregroundColor(Color.blue)
+                    }.padding(.trailing)
+                }
+                
+                //Display ProfileImage
                 GeometryReader{ gView in
                     ZStack {
                         Circle()
                             .fill(Color.gray.opacity(0.1))
                             .overlay(Circle()
-                                .stroke(Color.orange, lineWidth: 4))
+                                        .stroke(Color.orange, lineWidth: 4))
                         //Show Image if image is not empty
-                        if self.image != nil {
-                            CircleImage(image: self.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
+                        if self.profilepic.image != nil {
+                            CircleImage(image: self.profilepic.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
                         }
-                         else if self.profilepic.emojipic != "" {
+                        else if self.profilepic.emojipic != "" {
                             //Show Emoji if emojistring is not empty
                             Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width *  0.7: gView.size.height *  0.7))
-                         }
-                         else{
+                        }
+                        else{
                             //If both Image and Emoji is empty show default image
                             Image(systemName: "person")
                                 .resizable()
                                 .frame(width: gView.size.height * 0.5, height: gView.size.height * 0.5)
                                 .opacity(0.5)
-                         }
+                        }
                     }
                 }
                 .padding()
@@ -84,47 +91,48 @@ struct UserProfileView: View {
                 .onTapGesture {
                     self.showImagePicker = true
                 }
-            
-            //Choose emoji avatars
-            VStack(alignment: .leading) {
-                Divider()
-                Text("Choose avatar").padding(.top)
-                GeometryReader { geometry in
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack {
-                            Image(systemName: "camera")
-                                .padding()
-                                .font(.title)
-                                .padding()
-                                .background(Circle().stroke(Color.gray.opacity(0.50)))
-                                .fixedSize()
-                                .onTapGesture {
-                                    self.showImagePicker = true
-                            }
-                            ForEach(self.viewModel.imageCards){ card in
-                                ImageCardView(imageCard: card)
+                
+                //Choose emoji avatars
+                VStack(alignment: .leading) {
+                    Divider()
+                    Text("Choose avatar").padding(.top)
+                    GeometryReader { geometry in
+                        ScrollView(.horizontal, showsIndicators: false){
+                            HStack {
+                                Image(systemName: "camera")
+                                    .padding()
+                                    .font(.title)
+                                    .padding()
+                                    .background(Circle().stroke(Color.gray.opacity(0.50)))
+                                    .fixedSize()
                                     .onTapGesture {
-                                        self.viewModel.choose(card: card)
-                                        self.profilepic.emojipic = card.content
-                                        self.image = nil
+                                        self.showImagePicker = true
+                                    }
+                                ForEach(self.viewModel.imageCards){ card in
+                                    ImageCardView(imageCard: card)
+                                        .onTapGesture {
+                                            self.viewModel.choose(card: card)
+                                            self.profilepic.emojipic = card.content
+                                            self.profilepic.image = nil
+                                        }
                                 }
-                            }
-                        }.fixedSize()
-                    }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
-                }.frame(height: 150)
-            }
-            //Namefields
-            NameFields()
-            
-        //Imagepicker over the whole view
-        }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
-            ImagePicker(image: self.$inputImage)
-        }.padding()
-        
+                            }.fixedSize()
+                        }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
+                    }.frame(height: 150)
+                }
+                //Namefields
+                NameFields()
+                
+                //Imagepicker over the whole view
+            }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
+                ImagePicker(image: self.$inputImage)
+            }.padding()
+        .navigationBarHidden(true)
+        }
     }
     func loadImage(){
         guard let inputImage = inputImage else {return}
-        image = Image(uiImage: inputImage)
+        profilepic.image = Image(uiImage: inputImage)
         profilepic.emojipic = ""
         
     }

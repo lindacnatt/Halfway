@@ -14,6 +14,8 @@ struct MapView: UIViewRepresentable {
     let locationManager = CLLocationManager()
     var annotations: [MKAnnotation]? = []
     
+    @ObservedObject static var profilepic: ImagePic = .shared
+    
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
@@ -224,7 +226,7 @@ struct MapView: UIViewRepresentable {
         
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
             //MARK: Setting annotation
-            
+           
             //Temporary data, will be replaced by database data
             let user = ["name": "Johannes", "timeLeft": "", "image": "user"]
             let friend = ["name": "Linda", "timeLeft": "", "image": "friend"]
@@ -236,7 +238,7 @@ struct MapView: UIViewRepresentable {
             
             //Changing the annotationView depanding on the title (used as Id) or type
             if annotation is MKUserLocation{
-                image = Image(user["image"] ?? "user")
+                image = profilepic.image ?? Image("friend")
                 strokeColor = ColorManager.blue
                 userName = user["name"] ?? "Friend"
                 timeLeft = user["timeLeft"] ?? "0"
