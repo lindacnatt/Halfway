@@ -10,6 +10,7 @@
 
 import SwiftUI
 import FirebaseStorage
+import FirebaseFirestore
 
 
 class ImagePic: ObservableObject{
@@ -34,6 +35,7 @@ struct UserProfileView: View {
     @State private var inputImage: UIImage?
     
     @ObservedObject var viewModel: EmojiProfileImage
+
     
     var body: some View {
         NavigationView{
@@ -136,25 +138,36 @@ struct UserProfileView: View {
         profilepic.emojipic = ""
         
     }
+    func setImageReferance(imageID: String){
+        let database = Firestore.firestore()
+        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").document("user1").updateData(["imageRef" : imageID]){ err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
     func storeImage(image: UIImage){
-        randomID()
+        let id = randomID()
         if let imageData = image.jpegData(compressionQuality: 1){
             let storage = Storage.storage()
-            storage.reference().child(imgID).putData(imageData, metadata: nil) {
+            storage.reference().child(id).putData(imageData, metadata: nil) {
                 (_, err) in
                 if let err = err {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
+                    setImageReferance(imageID: id)
                 }
             }
-            
         }
         
     }
-    func randomID(){
+    func randomID() -> String{
         let id = UUID().uuidString
         imgID = id
+        return imgID
     }
 }
 
