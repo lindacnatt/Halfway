@@ -15,11 +15,11 @@ class ImagePic: ObservableObject{
     private init(){}
     
     static let shared = ImagePic()
-    @Published var emojipic = ""
     @Published var image: Image?
     
     
 }
+
 
 struct UserProfileView: View {
     @ObservedObject private var FirebaseViewModel = UsersViewModel()
@@ -34,7 +34,6 @@ struct UserProfileView: View {
     @State private var inputImage: UIImage?
     
     @ObservedObject var viewModel: EmojiProfileImage
-
     
     var body: some View {
         NavigationView{
@@ -66,24 +65,27 @@ struct UserProfileView: View {
                 //Display ProfileImage
                 GeometryReader{ gView in
                     ZStack {
-                        Circle()
-                            .fill(Color.gray.opacity(0.1))
-                            .overlay(Circle()
-                                        .stroke(Color.orange, lineWidth: 4))
+                        if self.profilepic.image == nil{
+                            Circle()
+                                .fill(Color.gray.opacity(0.15))
+                                .overlay(Circle()
+                                            .stroke(Color.orange, lineWidth: 4))
+                        } else{
+                            Circle()
+                                .fill(ColorManager.lightBlue)
+                        }
+                        
                         //Show Image if image is not empty
                         if self.profilepic.image != nil {
                             CircleImage(image: self.profilepic.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
-                        }
-                        else if self.profilepic.emojipic != "" {
-                            //Show Emoji if emojistring is not empty
-                            Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width *  0.7: gView.size.height *  0.7))
                         }
                         else{
                             //If both Image and Emoji is empty show default image
                             Image(systemName: "person")
                                 .resizable()
-                                .frame(width: gView.size.height * 0.5, height: gView.size.height * 0.5)
-                                .opacity(0.5)
+                                .frame(width: gView.size.height * 0.3, height: gView.size.height * 0.3)
+                                .foregroundColor(Color.gray)
+                                
                         }
                     }
                 }
@@ -96,7 +98,8 @@ struct UserProfileView: View {
                 //Choose emoji avatars
                 VStack(alignment: .leading) {
                     Divider()
-                    Text("Choose avatar").padding(.top)
+                    Text("Pick an image or avatar").padding(.top)
+   
                     GeometryReader { geometry in
                         ScrollView(.horizontal, showsIndicators: false){
                             HStack {
@@ -113,11 +116,10 @@ struct UserProfileView: View {
                                     ImageCardView(imageCard: card)
                                         .onTapGesture {
                                             self.viewModel.choose(card: card)
-                                            self.profilepic.emojipic = card.content
-                                            self.profilepic.image = nil
+                                            self.profilepic.image = Image(card.content)
                                         }
                                 }
-                            }.fixedSize()
+                            }
                         }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
                     }.frame(height: 150)
                 }
@@ -134,7 +136,6 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         profilepic.image = Image(uiImage: inputImage)
-        profilepic.emojipic = ""
         
     }
     func storeImage(image: UIImage){
@@ -185,13 +186,14 @@ struct NameFields: View{
 
 struct ImageCardView: View{
     var imageCard: ProfileImage<String>.ImageCard
-    @ObservedObject var profilepic: ImagePic = .shared
     
     var body: some View{
         ZStack {
-            Circle().foregroundColor(Color.blue.opacity(0.15))
+            Circle().foregroundColor(ColorManager.lightBlue).padding()
                 .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
-            Text(imageCard.content)
+            Image(imageCard.content)
+                .resizable()
+                
         }.aspectRatio(contentMode: .fit)
     }
     
@@ -199,7 +201,8 @@ struct ImageCardView: View{
 
 struct UserProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfileView(viewModel: EmojiProfileImage())
+            UserProfileView(viewModel: EmojiProfileImage())
+
     }
 }
 
