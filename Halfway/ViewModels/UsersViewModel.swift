@@ -75,10 +75,10 @@ class UsersViewModel: ObservableObject {
     }
     
     func updateCoordinates(lat: Double, long: Double){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).updateData([
             "Lat": lat,
             "Long": long
-        ], merge: true) { err in
+        ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
