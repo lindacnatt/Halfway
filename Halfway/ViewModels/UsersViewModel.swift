@@ -16,10 +16,9 @@ class UsersViewModel: ObservableObject {
     @Published var userDataInitilized = false
     let currentUser = "user1"
     func fetchData(){
-        if !userDataInitilized{
-            setInitialUserData(name: currentUser == "user1" ? "Johannes" : "Linda")
-        }
-        
+//        if !userDataInitilized{
+//            setInitialUserData(name: currentUser == "user1" ? "Johannes" : "Linda")
+//        }
         print("fetching data")
         database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").addSnapshotListener{(querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
@@ -43,11 +42,11 @@ class UsersViewModel: ObservableObject {
                 users[0].id = "friend"
                 self.users = users
             }
-            
-            
+            print("finished fetching data")
+
         }
         
-        print("finished fetching data")
+        
     }
     
     func setInitialUserData(name: String){

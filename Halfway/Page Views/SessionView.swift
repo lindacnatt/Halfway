@@ -12,12 +12,15 @@ import MapKit
 
 struct SessionView: View {
     @State var showingEndOptions = false
-    @ObservedObject private var viewModel = UsersViewModel()
+    @ObservedObject var usersViewModel = UsersViewModel()
+    @ObservedObject private var locationViewModel = LocationViewModel()
     var body: some View {
         ZStack{
-            if (viewModel.users.count == 1 && viewModel.userDataInitilized){
-                MapView(viewModel: viewModel)
-                    .edgesIgnoringSafeArea(.all)
+            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
+                if (usersViewModel.users[0].lat != 0){
+                    MapView(users: usersViewModel.users)
+                        .edgesIgnoringSafeArea(.all)
+                }
             }else{
                Text("Waiting for friend")
             }
@@ -52,7 +55,7 @@ struct SessionView: View {
                 Spacer()
             }.padding()
         }.onAppear(){
-            self.viewModel.fetchData()
+            usersViewModel.fetchData()
         }
     }      
 }

@@ -21,7 +21,7 @@ struct TestView: View {
                 }
                 
             }.onAppear(){
-                self.viewModel.fetchData()
+                //self.viewModel.fetchData()
             }
             
         }
