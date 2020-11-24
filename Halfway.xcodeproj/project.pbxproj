@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		048361140F92B5E9CC9311AA /* Pods_Halfway.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6521D48F7600B47C9B277CE4 /* Pods_Halfway.framework */; };
 		6A19646950789A6259F4CF5D /* Pods_Halfway_HalfwayUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8C1B05B6C148DAC243A4010 /* Pods_Halfway_HalfwayUITests.framework */; };
+		84FC718F253DCBD900FF5D31 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FC718E253DCBD900FF5D31 /* TestView.swift */; };
 		8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C06252F4D5F00B595A3 /* MapView.swift */; };
 		8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C0B252F5F4700B595A3 /* SessionView.swift */; };
 		8F0C8C16252F98AD00B595A3 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C15252F98AD00B595A3 /* CircleImage.swift */; };
@@ -61,6 +62,8 @@
 		6521D48F7600B47C9B277CE4 /* Pods_Halfway.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Halfway.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68D95E2EA2B357CC42024AE8 /* Pods-Halfway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway.release.xcconfig"; path = "Target Support Files/Pods-Halfway/Pods-Halfway.release.xcconfig"; sourceTree = "<group>"; };
 		7E715CB9EE1E30693498FA98 /* Pods-Halfway-HalfwayUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway-HalfwayUITests.debug.xcconfig"; path = "Target Support Files/Pods-Halfway-HalfwayUITests/Pods-Halfway-HalfwayUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		84FC718D253DC69800FF5D31 /* Halfway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Halfway.entitlements; sourceTree = "<group>"; };
+		84FC718E253DCBD900FF5D31 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		8644D0EE1A9493FB6DCB8826 /* Pods-Halfway-HalfwayUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway-HalfwayUITests.release.xcconfig"; path = "Target Support Files/Pods-Halfway-HalfwayUITests/Pods-Halfway-HalfwayUITests.release.xcconfig"; sourceTree = "<group>"; };
 		86E7A80178038AD1FE1592FE /* Pods-Halfway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway.debug.xcconfig"; path = "Target Support Files/Pods-Halfway/Pods-Halfway.debug.xcconfig"; sourceTree = "<group>"; };
 		8F0C8C06252F4D5F00B595A3 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -216,6 +219,7 @@
 		CA553D95252DA90800B1BDF4 /* Halfway */ = {
 			isa = PBXGroup;
 			children = (
+				84FC718D253DC69800FF5D31 /* Halfway.entitlements */,
 				CAB2142A2539D65C00F8290C /* ViewModels */,
 				8F6043FF25324D6600949011 /* Page Views */,
 				8F6043FA25324BEC00949011 /* Map */,
@@ -701,6 +705,7 @@
 			baseConfigurationReference = 86E7A80178038AD1FE1592FE /* Pods-Halfway.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Halfway/Halfway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Halfway/Preview Content\"";
 				DEVELOPMENT_TEAM = 762W6V8USZ;
@@ -723,6 +728,7 @@
 			baseConfigurationReference = 68D95E2EA2B357CC42024AE8 /* Pods-Halfway.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Halfway/Halfway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Halfway/Preview Content\"";
 				DEVELOPMENT_TEAM = 762W6V8USZ;
