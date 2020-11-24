@@ -10,6 +10,7 @@ import SwiftUI
 import CoreLocation
 
 struct SettingLocationView: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var locationViewModel = LocationViewModel()
     @State var locationBtnClicked = false
     
@@ -28,6 +29,16 @@ struct SettingLocationView: View {
                 
             }else{
                 Text("Location is granted")
+                Button(
+                    action:{
+                        withAnimation {
+                            viewRouter.currentPage = .session
+                        }
+                    },
+                    label: {
+                        Text("Go to session")
+                    }
+                ).padding()
             }
         }
     }

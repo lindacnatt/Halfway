@@ -11,6 +11,7 @@ import SwiftUI
 import MapKit
 
 struct SessionView: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @State var showingEndOptions = false
     @ObservedObject var usersViewModel = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
@@ -39,7 +40,11 @@ struct SessionView: View {
                         Alert(
                             title: Text("End session?"),
                             message: Text("This will close the session and you will no longer see each other on the map"),
-                            primaryButton: .destructive(Text("Yes"), action: {}), //TODO: Make this end session
+                            primaryButton: .destructive(Text("Yes"), action: {
+                                //TODO: Make this end session
+                                withAnimation{
+                                    viewRouter.currentPage = .settingLocation}
+                            }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
                         )
@@ -62,6 +67,6 @@ struct SessionView: View {
 
 struct SessionView_Previews: PreviewProvider {
     static var previews: some View {
-        SessionView()
+        SessionView().environmentObject(ViewRouter())
     }
 }
