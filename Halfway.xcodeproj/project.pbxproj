@@ -18,7 +18,6 @@
 		8F6043F125322B9900949011 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6043F025322B9900949011 /* Triangle.swift */; };
 		8F6043F625322C2300949011 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6043F525322C2300949011 /* AnnotationView.swift */; };
 		8F7D412F256AD1C500123623 /* SettingLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7D412E256AD1C500123623 /* SettingLocationView.swift */; };
-		8F84D8EE256C51860094D5AA /* TestMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F84D8ED256C51860094D5AA /* TestMap.swift */; };
 		8FDB0409253250BA00FED70E /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDB0408253250BA00FED70E /* UserAnnotation.swift */; };
 		CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D96252DA90800B1BDF4 /* AppDelegate.swift */; };
 		CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D98252DA90800B1BDF4 /* SceneDelegate.swift */; };
@@ -73,7 +72,6 @@
 		8F6043F025322B9900949011 /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
 		8F6043F525322C2300949011 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		8F7D412E256AD1C500123623 /* SettingLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingLocationView.swift; sourceTree = "<group>"; };
-		8F84D8ED256C51860094D5AA /* TestMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestMap.swift; sourceTree = "<group>"; };
 		8FDB0408253250BA00FED70E /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		908DB6187A3FC1048E1E8679 /* Pods-HalfwayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.release.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.release.xcconfig"; sourceTree = "<group>"; };
 		C8C1B05B6C148DAC243A4010 /* Pods_Halfway_HalfwayUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Halfway_HalfwayUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,7 +145,6 @@
 				8F6043F525322C2300949011 /* AnnotationView.swift */,
 				8F0C8C06252F4D5F00B595A3 /* MapView.swift */,
 				8FDB0408253250BA00FED70E /* UserAnnotation.swift */,
-				8F84D8ED256C51860094D5AA /* TestMap.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -516,7 +513,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F84D8EE256C51860094D5AA /* TestMap.swift in Sources */,
 				CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */,
 				CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */,
 				CA7231C0254768B000F91D36 /* ProfileImageViewModel.swift in Sources */,

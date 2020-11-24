@@ -17,11 +17,11 @@ struct SessionView: View {
     var body: some View {
         ZStack{
             if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
-                if (usersViewModel.users[0].lat != 0){
-                    MapView(users: usersViewModel.users)
-                        .edgesIgnoringSafeArea(.all)
-                }
+                MapView(users: usersViewModel.users)
+                    .edgesIgnoringSafeArea(.all)
+                
             }else{
+                //TODO: Add waiting view
                Text("Waiting for friend")
             }
             VStack{
@@ -39,7 +39,7 @@ struct SessionView: View {
                         Alert(
                             title: Text("End session?"),
                             message: Text("This will close the session and you will no longer see each other on the map"),
-                            primaryButton: .destructive(Text("Yes"), action: {}),
+                            primaryButton: .destructive(Text("Yes"), action: {}), //TODO: Make this end session
                             secondaryButton: .cancel(Text("No"), action: {})
                             
                         )

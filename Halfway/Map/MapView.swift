@@ -16,8 +16,9 @@ struct MapView: UIViewRepresentable {
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
-    @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 59.34255, longitude: 18.070511)
-
+    @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    
+    //MARK: Create initial map
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
@@ -33,7 +34,6 @@ struct MapView: UIViewRepresentable {
             if users.count != 0{
                 let userAnnotations = getUsersAsAnnotations(from: users)
                 mapView.addAnnotations(userAnnotations)
-                setHalfWayPoint(on: mapView)
 
             }
             else{
@@ -55,20 +55,17 @@ struct MapView: UIViewRepresentable {
         return mapView
     }
     
+    //MARK: Update map
+    //Used to update the map when for example clicking a "find me on the map" button or new data comes in
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        //Used to update the map when for example clicking a "find me on the map" button or new data comes in
-        if (locationViewModel.locationAccessed){
-            if users.count != 0{
-                if users[0].lat != 0 && users[0].long != 0{
-                    updateUserAnnotation(withid: "friend", withColor: "orange", on: mapView)
-                    //setHalfWayPoint(on: mapView)
-                }
-
-            }
+        if (users.count != 0){
+            updateUserAnnotation(withid: "friend", withColor: "orange", on: mapView)
         }
         
     }
     
+    //MARK: User to annotation changer
+    //Transforms array of User objects to UserAnnotations
     func getUsersAsAnnotations (from users: [User]) -> [MKAnnotation]{
         let usersAsAnnotations: [MKAnnotation] = users.map{
             let title = $0.id
@@ -80,6 +77,8 @@ struct MapView: UIViewRepresentable {
         return usersAsAnnotations
     }
     
+    //MARK: Update user
+    //Updates user annotation and polyline
     func updateUserAnnotation(withid userId: String, withColor colorId: String, on mapView: MKMapView){
         let newAnnotations = getUsersAsAnnotations(from: users)
         let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId })
@@ -95,6 +94,7 @@ struct MapView: UIViewRepresentable {
         }
     }
     
+    //MARK: Update Polyline
     func updateUserPolyline(for userAnnotation: MKAnnotation, withColor colorId: String, on mapView: MKMapView){
         for polyline in mapView.overlays{
             if polyline.title == colorId{
@@ -108,16 +108,7 @@ struct MapView: UIViewRepresentable {
         }
     }
     
-    func addCompass(to mapView: MKMapView) -> (){
-        mapView.showsCompass = false
-        let screenHeight = UIScreen.main.bounds.height
-        let scrennWidth = UIScreen.main.bounds.width
-        let compassBtn = MKCompassButton(mapView: mapView)
-        compassBtn.frame.origin = CGPoint(x: scrennWidth - 60, y: screenHeight - 110)
-        compassBtn.compassVisibility = .adaptive
-        mapView.addSubview(compassBtn)
-    }
-    
+    //MARK: Add polyline
     func addPolyline(to mapView: MKMapView, from startPosition: CLLocationCoordinate2D, to endPostition: CLLocationCoordinate2D, colorId: String) -> (){
         let directionRequest = MKDirections.Request()
         let startPlacemark = MKPlacemark(coordinate: startPosition)
@@ -132,13 +123,22 @@ struct MapView: UIViewRepresentable {
             guard let response = response else { return }
             let route = response.routes[0]
             route.polyline.title = colorId
-            let time = convertSecondsToHoursAndMinutes(seconds: route.expectedTravelTime)
-            print("\(route.polyline.title!) halfway time: \(time)")
             mapView.addOverlay(route.polyline, level: .aboveRoads)
-            
         }
     }
     
+    //MARK: Add custom compass
+    func addCompass(to mapView: MKMapView) -> (){
+        mapView.showsCompass = false
+        let screenHeight = UIScreen.main.bounds.height
+        let scrennWidth = UIScreen.main.bounds.width
+        let compassBtn = MKCompassButton(mapView: mapView)
+        compassBtn.frame.origin = CGPoint(x: scrennWidth - 60, y: screenHeight - 110)
+        compassBtn.compassVisibility = .adaptive
+        mapView.addSubview(compassBtn)
+    }
+    
+    //MARK: Calculate halfwaypoint
     func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
         let startPlacemark = MKPlacemark(coordinate: startPosition, addressDictionary: nil)
         let destinationPlacemark = MKPlacemark(coordinate: endPosition, addressDictionary: nil)
@@ -181,20 +181,21 @@ struct MapView: UIViewRepresentable {
             halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
             group.leave()
             
-
         })
+        
         group.notify(queue: .main){
             completion(halfwayCoordinates)
         }
         
     }
     
+    //MARK: Adds halfwaypoint
+    //Adds the halfwaypoint and zooms to show users and halfwaypoint
     func setHalfWayPoint(on mapView: MKMapView) {
         let userAnnotations = getUsersAsAnnotations(from: users)
         let userOneCoordinate = locationViewModel.userCoordinates
         let userTwoCoordinate = userAnnotations.first(where: {$0.title == "friend"})?.coordinate
-        print("userone: \(userOneCoordinate)")
-        print("usertwo: \(userTwoCoordinate!)")
+
         getHalfWayPoint(startPosition: userOneCoordinate, endPosition: userTwoCoordinate!){ halfWaypointCoordinates in
             self.halfwayPointCoordinates = halfWaypointCoordinates
             addPolyline(to: mapView, from: userOneCoordinate, to: halfWaypointCoordinates, colorId: "blue")
@@ -218,12 +219,12 @@ struct MapView: UIViewRepresentable {
 
             mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
             halfwayPointIsSet = true
-            print("halfwaypoint set")
             
        }
     }
     
-    //To be used when updating the time left for users
+    //MARK: Calculate ETA
+    //Calculates the time left from user to halfwaypoint
     func getHalfWayETA(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (TimeInterval) -> Void){
         let startPlacemark = MKPlacemark(coordinate: startPosition)
         let destinationPlacemark = MKPlacemark(coordinate: endPosition)
@@ -243,6 +244,7 @@ struct MapView: UIViewRepresentable {
         }
     }
     
+    //MARK: Time formatter
     func convertSecondsToHoursAndMinutes(seconds: Double) -> String{
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
@@ -252,10 +254,12 @@ struct MapView: UIViewRepresentable {
         return formattedString
     }
     
+    //MARK: Setting map coordinator
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
     
+    //MARK: Map coordinator
     class Coordinator: NSObject, MKMapViewDelegate {
         var polyLineColor: UIColor = .blue
         var parent: MapView
@@ -266,8 +270,8 @@ struct MapView: UIViewRepresentable {
             
         }
         
+        //MARK: Annotation handling
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            //MARK: Annotation handling
             let annotationId = annotation.title ?? "NoTitleId"
             //Checks for old annotations to reuse
             let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationId!) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
@@ -286,81 +290,8 @@ struct MapView: UIViewRepresentable {
         
         }
         
-        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            //MARK: - Polyline Colors
-            if #available(iOS 14.0, *) {
-                let polyline = MKGradientPolylineRenderer(overlay: overlay)
-                var gradientStartColor: UIColor = .black
-                
-                if overlay.title == "blue"{
-                    gradientStartColor = UIColor(ColorManager.blue)
-                }else if (overlay.title == "orange"){
-                    gradientStartColor = UIColor(ColorManager.orange)
-                }
-                polyline.setColors([gradientStartColor, UIColor(ColorManager.inbetweenPurple)], locations: polyline.locations)
-                polyline.lineWidth = 5.0
-                
-                return polyline
-                
-            } else {
-                let polyline = MKPolylineRenderer(overlay: overlay)
-                polyline.lineWidth = 5.0
-                
-                if overlay.title == "blue"{
-                    polyline.strokeColor = .blue
-                }else if (overlay.title == "orange"){
-                    polyline.strokeColor = .orange
-                }
-                return polyline
-            }
-        }
-        
-        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-            if !parent.halfwayPointIsSet{
-                //parent.setHalfWayPoint(on: mapView)
-            }
-            else if self.userETA == "ETA"{
-                print("getting halfway eta")
-                parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
-                    let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
-                    if newEta != self.userETA{
-                        self.userETA = newEta
-                        self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
-                        mapView.showsUserLocation = false
-                        mapView.showsUserLocation = true
-
-                    }
-                }
-            }
-            
-            let walkedDistance = userLocation.location!.distance(from: CLLocation(latitude: lastUserLocationCoordinates.latitude, longitude: lastUserLocationCoordinates.longitude))
-            
-            if walkedDistance > 50{
-                let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
-                parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
-                lastUserLocationCoordinates = userLocation.coordinate
-                
-                if self.userETA != "ETA"{
-                    parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
-                        let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
-                        if newEta != self.userETA{
-                            self.userETA = newEta
-                            self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
-                            mapView.showsUserLocation = false
-                            mapView.showsUserLocation = true
-                        }
-                    }
-
-                }
-                
-                parent.usersViewModel.updateCoordinates(lat: userLocation.location!.coordinate.latitude, long: userLocation.location!.coordinate.longitude)
-                
-            }
-        }
-        
-        
+        //MARK: Setting annotation as AnnotationView
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
-            //MARK: Setting annotation
             var image: Image
             var strokeColor: Color
             var userName: String
@@ -388,9 +319,85 @@ struct MapView: UIViewRepresentable {
             
             let annotation = AnnotationView(image: image, strokeColor: strokeColor, userName: userName, timeLeft: timeLeft)
             return annotation
-            
         }
         
+        //MARK: Setting Polyline Colors
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            if #available(iOS 14.0, *) {
+                let polyline = MKGradientPolylineRenderer(overlay: overlay)
+                var gradientStartColor: UIColor = .black
+                
+                if overlay.title == "blue"{
+                    gradientStartColor = UIColor(ColorManager.blue)
+                }else if (overlay.title == "orange"){
+                    gradientStartColor = UIColor(ColorManager.orange)
+                }
+                
+                polyline.setColors([gradientStartColor, UIColor(ColorManager.inbetweenPurple)], locations: polyline.locations)
+                polyline.lineWidth = 5.0
+                
+                return polyline
+                
+            } else {
+                let polyline = MKPolylineRenderer(overlay: overlay)
+                polyline.lineWidth = 5.0
+                
+                if overlay.title == "blue"{
+                    polyline.strokeColor = .blue
+                }else if (overlay.title == "orange"){
+                    polyline.strokeColor = .orange
+                }
+                return polyline
+            }
+        }
+        
+        //MARK: Location updates
+        //Updates user location, polyline and eta when location changes
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            if parent.users.count != 0{
+                //Initial setup
+                if !parent.halfwayPointIsSet{
+                    parent.setHalfWayPoint(on: mapView)
+                }
+                else if self.userETA == "ETA"{
+                    parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
+                        let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
+                        if newEta != self.userETA{
+                            self.userETA = newEta
+                            self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
+                            mapView.showsUserLocation = false
+                            mapView.showsUserLocation = true
+
+                        }
+                    }
+                }
+                
+                //Runs when the user has moved a certain distance
+                let walkedDistance = userLocation.location!.distance(from: CLLocation(latitude: lastUserLocationCoordinates.latitude, longitude: lastUserLocationCoordinates.longitude))
+                if walkedDistance > 50{
+                    let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
+                    parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
+                    lastUserLocationCoordinates = userLocation.coordinate
+                    
+                    if self.userETA != "ETA"{
+                        parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
+                            let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
+                            if newEta != self.userETA{
+                                self.userETA = newEta
+                                self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
+                                mapView.showsUserLocation = false
+                                mapView.showsUserLocation = true
+                            }
+                        }
+
+                    }
+                    
+                    parent.usersViewModel.updateCoordinates(lat: userLocation.location!.coordinate.latitude, long: userLocation.location!.coordinate.longitude)
+                    
+                }
+            }
+           
+        }
     }
 }
 
