@@ -22,10 +22,10 @@ class ImagePic: ObservableObject{
 
 
 struct UserProfileView: View {
-    @ObservedObject private var FirebaseViewModel = UsersViewModel()
     
     @State var imgID = ""
     
+    @State var downloadimage:UIImage?
     
     @ObservedObject var profilepic: ImagePic = .shared
     
@@ -33,7 +33,7 @@ struct UserProfileView: View {
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
     
-    @ObservedObject var viewModel: EmojiProfileImage
+    @ObservedObject var viewModel = EmojiProfileImage()
     
     var body: some View {
         NavigationView{
@@ -125,6 +125,16 @@ struct UserProfileView: View {
                 }
                 //Namefields
                 NameFields()
+                Button(action: {
+                    getImage()
+                }){
+                    Text("Butt")
+                }
+                if downloadimage != nil{
+                    Image(uiImage: downloadimage!)
+                } else{
+                    Image(systemName:"camera")
+                }
                 
                 //Imagepicker over the whole view
             }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
@@ -139,20 +149,32 @@ struct UserProfileView: View {
         
     }
     func storeImage(image: UIImage){
-        let id = randomID()
-        if let imageData = image.jpegData(compressionQuality: 1){
+        let randID = randomID()
+        if let imageData = image.jpegData(compressionQuality: 0.75){
             let storage = Storage.storage()
-            storage.reference().child(id).putData(imageData, metadata: nil) {
+            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
                 (_, err) in
                 if let err = err {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
-                    FirebaseViewModel.setImageReferance(imageID: id)
+                    viewModel.setImageReferance(imageID: randID)
                 }
             }
         }
-        
+    }
+    func getImage(){
+            let storage = Storage.storage()
+        storage.reference(withPath:"F2F57326-B129-43CF-B247-339E39140A86").getData(maxSize: 4*1024*1024){  (data, error) in
+            if let error = error{
+                print("Got an error \(error.localizedDescription)")
+                return
+            }
+            if let data = data {
+                print("Works")
+                self.downloadimage = UIImage(data: data)
+            }
+        }
     }
     func randomID() -> String{
         let id = UUID().uuidString

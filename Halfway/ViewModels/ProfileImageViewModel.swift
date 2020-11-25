@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseStorage
 
 class EmojiProfileImage: ObservableObject{
     @Published private var model: ProfileImage<String> = EmojiProfileImage.createProfileImages()
@@ -25,4 +27,15 @@ class EmojiProfileImage: ObservableObject{
     func choose(card: ProfileImage<String>.ImageCard){
         model.choose(card: card)
     }
+    func setImageReferance(imageID: String){
+        let database = Firestore.firestore()
+        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").document("user1").updateData(["imageRef" : imageID]){ err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+
 }
