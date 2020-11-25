@@ -126,7 +126,7 @@ struct UserProfileView: View {
                 //Namefields
                 NameFields()
                 Button(action: {
-                    getImage()
+                    getImage(imgRef: "")
                 }){
                     Text("Butt")
                 }
@@ -163,9 +163,9 @@ struct UserProfileView: View {
             }
         }
     }
-    func getImage(){
+    func getImage(imgRef: String){
             let storage = Storage.storage()
-        storage.reference(withPath:"F2F57326-B129-43CF-B247-339E39140A86").getData(maxSize: 4*1024*1024){  (data, error) in
+        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
             if let error = error{
                 print("Got an error \(error.localizedDescription)")
                 return
