@@ -10,17 +10,21 @@
 import SwiftUI
 import MapKit
 
-//Temporary static second user annotation data
-let friendCoordinate = CLLocationCoordinate2D(latitude: 59.331860041777944, longitude: 18.03530908143972)
-let userAnnotations = [UserAnnotation(title: "friend", subtitle: nil, coordinate: friendCoordinate)]
-
 struct SessionView: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @State var showingEndOptions = false
-    
+    @ObservedObject var usersViewModel = UsersViewModel()
+    @ObservedObject private var locationViewModel = LocationViewModel()
     var body: some View {
         ZStack{
-            MapView(annotations: userAnnotations)
-                .edgesIgnoringSafeArea(.all)
+            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
+                MapView(users: usersViewModel.users)
+                    .edgesIgnoringSafeArea(.all)
+                
+            }else{
+                //TODO: Add waiting view
+               Text("Waiting for friend")
+            }
             VStack{
                 HStack{
                     Button(action: {
@@ -36,7 +40,11 @@ struct SessionView: View {
                         Alert(
                             title: Text("End session?"),
                             message: Text("This will close the session and you will no longer see each other on the map"),
-                            primaryButton: .destructive(Text("Yes"), action: {}),
+                            primaryButton: .destructive(Text("Yes"), action: {
+                                //TODO: Make this end session
+                                withAnimation{
+                                    viewRouter.currentPage = .settingLocation}
+                            }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
                         )
@@ -51,14 +59,14 @@ struct SessionView: View {
                 
                 Spacer()
             }.padding()
+        }.onAppear(){
+            usersViewModel.fetchData()
         }
-    }
-    
-        
+    }      
 }
 
 struct SessionView_Previews: PreviewProvider {
     static var previews: some View {
-        SessionView()
+        SessionView().environmentObject(ViewRouter())
     }
 }

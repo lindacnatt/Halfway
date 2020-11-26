@@ -12,10 +12,14 @@
 		8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C06252F4D5F00B595A3 /* MapView.swift */; };
 		8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C0B252F5F4700B595A3 /* SessionView.swift */; };
 		8F0C8C16252F98AD00B595A3 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C8C15252F98AD00B595A3 /* CircleImage.swift */; };
+		8F1C3358256AFF7600329A5B /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1C3357256AFF7600329A5B /* LocationViewModel.swift */; };
 		8F492D2A2555577C0051157E /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F492D292555577C0051157E /* ColorManager.swift */; };
 		8F6043E92531F7A600949011 /* ViewToUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6043E82531F7A600949011 /* ViewToUIImage.swift */; };
 		8F6043F125322B9900949011 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6043F025322B9900949011 /* Triangle.swift */; };
 		8F6043F625322C2300949011 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6043F525322C2300949011 /* AnnotationView.swift */; };
+		8F7D412F256AD1C500123623 /* SettingLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7D412E256AD1C500123623 /* SettingLocationView.swift */; };
+		8FD562D5256D4D3000885E09 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD562D4256D4D3000885E09 /* ParentView.swift */; };
+		8FD562DA256D52C900885E09 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD562D9256D52C900885E09 /* ViewRouter.swift */; };
 		8FDB0409253250BA00FED70E /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDB0408253250BA00FED70E /* UserAnnotation.swift */; };
 		CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D96252DA90800B1BDF4 /* AppDelegate.swift */; };
 		CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA553D98252DA90800B1BDF4 /* SceneDelegate.swift */; };
@@ -59,15 +63,20 @@
 		6521D48F7600B47C9B277CE4 /* Pods_Halfway.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Halfway.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68D95E2EA2B357CC42024AE8 /* Pods-Halfway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway.release.xcconfig"; path = "Target Support Files/Pods-Halfway/Pods-Halfway.release.xcconfig"; sourceTree = "<group>"; };
 		7E715CB9EE1E30693498FA98 /* Pods-Halfway-HalfwayUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway-HalfwayUITests.debug.xcconfig"; path = "Target Support Files/Pods-Halfway-HalfwayUITests/Pods-Halfway-HalfwayUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		84FC718D253DC69800FF5D31 /* Halfway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Halfway.entitlements; sourceTree = "<group>"; };
 		8644D0EE1A9493FB6DCB8826 /* Pods-Halfway-HalfwayUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway-HalfwayUITests.release.xcconfig"; path = "Target Support Files/Pods-Halfway-HalfwayUITests/Pods-Halfway-HalfwayUITests.release.xcconfig"; sourceTree = "<group>"; };
 		86E7A80178038AD1FE1592FE /* Pods-Halfway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halfway.debug.xcconfig"; path = "Target Support Files/Pods-Halfway/Pods-Halfway.debug.xcconfig"; sourceTree = "<group>"; };
 		8F0C8C06252F4D5F00B595A3 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		8F0C8C0B252F5F4700B595A3 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		8F0C8C15252F98AD00B595A3 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
+		8F1C3357256AFF7600329A5B /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		8F492D292555577C0051157E /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		8F6043E82531F7A600949011 /* ViewToUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewToUIImage.swift; sourceTree = "<group>"; };
 		8F6043F025322B9900949011 /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
 		8F6043F525322C2300949011 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		8F7D412E256AD1C500123623 /* SettingLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingLocationView.swift; sourceTree = "<group>"; };
+		8FD562D4256D4D3000885E09 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
+		8FD562D9256D52C900885E09 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		8FDB0408253250BA00FED70E /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		908DB6187A3FC1048E1E8679 /* Pods-HalfwayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.release.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.release.xcconfig"; sourceTree = "<group>"; };
 		C8C1B05B6C148DAC243A4010 /* Pods_Halfway_HalfwayUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Halfway_HalfwayUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +170,8 @@
 				8F0C8C0B252F5F4700B595A3 /* SessionView.swift */,
 				CAAAEA0D2545C24900838BAC /* UserProfileView.swift */,
 				CAC3CE81255577FE009C606F /* TestView.swift */,
+				8F7D412E256AD1C500123623 /* SettingLocationView.swift */,
+				8FD562D4256D4D3000885E09 /* ParentView.swift */,
 			);
 			path = "Page Views";
 			sourceTree = "<group>";
@@ -211,6 +222,7 @@
 		CA553D95252DA90800B1BDF4 /* Halfway */ = {
 			isa = PBXGroup;
 			children = (
+				84FC718D253DC69800FF5D31 /* Halfway.entitlements */,
 				CAB2142A2539D65C00F8290C /* ViewModels */,
 				8F6043FF25324D6600949011 /* Page Views */,
 				8F6043FA25324BEC00949011 /* Map */,
@@ -263,6 +275,8 @@
 				CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */,
 				CA7231BF254768B000F91D36 /* ProfileImageViewModel.swift */,
 				CAA507D42555BED700A861A8 /* UsersViewModel.swift */,
+				8F1C3357256AFF7600329A5B /* LocationViewModel.swift */,
+				8FD562D9256D52C900885E09 /* ViewRouter.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -509,11 +523,14 @@
 			files = (
 				CA553D97252DA90800B1BDF4 /* AppDelegate.swift in Sources */,
 				CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */,
+				8FD562DA256D52C900885E09 /* ViewRouter.swift in Sources */,
 				CA7231C0254768B000F91D36 /* ProfileImageViewModel.swift in Sources */,
 				8F6043F625322C2300949011 /* AnnotationView.swift in Sources */,
+				8F1C3358256AFF7600329A5B /* LocationViewModel.swift in Sources */,
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
 				8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,
+				8FD562D5256D4D3000885E09 /* ParentView.swift in Sources */,
 				CAA507D52555BED700A861A8 /* UsersViewModel.swift in Sources */,
 				CA7231BE254764DA00F91D36 /* ProfileImageModel.swift in Sources */,
 				CAAAEA0C2545BE4F00838BAC /* ImagePicker.swift in Sources */,
@@ -525,6 +542,7 @@
 				8F6043F125322B9900949011 /* Triangle.swift in Sources */,
 				8F492D2A2555577C0051157E /* ColorManager.swift in Sources */,
 				CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */,
+				8F7D412F256AD1C500123623 /* SettingLocationView.swift in Sources */,
 				CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -693,6 +711,7 @@
 			baseConfigurationReference = 86E7A80178038AD1FE1592FE /* Pods-Halfway.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Halfway/Halfway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Halfway/Preview Content\"";
 				DEVELOPMENT_TEAM = 762W6V8USZ;
@@ -715,6 +734,7 @@
 			baseConfigurationReference = 68D95E2EA2B357CC42024AE8 /* Pods-Halfway.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Halfway/Halfway.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Halfway/Preview Content\"";
 				DEVELOPMENT_TEAM = 762W6V8USZ;

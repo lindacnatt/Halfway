@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let  testView = UserProfileView(viewModel: image)
         
 //        let contentView = TestView()
+//        let contentView = ParentView().environmentObject(ViewRouter())
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
