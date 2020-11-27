@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 
 class UsersViewModel: ObservableObject {
     @Published var users = [User]()
@@ -19,6 +20,11 @@ class UsersViewModel: ObservableObject {
     @Published var userAlreadyExistsInSession = true
     let userCollection = "users"
     let sessionCollection = "sessions"
+    
+    @Published var downloadimage:UIImage?
+    
+    @Published var isSet = false
+    
     
     func fetchData(){
         database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -34,16 +40,19 @@ class UsersViewModel: ObservableObject {
                 let long = data["Long"] as? Double ?? 1.00
                 let lat = data["Lat"] as? Double ?? 1.00
                 let minLeft = data["MinLeft"] as? String ?? "0"
-
-                return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft)
+                let imgRef = data["imgRef"] as? String ?? "No image"
+                
+                return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft, imgRef: imgRef)
                 
             }.filter({$0.id != self.currentUser})
             
             if users.count != 0{
                 users[0].id = "friend"
                 self.users = users
+                self.getImage(imgRef: users[0].imgRef)
             }
             print("Fetched user data")
+            
         }
     }
     
@@ -98,7 +107,21 @@ class UsersViewModel: ObservableObject {
             }
         }
     }
+    func getImage(imgRef: String){
+        let storage = Storage.storage()
+        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
+            if let error = error{
+                print("Got an error \(error.localizedDescription)")
+                return
+            }
+            if let data = data {
+                print("Works")
+                self.downloadimage = UIImage(data: data)
+                self.isSet = true
+            }
+        }
+    }
     
-
+    
     
 }

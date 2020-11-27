@@ -21,16 +21,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         
-        let image = EmojiProfileImage()
-        let  testView = UserProfileView(viewModel: image)
-        
-//        let contentView = TestView()
-//        let contentView = ParentView().environmentObject(ViewRouter())
+//        let  testView = MapView()
+
+        let contentView = ParentView().environmentObject(ViewRouter())
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: testView)
+            window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
         }

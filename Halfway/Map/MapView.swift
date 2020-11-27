@@ -11,20 +11,21 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    var users: [User] = []
-    @ObservedObject var usersViewModel = UsersViewModel()
+    var usersViewModel: UsersViewModel?
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
     @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
     @ObservedObject static var profilepic: ImagePic = .shared
+
+    
     
     //MARK: Create initial map
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
-       
+        
         //MARK: Compass button
         addCompass(to: mapView)
         
@@ -33,10 +34,10 @@ struct MapView: UIViewRepresentable {
         
         //Sets the zoom and polylines depending on access to location and annotations
         if (locationViewModel.locationAccessed){
-            if users.count != 0{
-                let userAnnotations = getUsersAsAnnotations(from: users)
+            if usersViewModel!.users.count != 0{
+                let userAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
                 mapView.addAnnotations(userAnnotations)
-
+                
             }
             else{
                 var userLocation: CLLocationCoordinate2D = locationViewModel.userCoordinates
@@ -60,7 +61,7 @@ struct MapView: UIViewRepresentable {
     //MARK: Update map
     //Used to update the map when for example clicking a "find me on the map" button or new data comes in
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        if (users.count != 0){
+        if (usersViewModel!.users.count != 0){
             updateUserAnnotation(withid: "friend", withColor: "orange", on: mapView)
         }
         
@@ -82,7 +83,7 @@ struct MapView: UIViewRepresentable {
     //MARK: Update user
     //Updates user annotation and polyline
     func updateUserAnnotation(withid userId: String, withColor colorId: String, on mapView: MKMapView){
-        let newAnnotations = getUsersAsAnnotations(from: users)
+        let newAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
         let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId })
         let newUserAnnotation = newAnnotations.first(where: { $0.title == userId })
         
@@ -144,14 +145,14 @@ struct MapView: UIViewRepresentable {
     func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
         let startPlacemark = MKPlacemark(coordinate: startPosition, addressDictionary: nil)
         let destinationPlacemark = MKPlacemark(coordinate: endPosition, addressDictionary: nil)
-
+        
         let fullwayDirectionRequest = MKDirections.Request()
         fullwayDirectionRequest.source = MKMapItem(placemark: startPlacemark)
         fullwayDirectionRequest.destination = MKMapItem(placemark: destinationPlacemark)
-
+        
         fullwayDirectionRequest.transportType = transportType
         let fullwayDirections = MKDirections(request: fullwayDirectionRequest)
-
+        
         var halfwayCoordinates = CLLocationCoordinate2D(latitude: 60, longitude: 18)
         
         let group = DispatchGroup()
@@ -162,24 +163,24 @@ struct MapView: UIViewRepresentable {
                 print("no response when calculating halfwaypoint")
                 print(error.debugDescription)
                 transportType = .any
-
+                
                 return
-
+                
             }
             let route = resp.routes[0]
-
+            
             //Finds the approximate midpoint in terms of distance
             var midPolylinePointIndex = 0
             for pointIndex in 0...route.polyline.pointCount - 1 {
                 let distanceToUser = route.polyline.points()[pointIndex].distance(to: MKMapPoint(startPosition))
                 let distanceToFriend = route.polyline.points()[pointIndex].distance(to: MKMapPoint(endPosition))
-
+                
                 if distanceToUser > distanceToFriend{
                     midPolylinePointIndex = pointIndex
                     break
                 }
             }
-
+            
             halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
             group.leave()
             
@@ -194,10 +195,10 @@ struct MapView: UIViewRepresentable {
     //MARK: Adds halfwaypoint
     //Adds the halfwaypoint and zooms to show users and halfwaypoint
     func setHalfWayPoint(on mapView: MKMapView) {
-        let userAnnotations = getUsersAsAnnotations(from: users)
+        let userAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
         let userOneCoordinate = locationViewModel.userCoordinates
         let userTwoCoordinate = userAnnotations.first(where: {$0.title == "friend"})?.coordinate
-
+        
         getHalfWayPoint(startPosition: userOneCoordinate, endPosition: userTwoCoordinate!){ halfWaypointCoordinates in
             self.halfwayPointCoordinates = halfWaypointCoordinates
             addPolyline(to: mapView, from: userOneCoordinate, to: halfWaypointCoordinates, colorId: "blue")
@@ -211,18 +212,18 @@ struct MapView: UIViewRepresentable {
             midPoint.title = "Halfway"
             midPoint.coordinate = halfWaypointCoordinates
             mapView.addAnnotation(midPoint)
-
+            
             var zoomRect = MKMapRect.null;
             for annotation in mapView.annotations {
                 let annotationPoint = MKMapPoint(annotation.coordinate)
                 let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1);
                 zoomRect = zoomRect.union(pointRect);
             }
-
+            
             mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
             halfwayPointIsSet = true
             
-       }
+        }
     }
     
     //MARK: Calculate ETA
@@ -236,7 +237,7 @@ struct MapView: UIViewRepresentable {
         halfwayDirectionRequest.destination = MKMapItem(placemark: destinationPlacemark)
         halfwayDirectionRequest.transportType = .walking
         let halfwayDirections = MKDirections(request: halfwayDirectionRequest)
-
+        
         halfwayDirections.calculateETA { response, error in
             guard let response = response else {
                 return
@@ -251,7 +252,7 @@ struct MapView: UIViewRepresentable {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .abbreviated
-
+        
         let formattedString = formatter.string(from: TimeInterval(seconds))!
         return formattedString
     }
@@ -267,6 +268,7 @@ struct MapView: UIViewRepresentable {
         var parent: MapView
         var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         var userETA: String = "ETA"
+        @Published var friendIMAGE: Image?
         init(_ parent: MapView) {
             self.parent = parent
             
@@ -277,7 +279,7 @@ struct MapView: UIViewRepresentable {
             let annotationId = annotation.title ?? "NoTitleId"
             //Checks for old annotations to reuse
             let MKAnnView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationId!) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
-
+            
             //Sets new annotations
             if MKAnnView.image != nil{
                 MKAnnView.image = nil
@@ -287,20 +289,16 @@ struct MapView: UIViewRepresentable {
             MKAnnView.image = SwiftUIAnnView.asUIImage()
             
             MKAnnView.canShowCallout = false
-
+            
             return MKAnnView
-        
+            
         }
         
         //MARK: Setting annotation as AnnotationView
         func setAnnotation(_ annotation: MKAnnotation) -> some View{
             //MARK: Setting annotation
-           
-            //Temporary data, will be replaced by database data
-            let user = ["name": "Johannes", "timeLeft": "", "image": "user"]
-            let friend = ["name": "Linda", "timeLeft": "", "image": "friend"]
             
-            var image: Image
+            var image: Image?
             var strokeColor: Color
             var userName: String
             var timeLeft: String
@@ -312,11 +310,16 @@ struct MapView: UIViewRepresentable {
                 userName = "Johannes"
                 timeLeft = self.userETA
                 
-            }else if (annotation.title! == "friend"){
-                image = Image("friend")
+            } else if (annotation.title! == "friend"){
+
+                if parent.usersViewModel!.downloadimage != nil{
+                    self.friendIMAGE = Image( uiImage: parent.usersViewModel!.downloadimage!)
+                    image = self.friendIMAGE ?? Image("friend")
+                }
+                
                 strokeColor = ColorManager.orange
-                userName = parent.users[0].name
-                timeLeft = parent.users[0].minLeft
+                userName = parent.usersViewModel!.users[0].name
+                timeLeft = parent.usersViewModel!.users[0].minLeft
                 
             }else{
                 image = Image(systemName: "flag.circle.fill")
@@ -325,7 +328,7 @@ struct MapView: UIViewRepresentable {
                 timeLeft = (annotation.subtitle)! ?? ""
             }
             
-            let annotation = AnnotationView(image: image, strokeColor: strokeColor, userName: userName, timeLeft: timeLeft)
+            let annotation = AnnotationView(image: image ?? Image("friend"), strokeColor: strokeColor, userName: userName, timeLeft: timeLeft)
             return annotation
         }
         
@@ -362,7 +365,7 @@ struct MapView: UIViewRepresentable {
         //MARK: Location updates
         //Updates user location, polyline and eta when location changes
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-            if parent.users.count != 0{
+            if parent.usersViewModel!.users.count != 0{
                 //Initial setup
                 if !parent.halfwayPointIsSet{
                     parent.setHalfWayPoint(on: mapView)
@@ -372,10 +375,10 @@ struct MapView: UIViewRepresentable {
                         let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
                         if newEta != self.userETA{
                             self.userETA = newEta
-                            self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
+                            self.parent.usersViewModel!.updateTimeLeft(time: self.userETA)
                             mapView.showsUserLocation = false
                             mapView.showsUserLocation = true
-
+                            
                         }
                     }
                 }
@@ -392,19 +395,19 @@ struct MapView: UIViewRepresentable {
                             let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
                             if newEta != self.userETA{
                                 self.userETA = newEta
-                                self.parent.usersViewModel.updateTimeLeft(time: self.userETA)
+                                self.parent.usersViewModel!.updateTimeLeft(time: self.userETA)
                                 mapView.showsUserLocation = false
                                 mapView.showsUserLocation = true
                             }
                         }
-
+                        
                     }
                     
-                    parent.usersViewModel.updateCoordinates(lat: userLocation.location!.coordinate.latitude, long: userLocation.location!.coordinate.longitude)
+                    parent.usersViewModel!.updateCoordinates(lat: userLocation.location!.coordinate.latitude, long: userLocation.location!.coordinate.longitude)
                     
                 }
             }
-           
+            
         }
     }
 }

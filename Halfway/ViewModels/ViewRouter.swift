@@ -9,7 +9,7 @@
 import SwiftUI
 
 class ViewRouter: ObservableObject {
-    @Published var currentPage: Page = .settingLocation
+    @Published var currentPage: Page = .session
 }
 
 enum Page {

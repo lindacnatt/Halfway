@@ -16,8 +16,7 @@ class ImagePic: ObservableObject{
     
     static let shared = ImagePic()
     @Published var image: Image?
-    
-    
+    @Published var userName: String?
 }
 
 
@@ -25,43 +24,17 @@ struct UserProfileView: View {
     
     @State var imgID = ""
     
-    @State var downloadimage:UIImage?
-    
+    //    @State var downloadimage:UIImage?
     @ObservedObject var profilepic: ImagePic = .shared
-    
-    
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
+    @State private var userName: String = "Default Name"
     
     @ObservedObject var viewModel = EmojiProfileImage()
     
     var body: some View {
         NavigationView{
-            
             VStack{
-                HStack{
-                    Spacer()
-                    //Finish button
-                    //TODO: Send the input from the image and namefields to firebase and mapView
-                    NavigationLink(destination: MapView().navigationBarBackButtonHidden(true)
-                        .navigationBarHidden(true)
-                        .edgesIgnoringSafeArea(.all)){
-                        Text("Map")
-                        
-                    }
-                    Button(action: {
-                        if let profileImage = self.inputImage{
-                            storeImage(image: profileImage)
-                        }
-                        else{
-                            print("Problem with profile Image")
-                        }
-                        
-                    }){
-                        Text("Done").foregroundColor(Color.blue)
-                    }.padding(.trailing)
-                }
-                
                 //Display ProfileImage
                 GeometryReader{ gView in
                     ZStack {
@@ -74,7 +47,6 @@ struct UserProfileView: View {
                             Circle()
                                 .fill(ColorManager.lightBlue)
                         }
-                        
                         //Show Image if image is not empty
                         if self.profilepic.image != nil {
                             CircleImage(image: self.profilepic.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
@@ -85,7 +57,6 @@ struct UserProfileView: View {
                                 .resizable()
                                 .frame(width: gView.size.height * 0.3, height: gView.size.height * 0.3)
                                 .foregroundColor(Color.gray)
-                                
                         }
                     }
                 }
@@ -94,12 +65,18 @@ struct UserProfileView: View {
                 .onTapGesture {
                     self.showImagePicker = true
                 }
-                
+                Text(userName).font(.headline).foregroundColor(ColorManager.orange).padding()
+                VStack(alignment: .leading){
+                    Divider()
+                    HStack {
+                        Image(systemName: "person")
+                        TextField("Change name", text: $userName)
+                        Image(systemName: "pencil").foregroundColor(.blue)
+                    }.padding(.top).padding(.bottom)
+                }
                 //Choose emoji avatars
                 VStack(alignment: .leading) {
                     Divider()
-                    Text("Pick an image or avatar").padding(.top)
-   
                     GeometryReader { geometry in
                         ScrollView(.horizontal, showsIndicators: false){
                             HStack {
@@ -122,25 +99,32 @@ struct UserProfileView: View {
                             }
                         }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
                     }.frame(height: 150)
+                    Spacer()
                 }
-                //Namefields
-                NameFields()
+                Spacer()
                 Button(action: {
-                    getImage(imgRef: "")
+                    if let profileImage = self.inputImage{
+                        storeImage(image: profileImage, user: "user1")
+                    }
+                    else{
+                        print("Problem with profile Image")
+                    }
+                    
                 }){
-                    Text("Butt")
-                }
-                if downloadimage != nil{
-                    Image(uiImage: downloadimage!)
-                } else{
-                    Image(systemName:"camera")
-                }
-                
+                    Text("Done")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 90)
+                        .padding()
+                }.background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
+                .cornerRadius(50)
+                .padding(.bottom)
+                .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
                 //Imagepicker over the whole view
             }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: self.$inputImage)
             }.padding()
-        .navigationBarHidden(true)
+            .navigationBarHidden(true)
         }
     }
     func loadImage(){
@@ -148,7 +132,7 @@ struct UserProfileView: View {
         profilepic.image = Image(uiImage: inputImage)
         
     }
-    func storeImage(image: UIImage){
+    func storeImage(image: UIImage, user: String){
         let randID = randomID()
         if let imageData = image.jpegData(compressionQuality: 0.75){
             let storage = Storage.storage()
@@ -158,24 +142,24 @@ struct UserProfileView: View {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
-                    viewModel.setImageReferance(imageID: randID)
+                    viewModel.setImageReferance(sessionID: "hPlTmBl3E0wY8F7a4pHZ", imageID: randID, user: user)
                 }
             }
         }
     }
-    func getImage(imgRef: String){
-            let storage = Storage.storage()
-        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
-            if let error = error{
-                print("Got an error \(error.localizedDescription)")
-                return
-            }
-            if let data = data {
-                print("Works")
-                self.downloadimage = UIImage(data: data)
-            }
-        }
-    }
+    //    func getImage(imgRef: String){
+    //            let storage = Storage.storage()
+    //        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
+    //            if let error = error{
+    //                print("Got an error \(error.localizedDescription)")
+    //                return
+    //            }
+    //            if let data = data {
+    //                print("Works")
+    //                self.downloadimage = UIImage(data: data)
+    //            }
+    //        }
+    //    }
     func randomID() -> String{
         let id = UUID().uuidString
         imgID = id
@@ -183,28 +167,6 @@ struct UserProfileView: View {
     }
 }
 
-struct NameFields: View{
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    var body: some View {
-        VStack{
-            Divider()
-            HStack{
-                Text("Firstname").padding(.trailing)
-                VStack {
-                    TextField("Enter firstname", text: $firstName).padding(.top)
-                    Divider()
-                }
-            }
-            HStack{
-                Text("Lastname").padding(.trailing)
-                TextField("Enter lastname", text: $lastName)
-            }
-            Divider()
-            Spacer()
-        }
-    }
-}
 
 struct ImageCardView: View{
     var imageCard: ProfileImage<String>.ImageCard
@@ -215,7 +177,7 @@ struct ImageCardView: View{
                 .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
             Image(imageCard.content)
                 .resizable()
-                
+            
         }.aspectRatio(contentMode: .fit)
     }
     
@@ -223,8 +185,8 @@ struct ImageCardView: View{
 
 struct UserProfileView_Previews: PreviewProvider {
     static var previews: some View {
-            UserProfileView(viewModel: EmojiProfileImage())
-
+        UserProfileView(viewModel: EmojiProfileImage())
+        
     }
 }
 

@@ -27,9 +27,9 @@ class EmojiProfileImage: ObservableObject{
     func choose(card: ProfileImage<String>.ImageCard){
         model.choose(card: card)
     }
-    func setImageReferance(imageID: String){
+    func setImageReferance(sessionID: String, imageID: String, user: String){
         let database = Firestore.firestore()
-        database.collection("sessions").document("hPlTmBl3E0wY8F7a4pHZ").collection("users").document("user1").updateData(["imageRef" : imageID]){ err in
+        database.collection("sessions").document("\(sessionID)").collection("users").document("\(user)").updateData(["imgRef" : imageID]){ err in
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
