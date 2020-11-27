@@ -16,29 +16,43 @@ struct SettingLocationView: View {
     
     var body: some View {
         VStack{
+            CircleImage(image: Image("user"), width: 300, height: 300)
+                .padding(.vertical)
+            Text("Hi Johannes")
             if !locationViewModel.locationAccessed {
                 if !locationBtnClicked{
                     Text("To calculate the Halfway-point between you and your friends, we need your location")
-                    Button("Grant location access", action: {
-                        locationViewModel.askForLocationAccess()
-                        locationBtnClicked.toggle()
-                    }).padding()
+                        .padding(.all, 50)
+                        
+                    Spacer()
+                    Button(
+                        action:{
+                            locationViewModel.askForLocationAccess()
+                            locationBtnClicked.toggle()
+                        })
+                        {
+                            Text("Grant location access")
+                        }
+                        .buttonStyle(PrimaryButtonStyle())
                 }else{
                     Text("Go to Settings > Privacy > Location Services then choose Halfway and give location access")
+                        .padding(.all, 50)
                 }
-                
+
             }else{
                 Text("Location is granted")
+                    .padding(.all, 50)
+                Spacer()
                 Button(
                     action:{
                         withAnimation {
                             viewRouter.currentPage = .session
                         }
-                    },
-                    label: {
+                    })
+                    {
                         Text("Go to session")
                     }
-                ).padding()
+                    .buttonStyle(PrimaryButtonStyle())
             }
         }
     }
