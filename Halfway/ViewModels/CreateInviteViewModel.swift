@@ -11,16 +11,18 @@ import SwiftUI
 import Firebase
 import UIKit
 
-class CreateInviteViewModel {
+class CreateInviteViewModel: ObservableObject {
     
+    @Published var currentUser = "user2"
+    @Published var sessionID = UUID().uuidString
+
     func shareSheet(){
         
-        
-        let sessionlink = UUID().uuidString
+        let sessionlink = sessionID
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "www.google.com"
-        components.path = "/SessionView"
+        components.host = "www.johannesloor.se"
+        //components.path = "/SessionView"
         let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
         components.queryItems = [sessionIDQueryItem]
         
@@ -62,9 +64,8 @@ class CreateInviteViewModel {
     }
     
     func showShareSheet(url: URL) {
-        
+        currentUser = "user1"
         //guard let sessionlink = URL(string: "https://www.apple.com") else { return }
-        
         let promoText = "Someone wants to meet you half-way using the halfway app! Follow the link to accept."
         let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?

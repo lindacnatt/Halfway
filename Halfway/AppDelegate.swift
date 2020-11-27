@@ -49,7 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
 //            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
             let session = queryItems[0].value
         self.sessionID = session ?? ""
-        self.userID = "user2" 
         
     }
     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Firebase
 import FirebaseFirestore
 
@@ -14,11 +15,15 @@ class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
     @Published var userDataInitilized = false
-    var sessionId = "hPlTmBl3E0wY8F7a4pHZ"
-    var currentUser = "user1"
+    var sessionId = ""
+    //@Published var currentUser = "user1"
+    @ObservedObject var createInviteViewModel = CreateInviteViewModel()
+    @ObservedObject var appDelegate = AppDelegate()
+    
     @Published var userAlreadyExistsInSession = true
     let userCollection = "users"
     let sessionCollection = "sessions"
+    
     
     func fetchData(){
         database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -37,7 +42,7 @@ class UsersViewModel: ObservableObject {
 
                 return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft)
                 
-            }.filter({$0.id != self.currentUser})
+            }.filter({$0.id != self.createInviteViewModel.currentUser})
             
             if users.count != 0{
                 users[0].id = "friend"
@@ -48,7 +53,7 @@ class UsersViewModel: ObservableObject {
     }
     
     func checkIfUserExists(){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).getDocument {
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(createInviteViewModel.currentUser).getDocument {
             (document, error) in
             if let document = document, document.exists {
                 self.userAlreadyExistsInSession = true
@@ -59,7 +64,9 @@ class UsersViewModel: ObservableObject {
     }
     
     func setInitialUserData(name: String, Lat: Double, Long: Double){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
+        if createInviteViewModel.currentUser == "user1" {sessionId = createInviteViewModel.sessionID}
+        if createInviteViewModel.currentUser == "user2" {sessionId = appDelegate.sessionID}
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(createInviteViewModel.currentUser).setData([
             "Name": name,
             "MinLeft": "ETA",
             "Lat": Lat,
@@ -75,7 +82,7 @@ class UsersViewModel: ObservableObject {
     }
     
     func updateCoordinates(lat: Double, long: Double){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).updateData([
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(createInviteViewModel.currentUser).updateData([
             "Lat": lat,
             "Long": long
         ]) { err in
@@ -88,7 +95,7 @@ class UsersViewModel: ObservableObject {
     }
     
     func updateTimeLeft(time: String){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(createInviteViewModel.currentUser).setData([
             "MinLeft": time
         ], merge: true) { err in
             if let err = err {

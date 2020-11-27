@@ -61,6 +61,7 @@ struct SessionView: View {
             }.padding()
         }.onAppear(){
             usersViewModel.fetchData()
+            usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
         }
     }      
 }
