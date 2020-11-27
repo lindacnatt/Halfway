@@ -121,6 +121,32 @@ class UsersViewModel: ObservableObject {
             }
         }
     }
+    func setImageReferance(sessionID: String, imageID: String, user: String){
+        let database = Firestore.firestore()
+        database.collection("sessions").document("\(sessionID)").collection("users").document("\(user)").updateData(["imgRef" : imageID]){ err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+    func storeImage(image: UIImage, user: String){
+        let randID = UUID().uuidString
+        if let imageData = image.jpegData(compressionQuality: 0.75){
+            let storage = Storage.storage()
+            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
+                (_, err) in
+                if let err = err {
+                    print("Error occurred! \(err)")
+                } else {
+                    print("Upload successful")
+                    self.setImageReferance(sessionID: self.sessionId, imageID: randID, user: self.currentUser)
+                }
+            }
+        }
+    }
+    
     
     
     

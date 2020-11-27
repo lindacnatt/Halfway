@@ -11,10 +11,10 @@
 import SwiftUI
 import FirebaseStorage
 
-class ImagePic: ObservableObject{
+class UserInfo: ObservableObject{
     private init(){}
     
-    static let shared = ImagePic()
+    static let shared = UserInfo()
     @Published var image: Image?
     @Published var userName: String?
 }
@@ -22,10 +22,8 @@ class ImagePic: ObservableObject{
 
 struct UserProfileView: View {
     
-    @State var imgID = ""
-    
-    //    @State var downloadimage:UIImage?
-    @ObservedObject var profilepic: ImagePic = .shared
+    @EnvironmentObject var viewRouter: ViewRouter
+    @ObservedObject var profilepic: UserInfo = .shared
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
     @State private var userName: String = "Default Name"
@@ -103,13 +101,7 @@ struct UserProfileView: View {
                 }
                 Spacer()
                 Button(action: {
-                    if let profileImage = self.inputImage{
-                        storeImage(image: profileImage, user: "user1")
-                    }
-                    else{
-                        print("Problem with profile Image")
-                    }
-                    
+                    viewRouter.currentPage = .session
                 }){
                     Text("Done")
                         .font(.headline)
@@ -130,41 +122,22 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         profilepic.image = Image(uiImage: inputImage)
-        
     }
-    func storeImage(image: UIImage, user: String){
-        let randID = randomID()
-        if let imageData = image.jpegData(compressionQuality: 0.75){
-            let storage = Storage.storage()
-            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
-                (_, err) in
-                if let err = err {
-                    print("Error occurred! \(err)")
-                } else {
-                    print("Upload successful")
-                    viewModel.setImageReferance(sessionID: "hPlTmBl3E0wY8F7a4pHZ", imageID: randID, user: user)
-                }
-            }
-        }
-    }
-    //    func getImage(imgRef: String){
-    //            let storage = Storage.storage()
-    //        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
-    //            if let error = error{
-    //                print("Got an error \(error.localizedDescription)")
-    //                return
-    //            }
-    //            if let data = data {
-    //                print("Works")
-    //                self.downloadimage = UIImage(data: data)
-    //            }
-    //        }
-    //    }
-    func randomID() -> String{
-        let id = UUID().uuidString
-        imgID = id
-        return imgID
-    }
+//    func storeImage(image: UIImage, user: String){
+//        if let imageData = image.jpegData(compressionQuality: 0.75){
+//            let storage = Storage.storage()
+//            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
+//                (_, err) in
+//                if let err = err {
+//                    print("Error occurred! \(err)")
+//                } else {
+//                    print("Upload successful")
+//                    viewModel.setImageReferance(sessionID: "hPlTmBl3E0wY8F7a4pHZ", imageID: randID, user: user)
+//                }
+//            }
+//        }
+//    }
+
 }
 
 

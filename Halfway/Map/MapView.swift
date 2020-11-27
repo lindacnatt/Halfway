@@ -17,7 +17,7 @@ struct MapView: UIViewRepresentable {
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
     @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
-    @ObservedObject static var profilepic: ImagePic = .shared
+    @ObservedObject static var profilepic: UserInfo = .shared
 
     
     
