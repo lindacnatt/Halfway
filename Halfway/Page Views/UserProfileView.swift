@@ -40,7 +40,7 @@ struct UserProfileView: View {
                             Circle()
                                 .fill(Color.gray.opacity(0.15))
                                 .overlay(Circle()
-                                            .stroke(Color.orange, lineWidth: 4))
+                                            .stroke(ColorManager.blue, lineWidth: 4))
                         } else{
                             Circle()
                                 .fill(ColorManager.lightBlue)
@@ -63,15 +63,8 @@ struct UserProfileView: View {
                 .onTapGesture {
                     self.showImagePicker = true
                 }
-                Text(userName).font(.headline).foregroundColor(ColorManager.orange).padding()
-                VStack(alignment: .leading){
-                    Divider()
-                    HStack {
-                        Image(systemName: "person")
-                        TextField("Change name", text: $userName)
-                        Image(systemName: "pencil").foregroundColor(.blue)
-                    }.padding(.top).padding(.bottom)
-                }
+                Text(userName).font(.headline).foregroundColor(ColorManager.blue).padding()
+                
                 //Choose emoji avatars
                 VStack(alignment: .leading) {
                     Divider()
@@ -94,9 +87,19 @@ struct UserProfileView: View {
                                             self.profilepic.image = Image(card.content)
                                         }
                                 }
-                            }
-                        }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
+                            }.padding(.leading)
+                        }
                     }.frame(height: 150)
+                    
+                }
+                VStack(alignment: .leading){
+                    Divider()
+                    HStack {
+                        Image(systemName: "person")
+                        TextField("Change name", text: $userName)
+                        Image(systemName: "pencil").foregroundColor(.blue)
+                    }.padding()
+                    Divider()
                     Spacer()
                 }
                 Spacer()
@@ -115,7 +118,7 @@ struct UserProfileView: View {
                 //Imagepicker over the whole view
             }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: self.$inputImage)
-            }.padding()
+            }
             .navigationBarHidden(true)
         }
     }
@@ -123,21 +126,6 @@ struct UserProfileView: View {
         guard let inputImage = inputImage else {return}
         profilepic.image = Image(uiImage: inputImage)
     }
-//    func storeImage(image: UIImage, user: String){
-//        if let imageData = image.jpegData(compressionQuality: 0.75){
-//            let storage = Storage.storage()
-//            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
-//                (_, err) in
-//                if let err = err {
-//                    print("Error occurred! \(err)")
-//                } else {
-//                    print("Upload successful")
-//                    viewModel.setImageReferance(sessionID: "hPlTmBl3E0wY8F7a4pHZ", imageID: randID, user: user)
-//                }
-//            }
-//        }
-//    }
-
 }
 
 

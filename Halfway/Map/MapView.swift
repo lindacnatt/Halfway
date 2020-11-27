@@ -34,7 +34,6 @@ struct MapView: UIViewRepresentable {
         
         //Sets the zoom and polylines depending on access to location and annotations
         if (locationViewModel.locationAccessed){
-            //TODO: Crashes here!!
             if usersViewModel!.users.count != 0{
                 let userAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
                 mapView.addAnnotations(userAnnotations)
