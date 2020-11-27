@@ -47,7 +47,7 @@ struct UserProfileView: View {
                         }
                         //Show Image if image is not empty
                         if self.profilepic.image != nil {
-                            CircleImage(image: self.profilepic.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
+                            CircleImage(image: self.profilepic.image, width:  gView.size.height, height:  gView.size.height, strokeColor: ColorManager.blue)
                         }
                         else{
                             //If both Image and Emoji is empty show default image
@@ -101,7 +101,7 @@ struct UserProfileView: View {
                 }
                 Spacer()
                 Button(action: {
-                    viewRouter.currentPage = .session
+                    viewRouter.currentPage = .createInvite
                 }){
                     Text("Done")
                         .font(.headline)

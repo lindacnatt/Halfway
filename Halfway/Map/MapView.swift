@@ -11,7 +11,7 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    var usersViewModel: UsersViewModel?
+    var usersViewModel: UsersViewModel? = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
@@ -34,6 +34,7 @@ struct MapView: UIViewRepresentable {
         
         //Sets the zoom and polylines depending on access to location and annotations
         if (locationViewModel.locationAccessed){
+            //TODO: Crashes here!!
             if usersViewModel!.users.count != 0{
                 let userAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
                 mapView.addAnnotations(userAnnotations)

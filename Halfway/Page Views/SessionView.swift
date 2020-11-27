@@ -17,13 +17,13 @@ struct SessionView: View {
     @ObservedObject private var locationViewModel = LocationViewModel()
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
-                MapView(users: usersViewModel.users)
+            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed && usersViewModel.isSet){
+                MapView(usersViewModel: usersViewModel)
                     .edgesIgnoringSafeArea(.all)
                 
             }else{
                 //TODO: Add waiting view
-               Text("Waiting for friend")
+                Text("Waiting for friend")
             }
             VStack{
                 HStack{
