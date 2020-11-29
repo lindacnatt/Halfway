@@ -97,7 +97,7 @@ struct UserProfileView: View {
                 Divider()
                 HStack {
                     Image(systemName: "person")
-                    TextField("Change name", text: $userName)
+                    TextField("Name", text: $userName)
                 }.padding()
                 Divider()
                 Spacer()
@@ -115,10 +115,11 @@ struct UserProfileView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 90)
                     .padding()
-            }.background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
+            }.background(NotValid ? Color.gray : Color.blue)
             .cornerRadius(50)
             .padding(.bottom)
             .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
+            .disabled(NotValid)
             
             //MARK: Imagepicker over the whole view
         }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
@@ -128,6 +129,9 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         profile.image = Image(uiImage: inputImage)
+    }
+    var NotValid: Bool {
+        return userName.isEmpty || profile.image == nil
     }
 }
 
