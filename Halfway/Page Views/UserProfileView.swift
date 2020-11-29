@@ -23,7 +23,7 @@ struct UserProfileView: View {
     @ObservedObject var profile: UserInfo = .shared
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
-    @State private var userName: String = "" //Currently local variable
+    @State private var userName: String = ""
     
     @ObservedObject var viewModel = EmojiProfileImage()
     
@@ -59,7 +59,7 @@ struct UserProfileView: View {
             .onTapGesture {
                 self.showImagePicker = true
             }
-            Text(userName).font(.headline).foregroundColor(ColorManager.blue).padding()
+            Text(NewName ? userName : profile.name).font(.headline).foregroundColor(ColorManager.blue).padding()
             
             //MARK: Choose emoji avatars
             VStack(alignment: .leading) {
@@ -107,7 +107,11 @@ struct UserProfileView: View {
             //MARK: Finish Button
             Button(action: {
                 viewRouter.currentPage = .createInvite
-                profile.name = self.userName
+                if !userName.isEmpty{
+                    profile.name = self.userName}
+                else {
+                    
+                }
                 
             }){
                 Text("Done")
@@ -131,7 +135,10 @@ struct UserProfileView: View {
         profile.image = Image(uiImage: inputImage)
     }
     var NotValid: Bool {
-        return userName.isEmpty || profile.image == nil
+        return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
+    }
+    var NewName: Bool{
+        return profile.name.isEmpty
     }
 }
 
