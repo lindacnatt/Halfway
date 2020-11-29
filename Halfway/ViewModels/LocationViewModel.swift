@@ -27,7 +27,7 @@ class LocationViewModel: NSObject, ObservableObject{
 
         let status = CLLocationManager.authorizationStatus()
         if status == .authorizedAlways || status == .authorizedWhenInUse {
-            userCoordinates = self.locationManager.location!.coordinate
+            //userCoordinates = self.locationManager.location!.coordinate
             locationAccessed = true
         }
         

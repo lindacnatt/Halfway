@@ -14,10 +14,8 @@ struct ParentView: View {
         switch viewRouter.currentPage {
             case .settingLocation:
                 SettingLocationView()
-
-//            case .userProfile:
-//                UserProfileView()
-
+           case .userProfile:
+                UserProfileView()
             case .createInvite:
                 CreateInviteView()
             case .session:

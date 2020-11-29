@@ -14,4 +14,5 @@ struct User: Identifiable {
     var long: Double
     var lat: Double
     var minLeft: String
+    var imgRef: String
 }

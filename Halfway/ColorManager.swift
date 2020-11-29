@@ -13,6 +13,7 @@ struct ColorManager {
     static let lightOrange = Color("LightOrange")
     static let orange = Color("Orange")
     static let darkOrange = Color("DarkOrange")
+    static let lightBlue = Color("LightBlue")
     static let blue = Color("Blue")
     static let darkBlue = Color("DarkBlue")
     static let grey = Color("Grey")
