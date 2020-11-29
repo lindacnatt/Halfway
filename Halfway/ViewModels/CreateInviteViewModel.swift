@@ -12,7 +12,7 @@ import Firebase
 import UIKit
 
 class CreateInviteViewModel: ObservableObject {
-    
+    @EnvironmentObject var viewRouter: ViewRouter
     @Published var currentUser = "user2"
     @Published var sessionID = UUID().uuidString
 
@@ -66,10 +66,24 @@ class CreateInviteViewModel: ObservableObject {
     func showShareSheet(url: URL) {
         currentUser = "user1"
         //guard let sessionlink = URL(string: "https://www.apple.com") else { return }
-        let promoText = "Someone wants to meet you half-way using the halfway app! Follow the link to accept."
+        let promoText = "Someone wants to meet you half-way using the halfway app! Click the link to accept."
         let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?
             .present(activityVC, animated: true, completion: nil)
+        
+        //Completion handler
+        activityVC.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
+            if completed {
+                print("share completed")
+                return
+            } else {
+                print("cancel")
+                
+            }
+            if let shareError = error {
+                print("error while sharing: \(shareError.localizedDescription)")
+            }
+        }
         
        
         //let av = UIActivityViewController(activityItems: [sessionlink], applicationActivities: nil)
