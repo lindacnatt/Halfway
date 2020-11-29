@@ -20,6 +20,7 @@ struct CreateInviteView: View {
             MapView().edgesIgnoringSafeArea(.all)
             Rectangle().edgesIgnoringSafeArea(.all).foregroundColor(Color.white).opacity(0.4)
             VStack{
+                //MARK: Go to change user profile view
                 HStack {
                     Button(action: {viewRouter.currentPage = .userProfile}){
                         CircleImage(image: CreateInviteView.profilepic.image, width: 60, height: 60, strokeColor: ColorManager.blue).padding(.leading)}
@@ -27,7 +28,7 @@ struct CreateInviteView: View {
                 }
                 Spacer()
                 VStack{
-                   
+                    
                     Text("Halfway")
                         .font(.largeTitle)
                         .fontWeight(.bold)

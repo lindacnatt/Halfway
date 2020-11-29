@@ -17,7 +17,7 @@ struct MapView: UIViewRepresentable {
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
     @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
-    @ObservedObject static var profilepic: UserInfo = .shared
+    @ObservedObject static var profile: UserInfo = .shared
 
     
     
@@ -268,7 +268,7 @@ struct MapView: UIViewRepresentable {
         var parent: MapView
         var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         var userETA: String = "ETA"
-        @Published var friendIMAGE: Image?
+        @Published var friendProfileImage: Image?
         init(_ parent: MapView) {
             self.parent = parent
             
@@ -305,16 +305,16 @@ struct MapView: UIViewRepresentable {
             
             //Changing the annotationView depanding on the title (used as Id) or type
             if annotation is MKUserLocation{
-                image = profilepic.image ?? Image("friend")
+                image = profile.image ?? Image("friend")
                 strokeColor = ColorManager.blue
-                userName = "Johannes"
+                userName = profile.name
                 timeLeft = self.userETA
                 
             } else if (annotation.title! == "friend"){
 
                 if parent.usersViewModel!.downloadimage != nil{
-                    self.friendIMAGE = Image( uiImage: parent.usersViewModel!.downloadimage!)
-                    image = self.friendIMAGE ?? Image("friend")
+                    self.friendProfileImage = Image( uiImage: parent.usersViewModel!.downloadimage!)
+                    image = self.friendProfileImage ?? Image("friend")
                 }
                 
                 strokeColor = ColorManager.orange
