@@ -13,12 +13,25 @@ struct SettingLocationView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var locationViewModel = LocationViewModel()
     @State var locationBtnClicked = false
-    
+    @State var imageBounce = false
     var body: some View {
         VStack{
-            CircleImage(image: Image("user"), width: 300, height: 300)
-                .padding(.vertical)
-            Text("Hi Johannes")
+            Group{
+                CircleImage(image: Image("user"), width: 200, height: 200)
+                    .padding(.vertical)
+                    .rotationEffect(.degrees(imageBounce ? -10 : 10))
+                    .onAppear(){
+                        self.imageBounce.toggle()
+                    }
+                    
+            }
+            .offset(x: imageBounce ? -20 : 20)
+
+            .animation(Animation.easeInOut(duration: 0.6).repeatForever())
+            
+                
+            Text("Hi Johannes!")
+                .font(.headline)
             if !locationViewModel.locationAccessed {
                 if !locationBtnClicked{
                     Text("To calculate the Halfway-point between you and your friends, we need your location")
@@ -37,22 +50,18 @@ struct SettingLocationView: View {
                 }else{
                     Text("Go to Settings > Privacy > Location Services then choose Halfway and give location access")
                         .padding(.all, 50)
+                    Spacer()
                 }
 
             }else{
-                Text("Location is granted")
+                Text("Location Granted")
                     .padding(.all, 50)
-                Spacer()
-                Button(
-                    action:{
-                        withAnimation {
-                            viewRouter.currentPage = .session
+                    .onAppear(){
+                        withAnimation(Animation.linear.delay(1.5)){
+                            viewRouter.currentPage = .createInvite
                         }
-                    })
-                    {
-                        Text("Go to session")
                     }
-                    .buttonStyle(PrimaryButtonStyle())
+                Spacer()
             }
         }
     }

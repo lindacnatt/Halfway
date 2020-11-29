@@ -32,9 +32,9 @@ class LocationViewModel: NSObject, ObservableObject{
         }
         
         //TODO: Remove when settingLocationView is in action
-        else{
-            askForLocationAccess()
-        }
+//        else{
+//            askForLocationAccess()
+//        }
 
 
         
