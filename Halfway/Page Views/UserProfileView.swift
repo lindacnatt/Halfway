@@ -21,6 +21,7 @@ struct UserProfileView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var profile: UserInfo = .shared
+    @ObservedObject var locationViewModel = LocationViewModel()
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
     @State private var userName: String = ""
@@ -106,7 +107,15 @@ struct UserProfileView: View {
             
             //MARK: Finish Button
             Button(action: {
-                viewRouter.currentPage = .createInvite
+                withAnimation(){
+                    if locationViewModel.locationAccessed{
+                        viewRouter.currentPage = .createInvite
+                    }
+                    else{
+                        viewRouter.currentPage = .settingLocation
+                        }
+                }
+                
                 if !userName.isEmpty{
                     profile.name = self.userName}
                 else {

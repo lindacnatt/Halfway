@@ -19,8 +19,6 @@ struct MapView: UIViewRepresentable {
     
     @ObservedObject static var profile: UserInfo = .shared
 
-    
-    
     //MARK: Create initial map
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -267,7 +265,7 @@ struct MapView: UIViewRepresentable {
         var polyLineColor: UIColor = .blue
         var parent: MapView
         var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        var userETA: String = "ETA"
+        var userETA: String = ""
         @Published var friendProfileImage: Image?
         init(_ parent: MapView) {
             self.parent = parent
@@ -370,7 +368,7 @@ struct MapView: UIViewRepresentable {
                 if !parent.halfwayPointIsSet{
                     parent.setHalfWayPoint(on: mapView)
                 }
-                else if self.userETA == "ETA"{
+                else if self.userETA == ""{
                     parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
                         let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
                         if newEta != self.userETA{
@@ -390,7 +388,7 @@ struct MapView: UIViewRepresentable {
                     parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
                     lastUserLocationCoordinates = userLocation.coordinate
                     
-                    if self.userETA != "ETA"{
+                    if self.userETA != ""{
                         parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in
                             let newEta = self.parent.convertSecondsToHoursAndMinutes(seconds: halfwayETA)
                             if newEta != self.userETA{
