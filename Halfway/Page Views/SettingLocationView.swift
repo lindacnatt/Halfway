@@ -13,66 +13,55 @@ struct SettingLocationView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var locationViewModel = LocationViewModel()
     @State var imageBounce = false
+    @State var test = false
     var body: some View {
         VStack{
-            HStack{
-                CircleImage(image: Image("user"), width: 200, height: 200)
+            Group{
+                CircleImage(image: Image("user"), width: 180, height: 180, strokeColor: ColorManager.blue)
                     .padding(.vertical)
                     .rotationEffect(.degrees(imageBounce ? -10 : 10))
                     .onAppear(){
                         self.imageBounce.toggle()
                     }
-                    
             }
             .offset(x: imageBounce ? -20 : 20)
             .animation(Animation.easeInOut(duration: 0.6).repeatForever())
             
-            VStack{
-                if !locationViewModel.locationAccessed{
-                    if locationViewModel.authStatus == .notDetermined {
-                        VStack(alignment: .leading){
-                            Text("To calculate the Halfway-point between you and your friends, we need your location.")
-                                .padding(.bottom)
-                            Text("Worried? Your location data will only be shared with the person you are meeting and will be deleted when you have found each other.")
-                                
-                        }
-                        .padding(.horizontal, 50)
+            VStack(alignment: .leading){
+                if locationViewModel.authStatus == .notDetermined {
+                    Text("To help you find your friends, we need your location.")
+                        .font(.headline)
+                    Text("Worried? Your location data will only be shared with the person you are meeting and will be deleted when you have found each other.")
+                        .padding(.top)
+                        .font(.footnote)
+                }
+                else if !locationViewModel.locationAccessed{
+                    Text("Go to Settings > Privacy > Location Services, then choose Halfway and give location access")
+                        .font(.headline)
+                        .padding(.top)
+                }
 
-                        Spacer()
-                        Button(
-                            action:{
-                                locationViewModel.askForLocationAccess()
-                            })
-                            {
-                                Text("Grant location access")
-                            }
-                            .buttonStyle(PrimaryButtonStyle())
-                    }else{
-                        VStack(alignment: .leading){
-                            Text("For Halfway to work, you must grant location access.")
-                                .padding(.bottom)
-                            Text("Go to Settings > Privacy > Location Services, then choose Halfway and give location access")
-                                .foregroundColor(.red)
-                        }
-                        .padding(.horizontal, 50)
-                        
-                        Spacer()
-                    }
-
-                }else{
-                    Text("Great! Let's start")
-                        .font(.title)
-                        .padding(.horizontal, 50)
+                else{
+                    Text("Great! Let's start finding some friends.")
+                        .font(.headline)
                         .onAppear(){
-                            withAnimation(Animation.linear.delay(3)){
+                            withAnimation(Animation.linear.delay(2.5)){
                                 viewRouter.currentPage = .createInvite
                             }
                         }
-                    Spacer()
                 }
             }
+            .padding(.horizontal, 50)
             .padding(.top, 50)
            
+            Spacer()
+            if locationViewModel.authStatus == .notDetermined {
+                Button(action:{ locationViewModel.askForLocationAccess() })
+                    {
+                        Text("Grant location access")
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+            }
         }
     }
 }
