@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseStorage
 
 class EmojiProfileImage: ObservableObject{
     @Published private var model: ProfileImage<String> = EmojiProfileImage.createProfileImages()
     
     static func createProfileImages() -> ProfileImage<String> {
-        let images: Array<String> = ["🥳","😎","😈","🥰","🤩", "😇", "😂", "🤯","😘"]
+        let images: Array<String> = ["partyEmoji","starEmoji", "laughingEmoji"]
         return ProfileImage<String>(numberOfImageCards: images.count){ index in
             return images[index]
         }

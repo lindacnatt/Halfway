@@ -6,81 +6,69 @@
 //  Copyright © 2020 Halfway. All rights reserved.
 
 
-
-
 import SwiftUI
 
-//Hello! Gör dig redo för väldigt mycket och väldigt ful kod. Enjoy ;)
-
-class ImagePic: ObservableObject{
+class UserInfo: ObservableObject{
     private init(){}
     
-    static let shared = ImagePic()
-    @Published var emojipic = ""
-    
-
+    static let shared = UserInfo()
+    @Published var image: Image?
+    @Published var name: String = ""
 }
+
 
 struct UserProfileView: View {
     
-    @State private var image: Image?
-    
-    @ObservedObject var profilepic: ImagePic = .shared
-    
-    
+    @EnvironmentObject var viewRouter: ViewRouter
+    @ObservedObject var profile: UserInfo = .shared
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
+    @State private var userName: String = ""
     
-    @ObservedObject var viewModel: EmojiProfileImage
+    @ObservedObject var viewModel = EmojiProfileImage()
     
     var body: some View {
         VStack{
-            HStack{
-                Spacer()
-                //Finish button
-                //TODO: Send the input from the image and namefields to firebase and mapView
-                Button(action: {}){
-                    Text("Done").foregroundColor(Color.blue)
-                }.padding(.trailing)
-            }
-           
-            //Display ProfileImage
-                GeometryReader{ gView in
-                    ZStack {
+            //MARK: Display ProfileImage
+            GeometryReader{ gView in
+                ZStack {
+                    if self.profile.image == nil{
                         Circle()
-                            .fill(Color.gray.opacity(0.1))
+                            .fill(Color.gray.opacity(0.15))
                             .overlay(Circle()
-                                .stroke(Color.orange, lineWidth: 4))
-                        //Show Image if image is not empty
-                        if self.image != nil {
-                            CircleImage(image: self.image, width:  gView.size.height, height:  gView.size.height, strokeColor: Color.orange)
-                        }
-                         else if self.profilepic.emojipic != "" {
-                            //Show Emoji if emojistring is not empty
-                            Text(self.profilepic.emojipic).font(.system(size: gView.size.height > gView.size.width ? gView.size.width *  0.7: gView.size.height *  0.7))
-                         }
-                         else{
-                            //If both Image and Emoji is empty show default image
-                            Image(systemName: "person")
-                                .resizable()
-                                .frame(width: gView.size.height * 0.5, height: gView.size.height * 0.5)
-                                .opacity(0.5)
-                         }
+                                        .stroke(ColorManager.blue, lineWidth: 4))
+                    } else{
+                        Circle()
+                            .fill(ColorManager.lightBlue)
+                    }
+                    //MARK: Show Image if image is not empty
+                    if self.profile.image != nil {
+                        CircleImage(image: self.profile.image, width:  gView.size.height, height:  gView.size.height, strokeColor: ColorManager.blue)
+                    }
+                    else{
+                        Image(systemName: "person")
+                            .resizable()
+                            .frame(width: gView.size.height * 0.3, height: gView.size.height * 0.3)
+                            .foregroundColor(Color.gray)
                     }
                 }
-                .padding()
-                //Tap to show the Imagepicker
-                .onTapGesture {
-                    self.showImagePicker = true
-                }
+            }
+            .padding()
             
-            //Choose emoji avatars
+            //MARK: Tap to show the Imagepicker
+            .onTapGesture {
+                self.showImagePicker = true
+            }
+            Text(NewName ? userName : profile.name).font(.headline).foregroundColor(ColorManager.blue).padding()
+            
+            //MARK: Choose emoji avatars
             VStack(alignment: .leading) {
                 Divider()
-                Text("Choose avatar").padding(.top)
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack {
+                            
+                            //MARK: Image picker
                             Image(systemName: "camera")
                                 .padding()
                                 .font(.title)
@@ -89,71 +77,82 @@ struct UserProfileView: View {
                                 .fixedSize()
                                 .onTapGesture {
                                     self.showImagePicker = true
-                            }
+                                }
+                            
+                            //MARK: The emoji images
                             ForEach(self.viewModel.imageCards){ card in
                                 ImageCardView(imageCard: card)
                                     .onTapGesture {
                                         self.viewModel.choose(card: card)
-                                        self.profilepic.emojipic = card.content
-                                        self.image = nil
-                                }
+                                        self.profile.image = Image(card.content)
+                                    }
                             }
-                        }.fixedSize()
-                    }.font(Font.system(size: min((geometry.size.width)/2, (geometry.size.height)/2)))
+                        }.padding(.leading)
+                    }
                 }.frame(height: 150)
             }
-            //Namefields
-            NameFields()
             
-        //Imagepicker over the whole view
+            //MARK: Change Username
+            VStack(alignment: .leading){
+                Divider()
+                HStack {
+                    Image(systemName: "person")
+                    TextField("Name", text: $userName)
+                }.padding()
+                Divider()
+                Spacer()
+            }
+            Spacer()
+            
+            //MARK: Finish Button
+            Button(action: {
+                viewRouter.currentPage = .createInvite
+                if !userName.isEmpty{
+                    profile.name = self.userName}
+                else {
+                    
+                }
+                
+            }){
+                Text("Done")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 90)
+                    .padding()
+            }.background(NotValid ? Color.gray : Color.blue)
+            .cornerRadius(50)
+            .padding(.bottom)
+            .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
+            .disabled(NotValid)
+            
+            //MARK: Imagepicker over the whole view
         }.sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
             ImagePicker(image: self.$inputImage)
-        }.padding()
-        
+        }
     }
     func loadImage(){
         guard let inputImage = inputImage else {return}
-        image = Image(uiImage: inputImage)
-        profilepic.emojipic = ""
-        
+        profile.image = Image(uiImage: inputImage)
     }
-    func addUser(Name: String){
-        
+    var NotValid: Bool {
+        return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
+    }
+    var NewName: Bool{
+        return profile.name.isEmpty
     }
 }
 
-struct NameFields: View{
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    var body: some View {
-        VStack{
-            Divider()
-            HStack{
-                Text("Firstname").padding(.trailing)
-                VStack {
-                    TextField("Enter firstname", text: $firstName).padding(.top)
-                    Divider()
-                }
-            }
-            HStack{
-                Text("Lastname").padding(.trailing)
-                TextField("Enter lastname", text: $lastName)
-            }
-            Divider()
-            Spacer()
-        }
-    }
-}
 
 struct ImageCardView: View{
     var imageCard: ProfileImage<String>.ImageCard
-    @ObservedObject var profilepic: ImagePic = .shared
     
     var body: some View{
         ZStack {
-            Circle().foregroundColor(Color.blue.opacity(0.15))
+            Circle().foregroundColor(ColorManager.lightBlue).padding()
                 .shadow(color: Color.black.opacity(0.15), radius: 5, x: 2, y: 2)
-            Text(imageCard.content)
+            Image(imageCard.content)
+                .resizable()
+            
         }.aspectRatio(contentMode: .fit)
     }
     
@@ -161,7 +160,8 @@ struct ImageCardView: View{
 
 struct UserProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfileView(viewModel: EmojiProfileImage())
+        UserProfileView()
+        
     }
 }
 
