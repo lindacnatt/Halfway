@@ -16,7 +16,7 @@ class UserInfo: ObservableObject{
     @Published var name: String = ""
 }
 
-
+//TODO: Store image and name where the app can reach them after force quit
 struct UserProfileView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter

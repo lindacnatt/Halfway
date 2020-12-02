@@ -32,13 +32,6 @@ class LocationViewModel: NSObject, ObservableObject{
             locationAccessed = true
         }
         
-        //TODO: Remove when settingLocationView is in action
-//        else{
-//            askForLocationAccess()
-//        }
-
-
-        
     }
     
     func askForLocationAccess(){

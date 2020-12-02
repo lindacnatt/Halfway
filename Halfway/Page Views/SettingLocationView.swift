@@ -18,7 +18,6 @@ struct SettingLocationView: View {
         GeometryReader{ geometry in
             VStack{
                 //MARK: Image and name
-                Spacer()
                 Group{
                     CircleImage(image: self.profile.image ?? Image(systemName: "person") , width: geometry.size.width/2, height: geometry.size.width/2, strokeColor: ColorManager.blue)
                     .padding(.vertical)
@@ -35,22 +34,20 @@ struct SettingLocationView: View {
                     .font(.headline)
                     .foregroundColor(ColorManager.blue)
                     .padding()
+                
                 //MARK: Information text
                 VStack(alignment: .leading){
                     if locationViewModel.authStatus == .notDetermined {
                         Text("To help you find your friends, we need your location.")
-                            .font(.headline)
                         Text("Worried? Your location data will only be shared with the person you are meeting and will be deleted when you have found each other.")
                             .padding(.top)
                             .font(.footnote)
                     }
                     else if !locationViewModel.locationAccessed{
                         Text("Go to Settings > Privacy > Location Services, then choose Halfway and give location access")
-                            .font(.headline)
-                            .padding(.top)
                     }
                     else{
-                        Text("Great! Let's find some friends")
+                        Text("Great! Let's meet some friends")
                             .onAppear(){
                                 withAnimation(Animation.linear.delay(2.5)){
                                     viewRouter.currentPage = .createInvite
@@ -58,8 +55,10 @@ struct SettingLocationView: View {
                             }
                     }
                 }
+                .font(.headline)
                 .padding(.horizontal, 50)
                 .padding(.vertical, 20)
+                .frame(width: geometry.size.width)
                 
                 Spacer()
                 //MARK: Button
@@ -71,6 +70,7 @@ struct SettingLocationView: View {
                         .buttonStyle(PrimaryButtonStyle())
                 }
             }
+            .padding(.top,  110)
         }
     }
 }
