@@ -13,6 +13,7 @@ import CoreLocation
 class LocationViewModel: NSObject, ObservableObject{
     @Published var userCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @Published var locationAccessed = false
+    @Published var authStatus  = CLLocationManager.authorizationStatus()
     
     private let locationManager = CLLocationManager()
     override init() {
@@ -25,24 +26,18 @@ class LocationViewModel: NSObject, ObservableObject{
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.startUpdatingLocation()
 
-        let status = CLLocationManager.authorizationStatus()
-        if status == .authorizedAlways || status == .authorizedWhenInUse {
-            //userCoordinates = self.locationManager.location!.coordinate
+        self.authStatus = CLLocationManager.authorizationStatus()
+        if self.authStatus == .authorizedAlways || self.authStatus == .authorizedWhenInUse {
+            userCoordinates = self.locationManager.location!.coordinate
             locationAccessed = true
         }
-        
-        //TODO: Remove when settingLocationView is in action
-        else{
-            askForLocationAccess()
-        }
-
-
         
     }
     
     func askForLocationAccess(){
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.requestAlwaysAuthorization()
+        self.authStatus = CLLocationManager.authorizationStatus()
         
     }
 }
@@ -57,4 +52,8 @@ extension LocationViewModel: CLLocationManagerDelegate {
         locationAccessed = true
     }
   }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        self.authStatus = status
+    }
 }
