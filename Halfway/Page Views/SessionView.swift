@@ -13,12 +13,13 @@ import MapKit
 struct SessionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @State var showingEndOptions = false
+    @State var usersHaveMet = false
     @ObservedObject var usersViewModel = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
     var body: some View {
         ZStack{
             if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed && usersViewModel.isSet){
-                MapView(usersViewModel: usersViewModel)
+                MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
                 
             }else{
@@ -43,7 +44,7 @@ struct SessionView: View {
                             primaryButton: .destructive(Text("Yes"), action: {
                                 //TODO: Make this end session
                                 withAnimation{
-                                    viewRouter.currentPage = .settingLocation}
+                                    viewRouter.currentPage = .createInvite}
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
@@ -55,12 +56,18 @@ struct SessionView: View {
                     .shadow(radius: 6, x: 6, y: 6)
                     
                     Spacer()
+                    if usersHaveMet{
+                        Text("User have met")
+                    }
                 }
                 
                 Spacer()
             }.padding()
         }.onAppear(){
             usersViewModel.fetchData()
+        }
+        .sheet(isPresented: $usersHaveMet){
+            UsersHaveMetSheet(usersHaveMet: $usersHaveMet)
         }
     }      
 }
