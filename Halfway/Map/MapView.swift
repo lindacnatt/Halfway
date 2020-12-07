@@ -11,14 +11,19 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    var usersViewModel: UsersViewModel? = UsersViewModel()
+    var usersViewModel: UsersViewModel?
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
     @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    
+    @Binding var usersHaveMet: Bool
     @ObservedObject static var profile: UserInfo = .shared
-
+    
+    init(usersViewModel: UsersViewModel? = UsersViewModel(), usersHaveMet: Binding<Bool> = .constant(false)) {
+        self.usersViewModel = usersViewModel
+        _usersHaveMet = usersHaveMet
+    }
+    
     //MARK: Create initial map
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -62,6 +67,7 @@ struct MapView: UIViewRepresentable {
         if (usersViewModel!.users.count != 0){
             updateUserAnnotation(withid: "friend", withColor: "orange", on: mapView)
         }
+
         
     }
     
@@ -85,14 +91,17 @@ struct MapView: UIViewRepresentable {
         let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId })
         let newUserAnnotation = newAnnotations.first(where: { $0.title == userId })
         
-        if oldUserAnnotation?.coordinate.longitude != newUserAnnotation?.coordinate.longitude
-            || oldUserAnnotation?.coordinate.latitude != newUserAnnotation?.coordinate.latitude{
-            
-            mapView.removeAnnotation(oldUserAnnotation!)
-            mapView.addAnnotation(newUserAnnotation!)
-            updateUserPolyline(for: newUserAnnotation!, withColor: colorId, on: mapView)
-            
+        if oldUserAnnotation != nil{
+            if oldUserAnnotation?.coordinate.longitude != newUserAnnotation?.coordinate.longitude
+                || oldUserAnnotation?.coordinate.latitude != newUserAnnotation?.coordinate.latitude{
+                
+                mapView.removeAnnotation(oldUserAnnotation!)
+                mapView.addAnnotation(newUserAnnotation!)
+                updateUserPolyline(for: newUserAnnotation!, withColor: colorId, on: mapView)
+                
+            }
         }
+        
     }
     
     //MARK: Update Polyline
@@ -257,7 +266,7 @@ struct MapView: UIViewRepresentable {
     
     //MARK: Setting map coordinator
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, usersHaveMet: $usersHaveMet)
     }
     
     //MARK: Map coordinator
@@ -266,10 +275,13 @@ struct MapView: UIViewRepresentable {
         var parent: MapView
         var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         var userETA: String = ""
+        var hasShownEndSheet = false
         @Published var friendProfileImage: Image?
-        init(_ parent: MapView) {
+        @Binding var usersHaveMet: Bool
+        
+        init(_ parent: MapView, usersHaveMet: Binding<Bool>) {
             self.parent = parent
-            
+            _usersHaveMet = usersHaveMet
         }
         
         //MARK: Annotation handling
@@ -384,6 +396,8 @@ struct MapView: UIViewRepresentable {
                 //Runs when the user has moved a certain distance
                 let walkedDistance = userLocation.location!.distance(from: CLLocation(latitude: lastUserLocationCoordinates.latitude, longitude: lastUserLocationCoordinates.longitude))
                 if walkedDistance > 50{
+                    
+                    
                     let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
                     parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
                     lastUserLocationCoordinates = userLocation.coordinate
@@ -403,6 +417,14 @@ struct MapView: UIViewRepresentable {
                     
                     parent.usersViewModel!.updateCoordinates(lat: userLocation.location!.coordinate.latitude, long: userLocation.location!.coordinate.longitude)
                     
+                }
+                
+                let distanceBetweenUsers = userLocation.location!.distance(from: CLLocation(latitude: parent.usersViewModel!.users[0].lat, longitude: parent.usersViewModel!.users[0].long))
+                if distanceBetweenUsers < 50 && !self.hasShownEndSheet{
+                    DispatchQueue.main.async {
+                        self.usersHaveMet = true //Testing binding variable
+                    }
+                    self.hasShownEndSheet = true
                 }
             }
             
