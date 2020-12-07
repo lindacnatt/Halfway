@@ -13,16 +13,16 @@ import UIKit
 
 class CreateInviteViewModel: ObservableObject {
     @EnvironmentObject var viewRouter: ViewRouter
-    @Published var currentUser = "user2"
-    @Published var sessionID = UUID().uuidString
+    @ObservedObject var usersViewModel = UsersViewModel()
+    
 
     func shareSheet(){
         
-        let sessionlink = sessionID
+        let sessionlink = usersViewModel.sessionId
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "www.johannesloor.se"
-        //components.path = "/SessionView"
+        components.host = "halfwayapplication.page.link"
+        components.path = "/SessionView"
         let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
         components.queryItems = [sessionIDQueryItem]
         
@@ -64,7 +64,6 @@ class CreateInviteViewModel: ObservableObject {
     }
     
     func showShareSheet(url: URL) {
-        currentUser = "user1"
         //guard let sessionlink = URL(string: "https://www.apple.com") else { return }
         let promoText = "Someone wants to meet you half-way using the halfway app! Click the link to accept."
         let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)

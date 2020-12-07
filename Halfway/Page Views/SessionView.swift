@@ -15,6 +15,7 @@ struct SessionView: View {
     @State var showingEndOptions = false
     @ObservedObject var usersViewModel = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
+    @ObservedObject var createInviteViewModel = CreateInviteViewModel()
     var body: some View {
         ZStack{
             if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
@@ -56,12 +57,20 @@ struct SessionView: View {
                     
                     Spacer()
                 }
-                
+                Spacer()
+                Button(action: {createInviteViewModel.shareSheet()
+                },
+                       label: {Text("Send invite")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 90)
+                        .padding()
+                })
                 Spacer()
             }.padding()
         }.onAppear(){
-            usersViewModel.fetchData()
             usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+            usersViewModel.fetchData()
         }
     }      
 }

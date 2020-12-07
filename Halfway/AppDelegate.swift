@@ -13,7 +13,6 @@ import Firebase
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
     @Published var sessionID: String = ""
-    @Published var userID: String = ""
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -48,12 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
 //        for queryItem in queryItems {
 //            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
             let session = queryItems[0].value
+        print("sessionid: \(session)")
         self.sessionID = session ?? ""
         
     }
     
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        print("ok. gr8 \(userActivity.webpageURL)")
         if let incomingURL = userActivity.webpageURL {
             print("incoming URL is \(incomingURL)")
             let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in

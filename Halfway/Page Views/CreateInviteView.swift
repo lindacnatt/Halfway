@@ -9,8 +9,10 @@
 import SwiftUI
 
 struct CreateInviteView: View {
+    @EnvironmentObject var viewRouter: ViewRouter
     @State private var showShareSheet = false
     let createInviteVM = CreateInviteViewModel()
+    @ObservedObject var usersViewModel = UsersViewModel()
     
     var body: some View {
         ZStack{
@@ -26,13 +28,15 @@ struct CreateInviteView: View {
                     Text("Facilitating encounters")
                 }
                 Spacer()
-                Button(action: createInviteVM.shareSheet) {
-                    Text("Create Invite Link")
+                Button(action: {usersViewModel.currentUser = "user1"
+                    viewRouter.currentPage = .session
+                },
+                       label: {Text("Start session")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding(.horizontal, 90)
                         .padding()
-                }
+                })
                 .background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
                 .cornerRadius(50)
                 .padding(.bottom)
