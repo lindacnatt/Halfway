@@ -12,18 +12,13 @@ import Firebase
 import UIKit
 
 class CreateInviteViewModel: ObservableObject {
-    @EnvironmentObject var viewRouter: ViewRouter
-    @ObservedObject var usersViewModel = UsersViewModel()
     
-
-    func shareSheet(){
-        
-        let sessionlink = usersViewModel.sessionId
+    func shareSheet(sessionId: String){
         var components = URLComponents()
         components.scheme = "https"
         components.host = "halfwayapplication.page.link"
         components.path = "/SessionView"
-        let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
+        let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionId)
         components.queryItems = [sessionIDQueryItem]
         
         guard let linkParameter = components.url else { return }

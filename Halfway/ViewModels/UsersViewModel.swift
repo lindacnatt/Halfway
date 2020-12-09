@@ -15,11 +15,10 @@ class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
     @Published var userDataInitilized = false
-    @Published var sessionId = UUID().uuidString
+    var sessionId = UUID().uuidString
     @Published var currentUser = "user1"
-    @ObservedObject var appDelegate = AppDelegate()
     
-    @Published var userAlreadyExistsInSession = true
+    @Published var userAlreadyExistsInSession = false
     let userCollection = "users"
     let sessionCollection = "sessions"
     
@@ -63,14 +62,6 @@ class UsersViewModel: ObservableObject {
     }
     
     func setInitialUserData(name: String, Lat: Double, Long: Double){
-        if appDelegate.sessionID != "" {
-            currentUser = "user2"
-            sessionId = appDelegate.sessionID
-        }
-//        if currentUser == "user1" {
-//            appDelegate.sessionID = sessionId
-//
-//        }
         database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
             "Name": name,
             "MinLeft": "ETA",

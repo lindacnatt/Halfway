@@ -44,7 +44,7 @@ struct SessionView: View {
                             primaryButton: .destructive(Text("Yes"), action: {
                                 //TODO: Make this end session
                                 withAnimation{
-                                    viewRouter.currentPage = .settingLocation}
+                                    viewRouter.currentPage = .createInvite}
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
@@ -58,19 +58,33 @@ struct SessionView: View {
                     Spacer()
                 }
                 Spacer()
-                Button(action: {createInviteViewModel.shareSheet()
+                Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
                 },
-                       label: {Text("Send invite")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 90)
-                        .padding()
+                   label: {Text("Send invite")
+                    .font(.headline)
+                    .padding(.horizontal, 90)
+                    .padding()
                 })
-                Spacer()
             }.padding()
         }.onAppear(){
-            usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
-            usersViewModel.fetchData()
+            if viewRouter.sessionId != "" {
+                usersViewModel.sessionId = viewRouter.sessionId
+                usersViewModel.currentUser = "user2"
+                usersViewModel.checkIfUserExists()
+
+                print("found viewrouterid: \(viewRouter.sessionId) and change to user 2")
+            }
+
+            if !usersViewModel.userAlreadyExistsInSession{
+                usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+                usersViewModel.fetchData()
+            }else{
+                //TODO: Handle what to do if "user3" wants to join
+            }
+            
+        }
+        .onDisappear(){
+            //TODO: Reset settings and remove session from firebase
         }
     }      
 }

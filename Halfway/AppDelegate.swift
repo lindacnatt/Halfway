@@ -12,8 +12,9 @@ import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
-    @Published var sessionID: String = ""
-
+    //@Published var sessionID: String = ""
+    lazy var viewRouter = ViewRouter()
+    let linkHandler = LinkHandler()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -36,56 +37,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
     }
     
     
-    func handleIncomingDynamicLink(_ dynamicLink: DynamicLink) {
-        guard let url = dynamicLink.url else {
-            print("The Dynamic Link has no url")
-            return
-        }
-        print("Link parameter is \(url.absoluteString)")
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            let queryItems = components.queryItems else { return }
-//        for queryItem in queryItems {
-//            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
-            let session = queryItems[0].value
-        print("sessionid: \(session)")
-        self.sessionID = session ?? ""
-        
-    }
+//    func handleIncomingDynamicLink(_ dynamicLink: DynamicLink) {
+//        guard let url = dynamicLink.url else {
+//            print("The Dynamic Link has no url")
+//            return
+//        }
+//        print("Link parameter is \(url.absoluteString)")
+//        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+//            let queryItems = components.queryItems else { return }
+////        for queryItem in queryItems {
+////            print("Parameter \(queryItem.name) has a value of \(queryItem.value ?? "")")
+//            let session = queryItems[0].value
+//        print("sessionid: \(session)")
+//        self.sessionID = session ?? ""
+//
+//    }
     
     
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        print("ok. gr8 \(userActivity.webpageURL)")
-        if let incomingURL = userActivity.webpageURL {
-            print("incoming URL is \(incomingURL)")
-            let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
-                guard error == nil else {
-                    print("found an error! \(error!.localizedDescription)")
-                    return
-                }
-                if let dynamicLink = dynamicLink {
-                    self.handleIncomingDynamicLink(dynamicLink)
-                }
-            }
-            if linkHandled {
-                return true
-            } else {
-               // Maybe do other things with incoming links
-                return false
-            }
-        }
-        return false
-    }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        print("I have received a URL through a custom scheme! \(url.absoluteString)")
-        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
-            self.handleIncomingDynamicLink(dynamicLink)
-            return true
-        } else {
-            // Maybe handle sign in with Apple here?
-            return false
-        }
-    }
+//    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+//        //print("ok. gr8 \(userActivity.webpageURL)")
+//        if let incomingURL = userActivity.webpageURL {
+//            print("incoming URL is \(incomingURL)")
+//            let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
+//                guard error == nil else {
+//                    print("found an error! \(error!.localizedDescription)")
+//                    return
+//                }
+//                if let dynamicLink = dynamicLink {
+//                    //self.handleIncomingDynamicLink(dynamicLink)
+//                    self.linkHandler.handleIncomingDynamicLink(dynamicLink, self.viewRouter)
+//
+//                }
+//            }
+//            return linkHandled ? true : false
+//        }
+//        //return viewRouter.sessionId != "" ? true : false
+//
+//        return false
+//    }
+//
+//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//        print("I have received a URL through a custom scheme! \(url.absoluteString)")
+//
+//        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+//            //self.handleIncomingDynamicLink(dynamicLink)
+//            linkHandler.handleIncomingDynamicLink(dynamicLink, viewRouter)
+//            return true
+//        } else {
+//            // Maybe handle sign in with Apple here?
+//            return false
+//        }
+//
+//    }
 
 
 }

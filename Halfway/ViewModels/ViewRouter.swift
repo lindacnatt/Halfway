@@ -10,6 +10,7 @@ import SwiftUI
 
 class ViewRouter: ObservableObject {
     @Published var currentPage: Page = .createInvite
+    @Published var sessionId: String = ""
 }
 
 enum Page {
