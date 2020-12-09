@@ -21,14 +21,15 @@ class UsersViewModel: ObservableObject {
     @Published var userAlreadyExistsInSession = false
     let userCollection = "users"
     let sessionCollection = "sessions"
-    
+    private var dbListener: ListenerRegistration? = nil
     
     func fetchData(){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
+        dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
                 print("No documents")
                 return
             }
+            
             var users = documents.map{ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()
                 
@@ -42,11 +43,18 @@ class UsersViewModel: ObservableObject {
                 
             }.filter({$0.id != self.currentUser})
             
+            querySnapshot?.documentChanges.forEach { diff in
+                if (diff.type == .removed) {
+                    self.users = []
+                    print("Removed users")
+                }
+            }
+            
             if users.count != 0{
                 users[0].id = "friend"
                 self.users = users
             }
-            print("Fetched user data")
+            
         }
     }
     
@@ -113,6 +121,8 @@ class UsersViewModel: ObservableObject {
                 print("Error removing document: \(err)")
             } else {
                 print("Document successfully removed!")
+                self.dbListener?.remove()
+                print("stopped listening for db changes")
             }
         }
         
