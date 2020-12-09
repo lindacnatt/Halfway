@@ -107,5 +107,17 @@ class UsersViewModel: ObservableObject {
         }
     }
     
+    func removeUserFromSession(){
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+        
+        
+    }
+    
 
 }

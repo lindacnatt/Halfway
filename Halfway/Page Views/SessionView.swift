@@ -94,7 +94,8 @@ struct SessionView: View {
             }
         }
         .onDisappear(){
-            //viewRouter.sessionId = ""
+            viewRouter.sessionId = ""
+            usersViewModel.removeUserFromSession()
             //TODO: Reset settings and remove session from firebase
         }
     }      
