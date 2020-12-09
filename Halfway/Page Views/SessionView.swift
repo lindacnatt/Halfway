@@ -18,13 +18,16 @@ struct SessionView: View {
     @ObservedObject var createInviteViewModel = CreateInviteViewModel()
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed){
-                MapView(users: usersViewModel.users)
+            if (usersViewModel.users.count == 1){
+                MapView(users: usersViewModel.users, usersViewModel: usersViewModel)
                     .edgesIgnoringSafeArea(.all)
                 
             }else{
                 //TODO: Add waiting view
-               Text("Waiting for friend")
+                MapView()
+                    .edgesIgnoringSafeArea(.all)
+                Text("Waiting for friend")
+                    .font(.title)
             }
             VStack{
                 HStack{
@@ -58,32 +61,40 @@ struct SessionView: View {
                     Spacer()
                 }
                 Spacer()
-                Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
-                },
-                   label: {Text("Send invite")
-                    .font(.headline)
-                    .padding(.horizontal, 90)
-                    .padding()
-                })
+                if (usersViewModel.users.count != 1){
+                    Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
+                    },
+                       label: {Text("Send invite")
+                        .font(.headline)
+                        .padding(.horizontal, 90)
+                        .padding()
+                       }).background(Color.white)
+                }
+                
             }.padding()
-        }.onAppear(){
+        }
+        .onAppear(){
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = "user2"
-                usersViewModel.checkIfUserExists()
-
-                print("found viewrouterid: \(viewRouter.sessionId) and change to user 2")
+                
             }
-
-            if !usersViewModel.userAlreadyExistsInSession{
-                usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
-                usersViewModel.fetchData()
-            }else{
-                //TODO: Handle what to do if "user3" wants to join
+            usersViewModel.checkIfUserExists{ userExists in
+                if !userExists{
+                    print("onappear fetchdata")
+                    usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+                    usersViewModel.fetchData()
+                }
+                else{
+                    //TODO: Handle what to do if "user3" wants to join
+                    withAnimation{
+                        viewRouter.currentPage = .createInvite //Maybe go to a view explaining that the session is full
+                    }
+                }
             }
-            
         }
         .onDisappear(){
+            //viewRouter.sessionId = ""
             //TODO: Reset settings and remove session from firebase
         }
     }      

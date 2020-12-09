@@ -15,7 +15,7 @@ class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
     @Published var userDataInitilized = false
-    var sessionId = UUID().uuidString
+    @Published var sessionId = UUID().uuidString
     @Published var currentUser = "user1"
     
     @Published var userAlreadyExistsInSession = false
@@ -50,14 +50,18 @@ class UsersViewModel: ObservableObject {
         }
     }
     
-    func checkIfUserExists(){
+    func checkIfUserExists(completion: @escaping (Bool) -> Void){
         database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).getDocument {
             (document, error) in
+            var userExists = false
             if let document = document, document.exists {
                 self.userAlreadyExistsInSession = true
+                userExists = true
             } else {
                 self.userAlreadyExistsInSession = false
+                
             }
+            completion(userExists)
         }
     }
     
@@ -75,6 +79,7 @@ class UsersViewModel: ObservableObject {
                 print("Successfully initilized user data!")
             }
         }
+        
     }
     
     func updateCoordinates(lat: Double, long: Double){

@@ -12,7 +12,7 @@ import MapKit
 
 struct MapView: UIViewRepresentable {
     var users: [User] = []
-    @ObservedObject var usersViewModel = UsersViewModel()
+    var usersViewModel = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
     @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
@@ -81,13 +81,15 @@ struct MapView: UIViewRepresentable {
     //Updates user annotation and polyline
     func updateUserAnnotation(withid userId: String, withColor colorId: String, on mapView: MKMapView){
         let newAnnotations = getUsersAsAnnotations(from: users)
-        let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId })
+        guard let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId }) else{
+            return
+        }
         let newUserAnnotation = newAnnotations.first(where: { $0.title == userId })
         
-        if oldUserAnnotation?.coordinate.longitude != newUserAnnotation?.coordinate.longitude
-            || oldUserAnnotation?.coordinate.latitude != newUserAnnotation?.coordinate.latitude{
+        if oldUserAnnotation.coordinate.longitude != newUserAnnotation?.coordinate.longitude
+            || oldUserAnnotation.coordinate.latitude != newUserAnnotation?.coordinate.latitude{
             
-            mapView.removeAnnotation(oldUserAnnotation!)
+            mapView.removeAnnotation(oldUserAnnotation)
             mapView.addAnnotation(newUserAnnotation!)
             updateUserPolyline(for: newUserAnnotation!, withColor: colorId, on: mapView)
             
