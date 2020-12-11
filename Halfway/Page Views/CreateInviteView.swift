@@ -11,9 +11,7 @@ import SwiftUI
 struct CreateInviteView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @State private var showShareSheet = false
-    @EnvironmentObject var viewRouter: ViewRouter
     let createInviteVM = CreateInviteViewModel()
-    @ObservedObject var usersViewModel = UsersViewModel()
     
     @ObservedObject static var profilepic: UserInfo = .shared
     
@@ -38,7 +36,7 @@ struct CreateInviteView: View {
                     Text("Facilitating encounters")
                 }
                 Spacer()
-                Button(action: {usersViewModel.currentUser = "user1"
+                Button(action: {
                     viewRouter.currentPage = .session
                 },
                        label: {Text("Start session")

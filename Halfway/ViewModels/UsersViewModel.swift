@@ -61,7 +61,7 @@ class UsersViewModel: ObservableObject {
                     users[userIndex].id = "friend"
                 }
                 self.users = users
-                self.getImage(imgRef: users[0].imgRef)
+                //self.getImage(imgRef: users[0].imgRef)
             }
             print("Fetched user data")
             
@@ -197,7 +197,4 @@ class UsersViewModel: ObservableObject {
     
     
     
-}
-    
-
 }

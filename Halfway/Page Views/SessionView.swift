@@ -17,9 +17,10 @@ struct SessionView: View {
     @ObservedObject var usersViewModel = UsersViewModel()
     @ObservedObject private var locationViewModel = LocationViewModel()
     @ObservedObject var createInviteViewModel = CreateInviteViewModel()
+    @ObservedObject var profile: UserInfo = .shared
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count == 1 && locationViewModel.locationAccessed && usersViewModel.isSet){
+            if (usersViewModel.users.count > 0) {//&& usersViewModel.isSet){
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
                 
@@ -73,10 +74,7 @@ struct SessionView: View {
                     Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
                     },
                        label: {Text("Send invite")
-                        .font(.headline)
-                        .padding(.horizontal, 90)
-                        .padding()
-                       }).background(Color.white)
+                    }).buttonStyle(PrimaryButtonStyle())
                 }
                 
             }.padding()
@@ -86,7 +84,7 @@ struct SessionView: View {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = viewRouter.currentUser
             }
-            usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+            usersViewModel.setInitialUserData(name: profile.name, Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
             usersViewModel.fetchData()
         }
         .sheet(isPresented: $usersHaveMet){
