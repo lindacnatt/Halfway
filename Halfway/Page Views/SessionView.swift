@@ -49,11 +49,12 @@ struct SessionView: View {
                             message: Text("This will close the session and you will no longer see each other on the map"),
                             primaryButton: .destructive(Text("Yes"), action: {
                                 //TODO: Make this end session
+                                usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
+                                viewRouter.sessionId = ""
+                                viewRouter.currentUser = "user1"
                                 withAnimation{
-                                    viewRouter.sessionId = ""
-                                    viewRouter.currentUser = "user1"
-                                    usersViewModel.removeUserFromSession(sessionId: usersViewModel.sessionId, currentUser: usersViewModel.currentUser)
-                                    viewRouter.currentPage = .createInvite}
+                                    viewRouter.currentPage = .createInvite
+                                }
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
