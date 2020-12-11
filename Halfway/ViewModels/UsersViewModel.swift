@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 
 class UsersViewModel: ObservableObject {
     @Published var users = [User]()
@@ -22,6 +23,11 @@ class UsersViewModel: ObservableObject {
     let userCollection = "users"
     let sessionCollection = "sessions"
     private var dbListener: ListenerRegistration? = nil
+    
+    @Published var downloadimage:UIImage?
+    
+    @Published var isSet = false
+    
     
     func fetchData(){
         dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -38,8 +44,9 @@ class UsersViewModel: ObservableObject {
                 let long = data["Long"] as? Double ?? 1.00
                 let lat = data["Lat"] as? Double ?? 1.00
                 let minLeft = data["MinLeft"] as? String ?? "0"
-
-                return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft)
+                let imgRef = data["imgRef"] as? String ?? "No image"
+                
+                return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft, imgRef: imgRef)
                 
             }.filter({$0.id != self.currentUser})
             
@@ -54,7 +61,9 @@ class UsersViewModel: ObservableObject {
                     users[userIndex].id = "friend"
                 }
                 self.users = users
+                self.getImage(imgRef: users[0].imgRef)
             }
+            print("Fetched user data")
             
         }
     }
@@ -144,6 +153,51 @@ class UsersViewModel: ObservableObject {
         
         
     }
+    
+    func getImage(imgRef: String){
+        let storage = Storage.storage()
+        storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
+            if let error = error{
+                print("Got an error \(error.localizedDescription)")
+                return
+            }
+            if let data = data {
+                print("Works")
+                self.downloadimage = UIImage(data: data)
+                self.isSet = true
+            }
+        }
+    }
+    func setImageReferance(sessionID: String, imageID: String, user: String){
+        let database = Firestore.firestore()
+        database.collection("sessions").document("\(sessionID)").collection("users").document("\(user)").updateData(["imgRef" : imageID]){ err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+    func storeImage(image: UIImage, user: String){
+        let randID = UUID().uuidString
+        if let imageData = image.jpegData(compressionQuality: 0.75){
+            let storage = Storage.storage()
+            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
+                (_, err) in
+                if let err = err {
+                    print("Error occurred! \(err)")
+                } else {
+                    print("Upload successful")
+                    self.setImageReferance(sessionID: self.sessionId, imageID: randID, user: self.currentUser)
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+}
     
 
 }
