@@ -12,6 +12,7 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
+    var usersViewModel = UsersViewModel()
     lazy var viewRouter = ViewRouter()
     let linkHandler = LinkHandler()
     
@@ -45,6 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This occurs shortly after the scene enters the background, or when its session is discarded.
         // Release any resources associated with this scene that can be re-created the next time the scene connects.
         // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+        if viewRouter.sessionId != ""{
+            usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {

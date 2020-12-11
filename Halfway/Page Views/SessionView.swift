@@ -52,7 +52,7 @@ struct SessionView: View {
                                 withAnimation{
                                     viewRouter.sessionId = ""
                                     viewRouter.currentUser = "user1"
-                                    usersViewModel.removeUserFromSession()
+                                    usersViewModel.removeUserFromSession(sessionId: usersViewModel.sessionId, currentUser: usersViewModel.currentUser)
                                     viewRouter.currentPage = .createInvite}
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
@@ -83,6 +83,10 @@ struct SessionView: View {
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = viewRouter.currentUser
+            }else{
+                //Needed to remove from firebase when app is forcequited (See Scenedelagate)
+                viewRouter.sessionId = usersViewModel.sessionId
+                viewRouter.currentUser = usersViewModel.currentUser
             }
             usersViewModel.setInitialUserData(name: profile.name, Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
             usersViewModel.fetchData()
