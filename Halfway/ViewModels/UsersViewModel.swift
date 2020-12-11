@@ -101,7 +101,7 @@ class UsersViewModel: ObservableObject {
     func setInitialUserData(name: String, Lat: Double, Long: Double){
         database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
             "Name": name,
-            "MinLeft": "ETA",
+            "MinLeft": "",
             "Lat": Lat,
             "Long": Long
         ]) { err in

@@ -11,7 +11,7 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    var users: [User] = []
+    //var users: [User] = []
     var usersViewModel: UsersViewModel?
     @ObservedObject private var locationViewModel = LocationViewModel()
     @State var halfwayPointIsSet = false
@@ -88,21 +88,20 @@ struct MapView: UIViewRepresentable {
     //MARK: Update user
     //Updates user annotation and polyline
     func updateUserAnnotation(withid userId: String, withColor colorId: String, on mapView: MKMapView){
-        let newAnnotations = getUsersAsAnnotations(from: users)
-        guard let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId }),
-              let newUserAnnotation = newAnnotations.first(where: { $0.title == userId })
-        else{
+        let newAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
+        guard let oldUserAnnotation = mapView.annotations.first(where: { $0.title == userId }), let newUserAnnotation = newAnnotations.first(where: { $0.title == userId }) else{
+            
             return
         }
         
-        
         if oldUserAnnotation.coordinate.longitude != newUserAnnotation.coordinate.longitude
-            || oldUserAnnotation.coordinate.latitude != newUserAnnotation.coordinate.latitude{
-            
+            || oldUserAnnotation.coordinate.latitude != newUserAnnotation.coordinate.latitude {
+
             mapView.removeAnnotation(oldUserAnnotation)
             mapView.addAnnotation(newUserAnnotation)
             updateUserPolyline(for: newUserAnnotation, withColor: colorId, on: mapView)
-            
+            print("updated user2")
+
         }
         
     }
