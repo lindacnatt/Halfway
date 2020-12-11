@@ -10,9 +10,10 @@ import Foundation
 import Firebase
 
 class LinkHandler: ObservableObject {
+    var usersViewModel = UsersViewModel()
     
     func handleIncomingDynamicLink(_ incomingURL: URL, _ viewRouter: ViewRouter) {
-        let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
+        DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
             guard error == nil else {
                 print("Error in dynamiclinks: \(error!.localizedDescription)")
                 return
@@ -29,14 +30,20 @@ class LinkHandler: ObservableObject {
                 viewRouter.sessionId = session ?? ""
                 
                 if viewRouter.sessionId != ""{
-                    viewRouter.currentPage = .session
+                    self.usersViewModel.sessionId = viewRouter.sessionId
+                    self.usersViewModel.checkIfSessionIsFull{ sessionIsFull, currentUser in
+                        if sessionIsFull{
+                            viewRouter.currentPage = .createInvite //TODO: Change to the view we want to show for "user3-99"
+                        }else{
+                            viewRouter.currentUser = currentUser
+                            viewRouter.currentPage = .session
+                            //TODO: Add check to see if user has a profile, if not send to userProfile
+                        }
+                    }
                 }
-                //TODO: Add check to see if user has a profile, if not send to userProfile
             }
         }
-        print("link handled: \(linkHandled)")
     }
-    
 }
 
 

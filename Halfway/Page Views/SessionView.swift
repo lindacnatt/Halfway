@@ -18,16 +18,17 @@ struct SessionView: View {
     @ObservedObject var createInviteViewModel = CreateInviteViewModel()
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count == 1){
+            if (usersViewModel.users.count > 0){
                 MapView(users: usersViewModel.users, usersViewModel: usersViewModel)
                     .edgesIgnoringSafeArea(.all)
                 
-            }else{
+            }
+            else{
                 //TODO: Add waiting view
                 MapView()
                     .edgesIgnoringSafeArea(.all)
-                Text("Waiting for friend")
-                    .font(.title)
+//                Text("Waiting for friend")
+//                    .font(.title)
             }
             VStack{
                 HStack{
@@ -47,6 +48,9 @@ struct SessionView: View {
                             primaryButton: .destructive(Text("Yes"), action: {
                                 //TODO: Make this end session
                                 withAnimation{
+                                    viewRouter.sessionId = ""
+                                    viewRouter.currentUser = "user1"
+                                    usersViewModel.removeUserFromSession()
                                     viewRouter.currentPage = .createInvite}
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
@@ -76,27 +80,10 @@ struct SessionView: View {
         .onAppear(){
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
-                usersViewModel.currentUser = "user2"
-                
+                usersViewModel.currentUser = viewRouter.currentUser
             }
-            usersViewModel.checkIfUserExists{ userExists in
-                if !userExists{
-                    print("onappear fetchdata")
-                    usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
-                    usersViewModel.fetchData()
-                }
-                else{
-                    //TODO: Handle what to do if "user3" wants to join
-                    withAnimation{
-                        viewRouter.currentPage = .createInvite //Maybe go to a view explaining that the session is full
-                    }
-                }
-            }
-        }
-        .onDisappear(){
-            viewRouter.sessionId = ""
-            usersViewModel.removeUserFromSession()
-            //TODO: Reset settings and remove session from firebase
+            usersViewModel.setInitialUserData(name: "J-lo", Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+            usersViewModel.fetchData()
         }
     }      
 }

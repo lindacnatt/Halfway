@@ -46,20 +46,21 @@ class UsersViewModel: ObservableObject {
             querySnapshot?.documentChanges.forEach { diff in
                 if (diff.type == .removed) {
                     self.users = []
-                    print("Removed users")
                 }
             }
             
             if users.count != 0{
-                users[0].id = "friend"
+                for userIndex in 0..<users.count{
+                    users[userIndex].id = "friend"
+                }
                 self.users = users
             }
             
         }
     }
     
-    func checkIfUserExists(completion: @escaping (Bool) -> Void){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).getDocument {
+    func checkIfUserExists(for user: String, completion: @escaping (Bool) -> Void){
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(user).getDocument {
             (document, error) in
             var userExists = false
             if let document = document, document.exists {
@@ -70,6 +71,21 @@ class UsersViewModel: ObservableObject {
                 
             }
             completion(userExists)
+        }
+    }
+    
+    func checkIfSessionIsFull(completion: @escaping (Bool, String) -> Void){
+        var user = "user1"
+        checkIfUserExists(for: user){ userOneExists in
+            if !userOneExists{
+                completion(userOneExists, user)
+            }
+            else{
+                user = "user2"
+                self.checkIfUserExists(for: user){ userTwoExists in
+                    completion(userTwoExists, user)
+                }
+            }
         }
     }
     
