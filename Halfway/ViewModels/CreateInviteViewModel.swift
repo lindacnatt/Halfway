@@ -11,17 +11,14 @@ import SwiftUI
 import Firebase
 import UIKit
 
-class CreateInviteViewModel {
+class CreateInviteViewModel: ObservableObject {
     
-    func shareSheet(){
-        
-        
-        let sessionlink = UUID().uuidString
+    func shareSheet(sessionId: String){
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "www.google.com"
+        components.host = "halfwayapplication.page.link"
         components.path = "/SessionView"
-        let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionlink)
+        let sessionIDQueryItem = URLQueryItem(name: "sessionID", value: sessionId)
         components.queryItems = [sessionIDQueryItem]
         
         guard let linkParameter = components.url else { return }
@@ -62,13 +59,25 @@ class CreateInviteViewModel {
     }
     
     func showShareSheet(url: URL) {
-        
         //guard let sessionlink = URL(string: "https://www.apple.com") else { return }
-        
-        let promoText = "Someone wants to meet you half-way using the halfway app! Follow the link to accept."
+        let promoText = "Someone wants to meet you half-way using the halfway app! Click the link to accept."
         let activityVC = UIActivityViewController(activityItems: [promoText, url], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?
             .present(activityVC, animated: true, completion: nil)
+        
+        //Completion handler
+        activityVC.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
+            if completed {
+                print("share completed")
+                return
+            } else {
+                print("cancel")
+                
+            }
+            if let shareError = error {
+                print("error while sharing: \(shareError.localizedDescription)")
+            }
+        }
         
        
         //let av = UIActivityViewController(activityItems: [sessionlink], applicationActivities: nil)

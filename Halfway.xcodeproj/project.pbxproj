@@ -40,6 +40,7 @@
 		CAC3CE82255577FE009C606F /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC3CE81255577FE009C606F /* TestView.swift */; };
 		CAEC898F25304C75005975EA /* CreateInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEC898E25304C75005975EA /* CreateInviteView.swift */; };
 		D77144377BF530DB639A40B5 /* Pods_HalfwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CEBE38DEA775D726A2160F0 /* Pods_HalfwayTests.framework */; };
+		F5D8500F258121E00013E41B /* LinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D8500E258121E00013E41B /* LinkHandler.swift */; };
 		F5E9FF5D257BF5A500F425C7 /* UsersHaveMetSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +108,7 @@
 		CAC3CE81255577FE009C606F /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		CAEC898E25304C75005975EA /* CreateInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteView.swift; sourceTree = "<group>"; };
 		E6C4A53B9B59912F8527C6E5 /* Pods-HalfwayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.debug.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F5D8500E258121E00013E41B /* LinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkHandler.swift; sourceTree = "<group>"; };
 		F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersHaveMetSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -283,6 +285,7 @@
 				CAA507D42555BED700A861A8 /* UsersViewModel.swift */,
 				8F1C3357256AFF7600329A5B /* LocationViewModel.swift */,
 				8FD562D9256D52C900885E09 /* ViewRouter.swift */,
+				F5D8500E258121E00013E41B /* LinkHandler.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 				8F6043E92531F7A600949011 /* ViewToUIImage.swift in Sources */,
 				8FDB0409253250BA00FED70E /* UserAnnotation.swift in Sources */,
 				CAAAEA0E2545C24900838BAC /* UserProfileView.swift in Sources */,
+				F5D8500F258121E00013E41B /* LinkHandler.swift in Sources */,
 				8F0C8C16252F98AD00B595A3 /* CircleImage.swift in Sources */,
 				CAC3CE82255577FE009C606F /* TestView.swift in Sources */,
 				8F6043F125322B9900949011 /* Triangle.swift in Sources */,

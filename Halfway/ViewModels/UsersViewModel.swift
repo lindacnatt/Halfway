@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
@@ -15,11 +16,13 @@ class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
     @Published var userDataInitilized = false
-    var sessionId = "hPlTmBl3E0wY8F7a4pHZ"
-    var currentUser = "user1"
-    @Published var userAlreadyExistsInSession = true
+    @Published var sessionId = UUID().uuidString
+    @Published var currentUser = "user1"
+    
+    @Published var userAlreadyExistsInSession = false
     let userCollection = "users"
     let sessionCollection = "sessions"
+    private var dbListener: ListenerRegistration? = nil
     
     @Published var downloadimage:UIImage?
     
@@ -27,11 +30,12 @@ class UsersViewModel: ObservableObject {
     
     
     func fetchData(){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
+        dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
                 print("No documents")
                 return
             }
+            
             var users = documents.map{ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()
                 
@@ -46,23 +50,50 @@ class UsersViewModel: ObservableObject {
                 
             }.filter({$0.id != self.currentUser})
             
+            querySnapshot?.documentChanges.forEach { diff in
+                if (diff.type == .removed) {
+                    self.users = []
+                }
+            }
+            
             if users.count != 0{
-                users[0].id = "friend"
+                for userIndex in 0..<users.count{
+                    users[userIndex].id = "friend"
+                }
                 self.users = users
-                self.getImage(imgRef: users[0].imgRef)
+                //self.getImage(imgRef: users[0].imgRef)
             }
             print("Fetched user data")
             
         }
     }
     
-    func checkIfUserExists(){
-        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).getDocument {
+    func checkIfUserExists(for user: String, completion: @escaping (Bool) -> Void){
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(user).getDocument {
             (document, error) in
+            var userExists = false
             if let document = document, document.exists {
                 self.userAlreadyExistsInSession = true
+                userExists = true
             } else {
                 self.userAlreadyExistsInSession = false
+                
+            }
+            completion(userExists)
+        }
+    }
+    
+    func checkIfSessionIsFull(completion: @escaping (Bool, String) -> Void){
+        var user = "user1"
+        checkIfUserExists(for: user){ userOneExists in
+            if !userOneExists{
+                completion(userOneExists, user)
+            }
+            else{
+                user = "user2"
+                self.checkIfUserExists(for: user){ userTwoExists in
+                    completion(userTwoExists, user)
+                }
             }
         }
     }
@@ -70,7 +101,7 @@ class UsersViewModel: ObservableObject {
     func setInitialUserData(name: String, Lat: Double, Long: Double){
         database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).setData([
             "Name": name,
-            "MinLeft": "ETA",
+            "MinLeft": "",
             "Lat": Lat,
             "Long": Long
         ]) { err in
@@ -81,6 +112,7 @@ class UsersViewModel: ObservableObject {
                 print("Successfully initilized user data!")
             }
         }
+        
     }
     
     func updateCoordinates(lat: Double, long: Double){
@@ -107,6 +139,21 @@ class UsersViewModel: ObservableObject {
             }
         }
     }
+    
+    func removeUserFromSession(sessionId: String, currentUser: String){
+        database.collection(sessionCollection).document(sessionId).collection(userCollection).document(currentUser).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+                self.dbListener?.remove()
+                print("stopped listening for db changes")
+            }
+        }
+        
+        
+    }
+    
     func getImage(imgRef: String){
         let storage = Storage.storage()
         storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
