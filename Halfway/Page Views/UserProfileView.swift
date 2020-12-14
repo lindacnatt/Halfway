@@ -7,13 +7,48 @@
 
 
 import SwiftUI
+import UIKit
 
 class UserInfo: ObservableObject{
-    private init(){}
-    
+    private init(){
+        getDefaultImage()
+    }
+
     static let shared = UserInfo()
     @Published var image: Image?
-    @Published var name: String = ""
+    @Published var name: String = UserDefaults.standard.string(forKey: "Name") ?? ""
+    let imageUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("profileImage.png")
+    
+    func getDefaultImage(){
+        if let fileData = FileManager.default.contents(atPath: imageUrl.path){
+
+            var img = UIImage(data: fileData)
+            
+            if let savedImageSize = UserDefaults.standard.string(forKey: "imageSize"){
+                let imageSize = String("\(img!.size)")
+                if imageSize != savedImageSize{
+                    img = UIImage(cgImage: img!.cgImage!, scale: 1.0, orientation: .right)
+                }
+            }
+            
+            self.image = Image(uiImage: img!)
+        }
+    }
+    
+    func setDefaultImage(image: UIImage){
+        if let imageData = image.pngData(){
+            let imageSize = String("\(image.size)")
+            UserDefaults.standard.set(imageSize, forKey: "imageSize")
+
+            do {
+                // Write to Disk
+                try imageData.write(to: imageUrl)
+
+            } catch {
+                print("Unable to Write Data to Disk (\(error))")
+            }
+        }
+    }
 }
 
 //TODO: Store image and name where the app can reach them after force quit
@@ -60,7 +95,7 @@ struct UserProfileView: View {
             .onTapGesture {
                 self.showImagePicker = true
             }
-            Text(NewName ? userName : profile.name).font(.headline).foregroundColor(ColorManager.blue).padding()
+            Text(userName.isEmpty ? profile.name : userName).font(.headline).foregroundColor(ColorManager.blue).padding()
             
             //MARK: Choose emoji avatars
             VStack(alignment: .leading) {
@@ -86,6 +121,7 @@ struct UserProfileView: View {
                                     .onTapGesture {
                                         self.viewModel.choose(card: card)
                                         self.profile.image = Image(card.content)
+                                        profile.setDefaultImage(image: UIImage(named: card.content)!)
                                     }
                             }
                         }.padding(.leading)
@@ -107,6 +143,13 @@ struct UserProfileView: View {
             
             //MARK: Finish Button
             Button(action: {
+                UserDefaults.standard.set(self.userName, forKey: "Name")
+                if !userName.isEmpty{
+                    profile.name = self.userName
+                }
+                if let profileImage = inputImage{
+                    profile.setDefaultImage(image: profileImage)
+                }
                 withAnimation(){
                     if locationViewModel.locationAccessed{
                         viewRouter.currentPage = .createInvite
@@ -116,11 +159,6 @@ struct UserProfileView: View {
                         }
                 }
                 
-                if !userName.isEmpty{
-                    profile.name = self.userName}
-                else {
-                    
-                }
                 
             }){
                 Text("Done")
@@ -141,14 +179,13 @@ struct UserProfileView: View {
     }
     func loadImage(){
         guard let inputImage = inputImage else {return}
+        print("Loaded image")
         profile.image = Image(uiImage: inputImage)
     }
     var NotValid: Bool {
         return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
     }
-    var NewName: Bool{
-        return profile.name.isEmpty
-    }
+
 }
 
 
