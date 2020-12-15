@@ -9,9 +9,22 @@
 import SwiftUI
 
 class ViewRouter: ObservableObject {
-    @Published var currentPage: Page = .userProfile
+    @ObservedObject var locationViewModel = LocationViewModel()
+    @Published var currentPage: Page = .createInvite
     @Published var sessionId: String = ""
     @Published var currentUser: String = "user1"
+    
+    init(){
+        setInitalPage()
+    }
+    
+    func setInitalPage() {
+        if UserDefaults.standard.string(forKey: "Name") == nil{
+            currentPage = .userProfile
+        }else if !locationViewModel.locationAccessed{
+            currentPage = .settingLocation
+        }
+    }
 }
 
 enum Page {

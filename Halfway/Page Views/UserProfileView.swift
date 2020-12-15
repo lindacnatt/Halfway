@@ -20,19 +20,21 @@ class UserInfo: ObservableObject{
     let imageUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("profileImage.png")
     
     func getDefaultImage(){
-        if let fileData = FileManager.default.contents(atPath: imageUrl.path){
-
-            var img = UIImage(data: fileData)
-            
-            if let savedImageSize = UserDefaults.standard.string(forKey: "imageSize"){
-                let imageSize = String("\(img!.size)")
-                if imageSize != savedImageSize{
-                    img = UIImage(cgImage: img!.cgImage!, scale: 1.0, orientation: .right)
-                }
-            }
-            
-            self.image = Image(uiImage: img!)
+        guard let fileData = FileManager.default.contents(atPath: imageUrl.path) else{
+            return
         }
+        var img = UIImage(data: fileData)
+        
+        //Check for rotating error and rotate image
+        if let savedImageSize = UserDefaults.standard.string(forKey: "imageSize"){
+            let imageSize = String("\(img!.size)")
+            if imageSize != savedImageSize{
+                img = UIImage(cgImage: img!.cgImage!, scale: 1.0, orientation: .right)
+            }
+        }
+        
+        self.image = Image(uiImage: img!)
+        
     }
     
     func setDefaultImage(image: UIImage){
@@ -51,7 +53,6 @@ class UserInfo: ObservableObject{
     }
 }
 
-//TODO: Store image and name where the app can reach them after force quit
 struct UserProfileView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
@@ -143,8 +144,8 @@ struct UserProfileView: View {
             
             //MARK: Finish Button
             Button(action: {
-                UserDefaults.standard.set(self.userName, forKey: "Name")
                 if !userName.isEmpty{
+                    UserDefaults.standard.set(self.userName, forKey: "Name")
                     profile.name = self.userName
                 }
                 if let profileImage = inputImage{
