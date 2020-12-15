@@ -17,8 +17,7 @@ struct CreateInviteView: View {
     
     var body: some View {
         ZStack{
-            MapView().edgesIgnoringSafeArea(.all)
-            Rectangle().edgesIgnoringSafeArea(.all).foregroundColor(Color.white).opacity(0.4)
+            MapView().edgesIgnoringSafeArea(.all).blur(radius: 5).disabled(true)
             VStack{
                 //MARK: Go to change user profile view
                 HStack {

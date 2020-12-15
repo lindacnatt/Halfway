@@ -73,7 +73,7 @@ struct SessionView: View {
                 if (usersViewModel.users.count != 1){
                     Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
                     },
-                       label: {Text("Send invite")
+                       label: {Text("Send invite link")
                     }).buttonStyle(PrimaryButtonStyle())
                 }
                 
