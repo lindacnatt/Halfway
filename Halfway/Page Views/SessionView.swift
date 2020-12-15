@@ -20,10 +20,9 @@ struct SessionView: View {
     @ObservedObject var profile: UserInfo = .shared
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count > 0) {//&& usersViewModel.isSet){
+            if (usersViewModel.users.count > 0) && (usersViewModel.friendsImageFetched){
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
-                
             }
             else{
                 //TODO: Add waiting view
@@ -89,6 +88,7 @@ struct SessionView: View {
                 viewRouter.currentUser = usersViewModel.currentUser
             }
             usersViewModel.setInitialUserData(name: profile.name, Lat: locationViewModel.userCoordinates.latitude, Long: locationViewModel.userCoordinates.longitude)
+            usersViewModel.storeImage(image: profile.uiImage!)
             usersViewModel.fetchData()
         }
         .sheet(isPresented: $usersHaveMet){

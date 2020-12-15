@@ -15,18 +15,20 @@ import FirebaseStorage
 class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
+    private let storage = Storage.storage()
+
     @Published var userDataInitilized = false
     @Published var sessionId = UUID().uuidString
     @Published var currentUser = "user1"
-    
     @Published var userAlreadyExistsInSession = false
+    
     let userCollection = "users"
     let sessionCollection = "sessions"
     private var dbListener: ListenerRegistration? = nil
     
     @Published var downloadimage:UIImage?
     
-    @Published var isSet = false
+    @Published var friendsImageFetched = false
     
     
     func fetchData(){
@@ -61,7 +63,9 @@ class UsersViewModel: ObservableObject {
                     users[userIndex].id = "friend"
                 }
                 self.users = users
-                //self.getImage(imgRef: users[0].imgRef)
+                if !self.friendsImageFetched{
+                    self.getImage(imgRef: users[0].imgRef)
+                }
             }
             print("Fetched user data")
             
@@ -151,6 +155,7 @@ class UsersViewModel: ObservableObject {
             }
         }
         
+        deleteImage(withId: "\(sessionId)\(currentUser)")
         
     }
     
@@ -164,7 +169,7 @@ class UsersViewModel: ObservableObject {
             if let data = data {
                 print("Works")
                 self.downloadimage = UIImage(data: data)
-                self.isSet = true
+                self.friendsImageFetched = true
             }
         }
     }
@@ -178,19 +183,29 @@ class UsersViewModel: ObservableObject {
             }
         }
     }
-    func storeImage(image: UIImage, user: String){
-        let randID = UUID().uuidString
+    func storeImage(image: UIImage){
+        let imageID = "\(self.sessionId)\(self.currentUser)"
+
         if let imageData = image.jpegData(compressionQuality: 0.75){
-            let storage = Storage.storage()
-            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
+            storage.reference(withPath: imageID).putData(imageData, metadata: nil) {
                 (_, err) in
                 if let err = err {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
-                    self.setImageReferance(sessionID: self.sessionId, imageID: randID, user: self.currentUser)
+                    self.setImageReferance(sessionID: self.sessionId, imageID: imageID, user: self.currentUser)
                 }
             }
+        }
+    }
+    
+    func deleteImage(withId imageID: String){
+        storage.reference(withPath: imageID).delete { error in
+          if let error = error {
+            print("Error deleting image: \(error)")
+          } else {
+            print("image deleted from storage")
+          }
         }
     }
     

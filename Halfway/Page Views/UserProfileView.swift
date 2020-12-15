@@ -12,6 +12,7 @@ class UserInfo: ObservableObject{
     private init(){}
     
     static let shared = UserInfo()
+    @Published var uiImage: UIImage?
     @Published var image: Image?
     @Published var name: String = ""
 }
@@ -86,6 +87,7 @@ struct UserProfileView: View {
                                     .onTapGesture {
                                         self.viewModel.choose(card: card)
                                         self.profile.image = Image(card.content)
+                                        profile.uiImage = UIImage(named: card.content)
                                     }
                             }
                         }.padding(.leading)
@@ -142,6 +144,7 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         profile.image = Image(uiImage: inputImage)
+        profile.uiImage = inputImage
     }
     var NotValid: Bool {
         return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
