@@ -20,7 +20,7 @@ struct SessionView: View {
     @ObservedObject var profile: UserInfo = .shared
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count > 0) && (usersViewModel.friendsImageFetched){
+            if (usersViewModel.users.count > 0) {//&& (usersViewModel.friendsImageFetched){
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
             }

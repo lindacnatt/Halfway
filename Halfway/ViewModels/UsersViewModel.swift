@@ -63,7 +63,7 @@ class UsersViewModel: ObservableObject {
                     users[userIndex].id = "friend"
                 }
                 self.users = users
-                if !self.friendsImageFetched{
+                if !self.friendsImageFetched && users[0].imgRef != ""{
                     self.getImage(imgRef: users[0].imgRef)
                 }
             }
@@ -107,7 +107,8 @@ class UsersViewModel: ObservableObject {
             "Name": name,
             "MinLeft": "",
             "Lat": Lat,
-            "Long": Long
+            "Long": Long,
+            "imgRef": ""
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
