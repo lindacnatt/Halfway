@@ -29,8 +29,6 @@ struct SessionView: View {
                 //TODO: Add waiting view
                 MapView()
                     .edgesIgnoringSafeArea(.all)
-//                Text("Waiting for friend")
-//                    .font(.title)
             }
             VStack{
                 HStack{

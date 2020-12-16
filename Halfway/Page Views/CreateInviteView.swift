@@ -28,12 +28,7 @@ struct CreateInviteView: View {
                 }
                 Spacer()
                 VStack{
-                    
-                    Text("Halfway")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(ColorManager.orange)
-                    Text("Facilitating encounters")
+                    Image("HalfwayFullLogo").resizable().aspectRatio(contentMode: .fit).padding(80)
                 }
                 Spacer()
                 Button(action: {
