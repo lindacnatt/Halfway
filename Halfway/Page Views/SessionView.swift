@@ -78,7 +78,7 @@ struct SessionView: View {
                     }
                     
                     Button(action: {
-                        createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
+                        createInviteViewModel.shareSheet(sessionId: viewRouter.sessionId)
                     },
                     label: {Text(createInviteViewModel.invitationSent ? "Send a new link" : "Send invite link")
                     }).buttonStyle(PrimaryButtonStyle())
@@ -87,7 +87,7 @@ struct SessionView: View {
             }.padding()
         }
         .onAppear() {
-            print("session appeared")
+            print("session appeared \(viewRouter.sessionId)")
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = viewRouter.currentUser

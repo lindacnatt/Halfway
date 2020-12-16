@@ -24,10 +24,10 @@ class LinkHandler: ObservableObject {
                     return
                 }
                 guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                    let queryItems = components.queryItems else { return }
-                    let session = queryItems[0].value
-
-                viewRouter.sessionId = session ?? ""
+                    let queryItems = components.queryItems,
+                    let session = queryItems[0].value else { return }
+                
+                viewRouter.sessionId = session
                 
                 if viewRouter.sessionId != ""{
                     self.usersViewModel.sessionId = viewRouter.sessionId
