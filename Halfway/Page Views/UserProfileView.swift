@@ -61,7 +61,10 @@ struct UserProfileView: View {
             .onTapGesture {
                 self.showImagePicker = true
             }
-            Text(NewName ? userName : profile.name).font(.headline).foregroundColor(ColorManager.blue).padding()
+            Text(NewName ? profile.name : userName)
+                .font(.headline)
+                .foregroundColor(ColorManager.blue)
+                .padding()
             
             //MARK: Choose emoji avatars
             VStack(alignment: .leading) {
@@ -150,7 +153,7 @@ struct UserProfileView: View {
         return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
     }
     var NewName: Bool{
-        return profile.name.isEmpty
+        return userName.isEmpty
     }
 }
 
