@@ -23,13 +23,15 @@ struct SessionView: View {
             if (usersViewModel.users.count > 0) {//&& (usersViewModel.friendsImageFetched){
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
+                    .sheet(isPresented: $usersHaveMet){
+                        UsersHaveMetSheet(usersHaveMet: $usersHaveMet)
+                    }
             }
             else{
                 //TODO: Add waiting view
                 MapView()
                     .edgesIgnoringSafeArea(.all)
-//                Text("Waiting for friend")
-//                    .font(.title)
+                
             }
             VStack{
                 HStack{
@@ -47,12 +49,11 @@ struct SessionView: View {
                             title: Text("End session?"),
                             message: Text("This will close the session and you will no longer see each other on the map"),
                             primaryButton: .destructive(Text("Yes"), action: {
-                                usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
-                                viewRouter.sessionId = ""
-                                viewRouter.currentUser = "user1"
                                 withAnimation{
                                     viewRouter.currentPage = .createInvite
                                 }
+                                
+                                
                             }),
                             secondaryButton: .cancel(Text("No"), action: {})
                             
@@ -69,16 +70,24 @@ struct SessionView: View {
                     }
                 }
                 Spacer()
-                if (usersViewModel.users.count != 1){
-                    Button(action: {createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
+                if (usersViewModel.users.count == 0){
+                    if createInviteViewModel.invitationSent{
+                        Text("Waiting for friend")
+                            .font(.headline)
+                            .padding(.bottom)
+                    }
+                    
+                    Button(action: {
+                        createInviteViewModel.shareSheet(sessionId: usersViewModel.sessionId)
                     },
-                       label: {Text("Send invite link")
+                    label: {Text(createInviteViewModel.invitationSent ? "Send a new link" : "Send invite link")
                     }).buttonStyle(PrimaryButtonStyle())
                 }
                 
             }.padding()
         }
-        .onAppear(){
+        .onAppear() {
+            print("session appeared")
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = viewRouter.currentUser
@@ -91,9 +100,13 @@ struct SessionView: View {
             usersViewModel.storeImage(image: profile.uiImage!)
             usersViewModel.fetchData()
         }
-        .sheet(isPresented: $usersHaveMet){
-            UsersHaveMetSheet(usersHaveMet: $usersHaveMet)
+        .onDisappear() {
+            print("session disappeared")
+            usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
+            viewRouter.sessionId = ""
+            viewRouter.currentUser = "user1"
         }
+        
     }      
 }
 
