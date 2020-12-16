@@ -27,7 +27,6 @@ class UsersViewModel: ObservableObject {
     private var dbListener: ListenerRegistration? = nil
     
     @Published var downloadimage:UIImage?
-    
     @Published var friendsImageFetched = false
     
     
@@ -62,10 +61,12 @@ class UsersViewModel: ObservableObject {
                 for userIndex in 0..<users.count{
                     users[userIndex].id = "friend"
                 }
-                self.users = users
-                if !self.friendsImageFetched && users[0].imgRef != ""{
+                if !self.friendsImageFetched{
                     self.getImage(imgRef: users[0].imgRef)
                 }
+                self.users = users
+                
+                
             }
             print("Fetched user data")
             
@@ -168,7 +169,7 @@ class UsersViewModel: ObservableObject {
                 return
             }
             if let data = data {
-                print("Works")
+                print("Image fetched")
                 self.downloadimage = UIImage(data: data)
                 self.friendsImageFetched = true
             }
