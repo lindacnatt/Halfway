@@ -17,6 +17,7 @@ func makeBody(configuration: Configuration) -> some View {
         .cornerRadius(50)
         .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
         .font(.headline)
-        .foregroundColor(.white)
+        .foregroundColor(configuration.isPressed ? .secondary : .white)
+        .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
     }
 }
