@@ -70,6 +70,7 @@ struct SettingLocationView: View {
                         .buttonStyle(PrimaryButtonStyle())
                 }
             }
+            .padding(.bottom, 40)
             .padding(.top,  110)
         }
     }
