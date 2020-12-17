@@ -36,7 +36,7 @@ struct SessionView: View {
     
     var body: some View {
         ZStack{
-            if (usersViewModel.users.count > 0) && (usersViewModel.friendsImageFetched){
+            if usersViewModel.friendsDataFetched{
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
                     .sheet(isPresented: $usersHaveMet){
@@ -84,7 +84,7 @@ struct SessionView: View {
                 .padding()
                 
                 Spacer()
-                if (usersViewModel.users.count == 0){
+                if !usersViewModel.friendsDataFetched {
                     if createInviteViewModel.invitationSent{
                         Text("Waiting for friend")
                             .font(.headline)

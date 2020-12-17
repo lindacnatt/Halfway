@@ -27,7 +27,7 @@ class UsersViewModel: ObservableObject {
     private var dbListener: ListenerRegistration? = nil
     
     @Published var downloadimage:UIImage?
-    @Published var friendsImageFetched = false
+    @Published var friendsDataFetched = false
     
     func fetchData(){
         dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -53,19 +53,26 @@ class UsersViewModel: ObservableObject {
             querySnapshot?.documentChanges.forEach { diff in
                 if (diff.type == .removed) {
                     self.users = []
+                    self.friendsDataFetched = false
+
                 }
             }
-            
+
             if users.count != 0{
                 for userIndex in 0..<users.count{
                     users[userIndex].id = "friend"
                 }
-                if !self.friendsImageFetched{
-                    self.getImage(imgRef: users[0].imgRef)
+                if !self.friendsDataFetched && users[0].imgRef != "No image"{
+                    self.getImage(imgRef: users[0].imgRef){ imageIsFetched in
+                        if imageIsFetched{
+                            self.users = users
+                            self.friendsDataFetched = true
+                        }
+                        
+                    }
                 }
             }
-            self.users = users
-
+            
             print("Fetched user data")
             
         }
@@ -107,7 +114,6 @@ class UsersViewModel: ObservableObject {
             "MinLeft": "",
             "Lat": Lat,
             "Long": Long,
-            "imgRef": ""
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -159,17 +165,18 @@ class UsersViewModel: ObservableObject {
         
     }
     
-    func getImage(imgRef: String){
+    func getImage(imgRef: String, completion: @escaping (Bool) -> Void){
         let storage = Storage.storage()
         storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
             if let error = error{
                 print("Got an error \(error.localizedDescription)")
+                completion(false)
                 return
             }
             if let data = data {
                 print("Image fetched")
                 self.downloadimage = UIImage(data: data)
-                self.friendsImageFetched = true
+                completion(true)
             }
         }
     }
