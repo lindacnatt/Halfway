@@ -56,7 +56,12 @@ struct SessionView: View {
                         Image(systemName: "xmark")
                             .font(.title)
                             .foregroundColor(Color.black)
+                            
                     }
+                    .padding()
+                    .background(Color.white)
+                    .mask(Circle())
+                    .shadow(radius: 6, x: 6, y: 6)
                     
                     .alert(isPresented: $showingEndOptions) {
                         Alert(
@@ -73,14 +78,11 @@ struct SessionView: View {
                             
                         )
                     }
-                    .padding()
-                    .background(Color.white)
-                    .mask(Circle())
-                    .shadow(radius: 6, x: 6, y: 6)
-                    
                     Spacer()
 
                 }
+                .padding()
+                
                 Spacer()
                 if (usersViewModel.users.count == 0){
                     if createInviteViewModel.invitationSent{
@@ -96,7 +98,7 @@ struct SessionView: View {
                     }).buttonStyle(PrimaryButtonStyle())
                 }
                 
-            }.padding()
+            }.padding(.bottom, 40)
         }
         .onAppear() {
             if viewRouter.sessionId != "" {

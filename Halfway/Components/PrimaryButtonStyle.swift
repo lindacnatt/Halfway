@@ -11,14 +11,11 @@ import SwiftUI
 struct PrimaryButtonStyle: ButtonStyle {
 func makeBody(configuration: Configuration) -> some View {
     configuration.label
-        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(minWidth: 0, maxWidth: 280)
         .padding()
         .background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
         .cornerRadius(50)
-        
         .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
-        .padding(.horizontal, 35)
-        .padding(.bottom)
         .font(.headline)
         .foregroundColor(.white)
     }

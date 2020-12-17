@@ -22,7 +22,7 @@ struct CreateInviteView: View {
                 //MARK: Go to change user profile view
                 HStack {
                     Button(action: {viewRouter.currentPage = .userProfile}){
-                        CircleImage(image: CreateInviteView.profilepic.image, width: 60, height: 60, strokeColor: ColorManager.blue).padding(.leading)}
+                        CircleImage(image: CreateInviteView.profilepic.image, width: 60, height: 60, strokeColor: ColorManager.blue).padding()}
                     Spacer()
                 }
                 Spacer()
@@ -39,17 +39,11 @@ struct CreateInviteView: View {
                     viewRouter.currentPage = .session
                 },
                        label: {Text("Start session")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 90)
-                        .padding()
+                       
                 })
-                .background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
-                .cornerRadius(50)
-                .padding(.bottom)
-                .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
+                .buttonStyle(PrimaryButtonStyle())
             }
-            .padding(.bottom)
+            .padding(.bottom, 40)
         }
     }
 }
