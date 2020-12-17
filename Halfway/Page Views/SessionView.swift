@@ -10,14 +10,30 @@
 import SwiftUI
 import MapKit
 
+@available(iOS 14.0, *)
+struct SessionViewPost14: View{
+    @StateObject var usersViewModel = UsersViewModel()
+    var body: some View{
+        SessionView(usersViewModel: self.usersViewModel)
+    }
+}
+
+struct SessionViewPre14: View{
+    @ObservedObject var usersViewModel = UsersViewModel()
+    var body: some View{
+        SessionView(usersViewModel: self.usersViewModel)
+    }
+}
+
 struct SessionView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @State var showingEndOptions = false
     @State var usersHaveMet = false
-    @ObservedObject var usersViewModel = UsersViewModel()
+    var usersViewModel: UsersViewModel
     @ObservedObject private var locationViewModel = LocationViewModel()
     @ObservedObject var createInviteViewModel = CreateInviteViewModel()
     @ObservedObject var profile: UserInfo = .shared
+    
     var body: some View {
         ZStack{
             if (usersViewModel.users.count > 0) && (usersViewModel.friendsImageFetched){
@@ -28,10 +44,8 @@ struct SessionView: View {
                     }
             }
             else{
-                //TODO: Add waiting view
                 MapView()
                     .edgesIgnoringSafeArea(.all)
-                
             }
             VStack{
                 HStack{
@@ -65,9 +79,7 @@ struct SessionView: View {
                     .shadow(radius: 6, x: 6, y: 6)
                     
                     Spacer()
-                    if usersHaveMet{
-                        Text("User have met")
-                    }
+
                 }
                 Spacer()
                 if (usersViewModel.users.count == 0){
@@ -87,7 +99,6 @@ struct SessionView: View {
             }.padding()
         }
         .onAppear() {
-            print("session appeared \(viewRouter.sessionId)")
             if viewRouter.sessionId != "" {
                 usersViewModel.sessionId = viewRouter.sessionId
                 usersViewModel.currentUser = viewRouter.currentUser
@@ -101,7 +112,6 @@ struct SessionView: View {
             usersViewModel.fetchData()
         }
         .onDisappear() {
-            print("session disappeared")
             usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
             viewRouter.sessionId = ""
             viewRouter.currentUser = "user1"
@@ -112,6 +122,10 @@ struct SessionView: View {
 
 struct SessionView_Previews: PreviewProvider {
     static var previews: some View {
-        SessionView().environmentObject(ViewRouter())
+        if #available(iOS 14.0, *) {
+            SessionViewPost14()
+        } else {
+            SessionViewPre14()
+        }
     }
 }

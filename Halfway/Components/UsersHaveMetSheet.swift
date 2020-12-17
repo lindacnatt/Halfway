@@ -12,7 +12,6 @@ import SwiftUI
 struct UsersHaveMetSheet: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @Binding var usersHaveMet: Bool
-    @ObservedObject var usersViewModel = UsersViewModel()
     var body: some View {
         VStack() {
             Spacer()

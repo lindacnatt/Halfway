@@ -29,7 +29,6 @@ class UsersViewModel: ObservableObject {
     @Published var downloadimage:UIImage?
     @Published var friendsImageFetched = false
     
-    
     func fetchData(){
         dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
@@ -50,7 +49,7 @@ class UsersViewModel: ObservableObject {
                 return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft, imgRef: imgRef)
                 
             }.filter({$0.id != self.currentUser})
-            
+
             querySnapshot?.documentChanges.forEach { diff in
                 if (diff.type == .removed) {
                     self.users = []
@@ -64,10 +63,9 @@ class UsersViewModel: ObservableObject {
                 if !self.friendsImageFetched{
                     self.getImage(imgRef: users[0].imgRef)
                 }
-                self.users = users
-                
-                
             }
+            self.users = users
+
             print("Fetched user data")
             
         }
