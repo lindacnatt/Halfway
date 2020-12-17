@@ -28,7 +28,7 @@ struct CreateInviteView: View {
                 }
                 Spacer()
                 VStack{
-                    Image("HalfwayFullLogo").resizable().aspectRatio(contentMode: .fit).padding(80)
+                    Image("HalfwayLogo").resizable().aspectRatio(contentMode: .fit).padding(80).padding(.leading, 15)
                 }
                 Spacer()
                 Button(action: {

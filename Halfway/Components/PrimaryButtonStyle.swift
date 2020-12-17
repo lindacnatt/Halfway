@@ -15,10 +15,9 @@ func makeBody(configuration: Configuration) -> some View {
         .padding()
         .background(LinearGradient(gradient: Gradient(colors: [ColorManager.lightOrange, ColorManager.orange]), startPoint: .leading, endPoint: .trailing))
         .cornerRadius(50)
-        
+        .padding(.horizontal, 40)
         .shadow(color: Color.black.opacity(0.15), radius: 20, x: 5, y: 20)
-        .padding(.horizontal, 35)
-        .padding(.bottom)
+                .padding(.bottom)
         .font(.headline)
         .foregroundColor(.white)
     }
