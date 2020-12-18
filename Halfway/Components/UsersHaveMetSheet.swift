@@ -12,17 +12,21 @@ import SwiftUI
 struct UsersHaveMetSheet: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @Binding var usersHaveMet: Bool
+    @ObservedObject var usersViewModel = UsersViewModel()
+    @ObservedObject var profile: UserInfo = .shared
     var body: some View {
         VStack() {
             Spacer()
             Text("Have you met?")
-                .font(.largeTitle)
-            Text("You are pretty close to each other...")
+                .font(.largeTitle).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).foregroundColor(ColorManager.orange)
+            Text("You are pretty close to each other...").font(.subheadline)
                 .padding()
-            Spacer()
-            
-            Text("Animation")
-            
+            if usersViewModel.downloadimage != nil{
+                HighFiveView(user1: profile.image ?? Image("starEmoji"), user2: Image(uiImage: usersViewModel.downloadimage!))
+            }
+            else {
+                HighFiveView(user1: profile.image ?? Image("partyEmoji"), user2: Image("starEmoji"))
+            }
             Spacer()
             Button(action: {
                 withAnimation{

@@ -26,14 +26,10 @@ struct CreateInviteView: View {
                     Spacer()
                 }
                 Spacer()
-                VStack{
+                HStack{
                     
-                    Text("Halfway")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(ColorManager.orange)
-                    Text("Facilitating encounters")
-                }
+                    Image("HalfwayLogo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
+                }.padding(.horizontal, 70)
                 Spacer()
                 Button(action: {
                     viewRouter.currentPage = .session

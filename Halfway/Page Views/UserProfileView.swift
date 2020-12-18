@@ -36,7 +36,7 @@ struct UserProfileView: View {
                 ZStack {
                     if self.profile.image == nil{
                         Circle()
-                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color.gray).opacity(0.3)
                             .overlay(Circle()
                                         .stroke(ColorManager.blue, lineWidth: 4))
                     } else{
@@ -51,7 +51,7 @@ struct UserProfileView: View {
                         Image(systemName: "person")
                             .resizable()
                             .frame(width: gView.size.height * 0.3, height: gView.size.height * 0.3)
-                            .foregroundColor(Color.gray)
+                            .foregroundColor(Color.black).opacity(0.5)
                     }
                 }
             }
@@ -75,11 +75,11 @@ struct UserProfileView: View {
                             
                             //MARK: Image picker
                             Image(systemName: "camera")
+                                .foregroundColor(Color.black).opacity(0.5)
                                 .padding()
                                 .font(.title)
                                 .padding()
-                                .background(Circle().stroke(Color.gray.opacity(0.50)))
-                                .fixedSize()
+                                .background(Circle().foregroundColor(Color.gray).opacity(0.3)).fixedSize()
                                 .onTapGesture {
                                     self.showImagePicker = true
                                 }
@@ -95,7 +95,7 @@ struct UserProfileView: View {
                             }
                         }.padding(.leading)
                     }
-                }.frame(height: 150)
+                }.frame(height: 110)
             }
             
             //MARK: Change Username
@@ -103,7 +103,7 @@ struct UserProfileView: View {
                 Divider()
                 HStack {
                     Image(systemName: "person")
-                    TextField("Name", text: $userName)
+                    TextField("Enter your name", text: $userName)
                 }.padding()
                 Divider()
                 Spacer()

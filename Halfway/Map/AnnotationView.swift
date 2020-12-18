@@ -15,6 +15,8 @@ struct AnnotationView: View {
     var userName: String
     var timeLeft: String
     
+    @State var pulsate = false
+    
     var body: some View {
         VStack{
             VStack{
@@ -28,13 +30,10 @@ struct AnnotationView: View {
                     CircleImage(image: image, width: 80, height: 80, strokeColor: strokeColor)
                     
                 }.offset(y: 8)
-                
-                Triangle()
-                    .fill(strokeColor)
+                Triangle().fill(strokeColor)
                     .frame(width: 25, height: 25)
                     .rotationEffect(.degrees(180))
-                Circle().fill(strokeColor).frame(width: 20, height: 20)
-                    
+                    Circle().fill(strokeColor).frame(width: 20, height: 20)
             }.frame(maxHeight: .infinity, alignment: .center).shadow(color: Color.black.opacity(0.15), radius: 8, x: 5, y: 5)
             
             Spacer()

@@ -14,7 +14,7 @@ class EmojiProfileImage: ObservableObject{
     @Published private var model: ProfileImage<String> = EmojiProfileImage.createProfileImages()
     
     static func createProfileImages() -> ProfileImage<String> {
-        let images: Array<String> = ["partyEmoji","starEmoji", "laughingEmoji"]
+        let images: Array<String> = ["partyEmoji","starEmoji", "angelEmoji","toungeEmoji","heartEmoji", "laughingEmoji"]
         return ProfileImage<String>(numberOfImageCards: images.count){ index in
             return images[index]
         }
