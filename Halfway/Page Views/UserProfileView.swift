@@ -90,7 +90,7 @@ struct UserProfileView: View {
                             }
                         }.padding(.leading)
                     }
-                }.frame(maxHeight: 110)
+                }.frame(height: 110)
             }
             
             //MARK: Change Username
