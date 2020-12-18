@@ -12,7 +12,7 @@ struct SplashView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     var body: some View {
         HStack{
-            Image("HalfwayLogo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
+            Image("Newlogo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
         }.padding(.horizontal, 70)
             .onAppear(){
                 withAnimation(Animation.linear.delay(2)){
