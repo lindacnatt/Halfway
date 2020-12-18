@@ -12,7 +12,7 @@ import SwiftUI
 struct UsersHaveMetSheet: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @Binding var usersHaveMet: Bool
-    @ObservedObject var usersViewModel = UsersViewModel()
+    var usersViewModel: UsersViewModel
     @ObservedObject var profile: UserInfo = .shared
     var body: some View {
         VStack() {
@@ -21,12 +21,8 @@ struct UsersHaveMetSheet: View {
                 .font(.largeTitle).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).foregroundColor(ColorManager.orange)
             Text("You are pretty close to each other...").font(.subheadline)
                 .padding()
-            if usersViewModel.downloadimage != nil{
-                HighFiveView(user1: profile.image ?? Image("starEmoji"), user2: Image(uiImage: usersViewModel.downloadimage!))
-            }
-            else {
-                HighFiveView(user1: profile.image ?? Image("partyEmoji"), user2: Image("starEmoji"))
-            }
+            HighFiveView(user1: profile.image ?? Image("starEmoji"), user2: Image(uiImage: usersViewModel.downloadimage!))
+
             Spacer()
             Button(action: {
                 withAnimation{
@@ -47,6 +43,6 @@ struct UsersHaveMetSheet: View {
 
 struct UsersHaveMetSheet_Previews: PreviewProvider {
     static var previews: some View {
-        UsersHaveMetSheet(usersHaveMet: .constant(true))
+        UsersHaveMetSheet(usersHaveMet: .constant(true), usersViewModel: UsersViewModel())
     }
 }

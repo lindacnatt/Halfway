@@ -40,7 +40,7 @@ struct SessionView: View {
                 MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
                     .edgesIgnoringSafeArea(.all)
                     .sheet(isPresented: $usersHaveMet){
-                        UsersHaveMetSheet(usersHaveMet: $usersHaveMet)
+                        UsersHaveMetSheet(usersHaveMet: $usersHaveMet, usersViewModel: usersViewModel)
                     }
             }
             else{
