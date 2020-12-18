@@ -12,7 +12,7 @@ import Firebase
 import UIKit
 
 class CreateInviteViewModel: ObservableObject {
-    
+    @Published var invitationSent: Bool = false
     func shareSheet(sessionId: String){
         var components = URLComponents()
         components.scheme = "https"
@@ -69,8 +69,10 @@ class CreateInviteViewModel: ObservableObject {
         activityVC.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
             if completed {
                 print("share completed")
+                self.invitationSent = true
                 return
             } else {
+                self.invitationSent = false
                 print("cancel")
                 
             }

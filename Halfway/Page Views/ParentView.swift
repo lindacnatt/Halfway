@@ -16,15 +16,23 @@ struct ParentView: View {
                 SplashView()
             case .settingLocation:
                 SettingLocationView()
+                
            case .userProfile:
                 UserProfileView()
+            
             case .createInvite:
                 CreateInviteView()
+                
             case .session:
-                SessionView()
-                    .transition(.slide)
-            default:
-                Text("Default")
+                if #available(iOS 14.0, *) {
+                    SessionViewPost14()
+                        .transition(.slide)
+                } else {
+                    SessionViewPre14()
+                        .transition(.slide)
+                }
+//            default:
+//                UserProfileView()
         }
         
     }

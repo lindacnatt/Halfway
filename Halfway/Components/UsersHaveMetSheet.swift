@@ -12,7 +12,6 @@ import SwiftUI
 struct UsersHaveMetSheet: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @Binding var usersHaveMet: Bool
-    @ObservedObject var usersViewModel = UsersViewModel()
     var body: some View {
         VStack() {
             Spacer()
@@ -26,9 +25,6 @@ struct UsersHaveMetSheet: View {
             
             Spacer()
             Button(action: {
-                usersViewModel.removeUserFromSession(sessionId: viewRouter.sessionId, currentUser: viewRouter.currentUser)
-                viewRouter.sessionId = ""
-                viewRouter.currentUser = "user1"
                 withAnimation{
                     viewRouter.currentPage = .createInvite
                 }
