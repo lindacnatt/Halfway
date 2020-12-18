@@ -12,6 +12,7 @@ class UserInfo: ObservableObject{
     private init(){}
     
     static let shared = UserInfo()
+    @Published var uiImage: UIImage?
     @Published var image: Image?
     @Published var name: String = ""
 }
@@ -60,7 +61,10 @@ struct UserProfileView: View {
             .onTapGesture {
                 self.showImagePicker = true
             }
-            Text(NewName ? userName : profile.name).font(.headline).foregroundColor(ColorManager.blue).padding()
+            Text(NewName ? profile.name : userName)
+                .font(.headline)
+                .foregroundColor(ColorManager.blue)
+                .padding()
             
             //MARK: Choose emoji avatars
             VStack(alignment: .leading) {
@@ -86,6 +90,7 @@ struct UserProfileView: View {
                                     .onTapGesture {
                                         self.viewModel.choose(card: card)
                                         self.profile.image = Image(card.content)
+                                        profile.uiImage = UIImage(named: card.content)
                                     }
                             }
                         }.padding(.leading)
@@ -142,12 +147,13 @@ struct UserProfileView: View {
     func loadImage(){
         guard let inputImage = inputImage else {return}
         profile.image = Image(uiImage: inputImage)
+        profile.uiImage = inputImage
     }
     var NotValid: Bool {
         return (userName.isEmpty && profile.name.isEmpty) || profile.image == nil
     }
     var NewName: Bool{
-        return profile.name.isEmpty
+        return userName.isEmpty
     }
 }
 

@@ -46,6 +46,7 @@
 		D77144377BF530DB639A40B5 /* Pods_HalfwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CEBE38DEA775D726A2160F0 /* Pods_HalfwayTests.framework */; };
 		F5D8500F258121E00013E41B /* LinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D8500E258121E00013E41B /* LinkHandler.swift */; };
 		F5E9FF5D257BF5A500F425C7 /* UsersHaveMetSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */; };
+		F5FEED12258CA2830013A083 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FEED11258CA2830013A083 /* SplashView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 		E6C4A53B9B59912F8527C6E5 /* Pods-HalfwayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.debug.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F5D8500E258121E00013E41B /* LinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkHandler.swift; sourceTree = "<group>"; };
 		F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersHaveMetSheet.swift; sourceTree = "<group>"; };
+		F5FEED11258CA2830013A083 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 				CAC3CE81255577FE009C606F /* TestView.swift */,
 				8F7D412E256AD1C500123623 /* SettingLocationView.swift */,
 				8FD562D4256D4D3000885E09 /* ParentView.swift */,
+				F5FEED11258CA2830013A083 /* SplashView.swift */,
 			);
 			path = "Page Views";
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				8F6043F625322C2300949011 /* AnnotationView.swift in Sources */,
 				8F1C3358256AFF7600329A5B /* LocationViewModel.swift in Sources */,
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
+				F5FEED12258CA2830013A083 /* SplashView.swift in Sources */,
 				8F0C8C07252F4D5F00B595A3 /* MapView.swift in Sources */,
 				CAF58A08258AA5E80041026F /* HighFiveView.swift in Sources */,
 				CA553D99252DA90800B1BDF4 /* SceneDelegate.swift in Sources */,

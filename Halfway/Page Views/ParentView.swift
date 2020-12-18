@@ -12,17 +12,27 @@ struct ParentView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     var body: some View {
         switch viewRouter.currentPage {
+            case .splash:
+                SplashView()
             case .settingLocation:
                 SettingLocationView()
+                
            case .userProfile:
                 UserProfileView()
+            
             case .createInvite:
                 CreateInviteView()
+                
             case .session:
-                SessionView()
-                    .transition(.slide)
-            default:
-                Text("Default")
+                if #available(iOS 14.0, *) {
+                    SessionViewPost14()
+                        .transition(.slide)
+                } else {
+                    SessionViewPre14()
+                        .transition(.slide)
+                }
+//            default:
+//                UserProfileView()
         }
         
     }

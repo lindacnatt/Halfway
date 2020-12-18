@@ -15,19 +15,19 @@ import FirebaseStorage
 class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
+    private let storage = Storage.storage()
+
     @Published var userDataInitilized = false
     @Published var sessionId = UUID().uuidString
     @Published var currentUser = "user1"
-    
     @Published var userAlreadyExistsInSession = false
+    
     let userCollection = "users"
     let sessionCollection = "sessions"
     private var dbListener: ListenerRegistration? = nil
     
     @Published var downloadimage:UIImage?
-    
-    @Published var isSet = false
-    
+    @Published var friendsDataFetched = false
     
     func fetchData(){
         dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -49,20 +49,30 @@ class UsersViewModel: ObservableObject {
                 return User(id: userId, name: name, long: long, lat:lat, minLeft: minLeft, imgRef: imgRef)
                 
             }.filter({$0.id != self.currentUser})
-            
+
             querySnapshot?.documentChanges.forEach { diff in
                 if (diff.type == .removed) {
                     self.users = []
+                    self.friendsDataFetched = false
+
                 }
             }
-            
+
             if users.count != 0{
                 for userIndex in 0..<users.count{
                     users[userIndex].id = "friend"
                 }
-                self.users = users
-                //self.getImage(imgRef: users[0].imgRef)
+                if !self.friendsDataFetched && users[0].imgRef != "No image"{
+                    self.getImage(imgRef: users[0].imgRef){ imageIsFetched in
+                        if imageIsFetched{
+                            self.users = users
+                            self.friendsDataFetched = true
+                        }
+                        
+                    }
+                }
             }
+            
             print("Fetched user data")
             
         }
@@ -103,7 +113,7 @@ class UsersViewModel: ObservableObject {
             "Name": name,
             "MinLeft": "",
             "Lat": Lat,
-            "Long": Long
+            "Long": Long,
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -151,20 +161,22 @@ class UsersViewModel: ObservableObject {
             }
         }
         
+        deleteImage(withId: "\(sessionId)\(currentUser)")
         
     }
     
-    func getImage(imgRef: String){
+    func getImage(imgRef: String, completion: @escaping (Bool) -> Void){
         let storage = Storage.storage()
         storage.reference(withPath: "\(imgRef)").getData(maxSize: 4*1024*1024){  (data, error) in
             if let error = error{
                 print("Got an error \(error.localizedDescription)")
+                completion(false)
                 return
             }
             if let data = data {
-                print("Works")
+                print("Image fetched")
                 self.downloadimage = UIImage(data: data)
-                self.isSet = true
+                completion(true)
             }
         }
     }
@@ -178,19 +190,29 @@ class UsersViewModel: ObservableObject {
             }
         }
     }
-    func storeImage(image: UIImage, user: String){
-        let randID = UUID().uuidString
+    func storeImage(image: UIImage){
+        let imageID = "\(self.sessionId)\(self.currentUser)"
+
         if let imageData = image.jpegData(compressionQuality: 0.75){
-            let storage = Storage.storage()
-            storage.reference(withPath: "\(randID)").putData(imageData, metadata: nil) {
+            storage.reference(withPath: imageID).putData(imageData, metadata: nil) {
                 (_, err) in
                 if let err = err {
                     print("Error occurred! \(err)")
                 } else {
                     print("Upload successful")
-                    self.setImageReferance(sessionID: self.sessionId, imageID: randID, user: self.currentUser)
+                    self.setImageReferance(sessionID: self.sessionId, imageID: imageID, user: self.currentUser)
                 }
             }
+        }
+    }
+    
+    func deleteImage(withId imageID: String){
+        storage.reference(withPath: imageID).delete { error in
+          if let error = error {
+            print("Error deleting image: \(error)")
+          } else {
+            print("image deleted from storage")
+          }
         }
     }
     
