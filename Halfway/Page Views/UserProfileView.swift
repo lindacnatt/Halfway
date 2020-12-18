@@ -35,7 +35,7 @@ struct UserProfileView: View {
                 ZStack {
                     if self.profile.image == nil{
                         Circle()
-                            .fill(ColorManager.lightBlue)
+                            .fill(Color.gray).opacity(0.3)
                             .overlay(Circle()
                                         .stroke(ColorManager.blue, lineWidth: 4))
                     } else{
@@ -50,7 +50,7 @@ struct UserProfileView: View {
                         Image(systemName: "person")
                             .resizable()
                             .frame(width: gView.size.height * 0.3, height: gView.size.height * 0.3)
-                            .foregroundColor(ColorManager.blue)
+                            .foregroundColor(Color.black).opacity(0.5)
                     }
                 }
             }
@@ -71,11 +71,11 @@ struct UserProfileView: View {
                             
                             //MARK: Image picker
                             Image(systemName: "camera")
-                                .foregroundColor(ColorManager.blue)
+                                .foregroundColor(Color.black).opacity(0.5)
                                 .padding()
                                 .font(.title)
                                 .padding()
-                                .background(Circle().foregroundColor(ColorManager.lightBlue)).fixedSize()
+                                .background(Circle().foregroundColor(Color.gray).opacity(0.3)).fixedSize()
                                 .onTapGesture {
                                     self.showImagePicker = true
                                 }
