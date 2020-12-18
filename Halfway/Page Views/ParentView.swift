@@ -12,6 +12,8 @@ struct ParentView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     var body: some View {
         switch viewRouter.currentPage {
+            case .splash:
+                SplashView()
             case .settingLocation:
                 SettingLocationView()
            case .userProfile:
