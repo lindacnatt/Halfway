@@ -36,7 +36,7 @@ class UsersViewModel: ObservableObject {
                 return
             }
             
-            var users = documents.map{ (queryDocumentSnapshot) -> User in
+            self.users = documents.map{ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()
                 
                 let userId = queryDocumentSnapshot.documentID
@@ -58,14 +58,14 @@ class UsersViewModel: ObservableObject {
                 }
             }
 
-            if users.count != 0{
-                for userIndex in 0..<users.count{
-                    users[userIndex].id = "friend"
+            if self.users.count != 0{
+                for userIndex in 0..<self.users.count{
+                    self.users[userIndex].id = "friend"
                 }
-                if !self.friendsDataFetched && users[0].imgRef != "No image"{
-                    self.getImage(imgRef: users[0].imgRef){ imageIsFetched in
+                if !self.friendsDataFetched && self.users[0].imgRef != "No image"{
+                    self.getImage(imgRef: self.users[0].imgRef){ imageIsFetched in
                         if imageIsFetched{
-                            self.users = users
+                            
                             self.friendsDataFetched = true
                         }
                         
