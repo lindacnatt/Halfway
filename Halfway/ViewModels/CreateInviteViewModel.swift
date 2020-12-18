@@ -35,7 +35,7 @@ class CreateInviteViewModel: ObservableObject {
         shareLink.iOSParameters?.appStoreID = "962194608" //Change later
         shareLink.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
         shareLink.socialMetaTagParameters?.title = "Halfway"
-        shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://images.unsplash.com/photo-1519614356164-43acba9cb25d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60")
+        shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://firebasestorage.googleapis.com/v0/b/halfway-a359a.appspot.com/o/NewLogoPadding.png?alt=media&token=69c40d7f-a4be-4fd5-a862-559e3c2f0852")
         shareLink.socialMetaTagParameters?.descriptionText = "Meet your friends half-way with the Halfway app!"
         
 
