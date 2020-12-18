@@ -9,12 +9,13 @@
 import SwiftUI
 
 class ViewRouter: ObservableObject {
-    @Published var currentPage: Page = .userProfile
+    @Published var currentPage: Page = .splash
     @Published var sessionId: String = ""
     @Published var currentUser: String = "user1"
 }
 
 enum Page {
+    case splash
     case settingLocation
     case userProfile
     case createInvite
