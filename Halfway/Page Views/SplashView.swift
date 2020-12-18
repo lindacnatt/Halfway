@@ -11,7 +11,9 @@ import SwiftUI
 struct SplashView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     var body: some View {
-        Text("Halfway")
+        HStack{
+            Image("HalfwayLogo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
+        }.padding(.horizontal, 70)
             .onAppear(){
                 withAnimation(Animation.linear.delay(2)){
                     viewRouter.currentPage = .userProfile
