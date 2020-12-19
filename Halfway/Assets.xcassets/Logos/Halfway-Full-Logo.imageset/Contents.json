@@ -1,15 +1,50 @@
 {
   "images" : [
     {
-      "filename" : "Halfway-Full-Logo.pdf",
+      "filename" : "HalfwayFullLogo@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "HalfwayFull-Logo-Dark-Mode@1x.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "HalfwayFullLogo@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "HalfwayFull-Logo-Dark-Mode@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "HalfwayFullLogo@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "HalfwayFull-Logo-Dark-Mode@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
