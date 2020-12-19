@@ -28,7 +28,7 @@ struct CreateInviteView: View {
                 Spacer()
                 HStack{
                     
-                    Image("Newlogo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
+                    Image("Halfway-Full-Logo").resizable().aspectRatio(contentMode: .fit).padding(.leading, 15)
                 }.padding(.horizontal, 70)
                 Spacer()
                 Button(action: {
