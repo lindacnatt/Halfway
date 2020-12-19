@@ -44,7 +44,7 @@ struct SettingLocationView: View {
                             .font(.footnote)
                     }
                     else if !locationViewModel.locationAccessed{
-                        Text("Go to Settings > Privacy > Location Services, then choose Halfway and give location access")
+                        Text("Your location is needed for the app to work...\n\nGo to Settings > Privacy > Location Services, then choose Halfway and give location access")
                     }
                     else{
                         Text("Great! Let's meet some friends")

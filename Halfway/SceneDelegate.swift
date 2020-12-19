@@ -8,11 +8,14 @@
 
 import UIKit
 import SwiftUI
+import CoreLocation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
+    var profile: UserInfo = .shared
     var usersViewModel = UsersViewModel()
+    var locationViewModel = LocationViewModel()
     lazy var viewRouter = ViewRouter()
     let linkHandler = LinkHandler()
     
@@ -32,12 +35,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
         
-        guard let userActivity = connectionOptions.userActivities.first,
-            userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-            let incomingURL = userActivity.webpageURL else{
-            return
-        }
-        linkHandler.handleIncomingDynamicLink(incomingURL, viewRouter)
+//        guard let userActivity = connectionOptions.userActivities.first,
+//            userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+//            let incomingURL = userActivity.webpageURL else{
+//            return
+//        }
+//        linkHandler.handleIncomingDynamicLink(incomingURL, viewRouter)
+        
+        
 
     }
 
@@ -64,6 +69,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        let authStatus = CLLocationManager.authorizationStatus()
+        
+        if profile.name != ""{
+            if authStatus == .notDetermined || authStatus == .denied{
+                viewRouter.currentPage = .settingLocation
+            }
+        }
+        
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -73,10 +86,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard let incomingURL = userActivity.webpageURL else {
-            return
+        let authStatus = CLLocationManager.authorizationStatus()
+
+        if profile.name == "" {
+            viewRouter.currentPage = .userProfile
         }
-        linkHandler.handleIncomingDynamicLink(incomingURL, viewRouter)
+        else if authStatus == .denied || authStatus == .notDetermined{
+            viewRouter.currentPage = .settingLocation
+        }
+        else{
+            guard let incomingURL = userActivity.webpageURL else {
+                return
+            }
+            linkHandler.handleIncomingDynamicLink(incomingURL, viewRouter)
+        }
     }
 }
 
