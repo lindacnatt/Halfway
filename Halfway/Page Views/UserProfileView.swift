@@ -28,6 +28,9 @@ struct UserProfileView: View {
     @State private var userName: String = ""
     
     @ObservedObject var viewModel = EmojiProfileImage()
+    let lightImpact = UIImpactFeedbackGenerator(style: .light)
+    let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
+    let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
     
     var body: some View {
         VStack{
@@ -59,8 +62,10 @@ struct UserProfileView: View {
             
             //MARK: Tap to show the Imagepicker
             .onTapGesture {
+                heavyImpact.impactOccurred()
                 self.showImagePicker = true
             }
+            
             Text(NewName ? profile.name : userName)
                 .font(.headline)
                 .foregroundColor(ColorManager.blue)
@@ -81,6 +86,7 @@ struct UserProfileView: View {
                                 .padding()
                                 .background(Circle().foregroundColor(Color.gray).opacity(0.3)).fixedSize()
                                 .onTapGesture {
+                                    heavyImpact.impactOccurred()
                                     self.showImagePicker = true
                                 }
                             
@@ -88,6 +94,7 @@ struct UserProfileView: View {
                             ForEach(self.viewModel.imageCards){ card in
                                 ImageCardView(imageCard: card)
                                     .onTapGesture {
+                                        lightImpact.impactOccurred()
                                         self.viewModel.choose(card: card)
                                         self.profile.image = Image(card.content)
                                         profile.uiImage = UIImage(named: card.content)
@@ -104,6 +111,9 @@ struct UserProfileView: View {
                 HStack {
                     Image(systemName: "person")
                     TextField("Enter your name", text: $userName)
+                        .onTapGesture {
+                            mediumImpact.impactOccurred()
+                        }
                 }.padding()
                 Divider()
                 Spacer()
@@ -112,6 +122,8 @@ struct UserProfileView: View {
             
             //MARK: Finish Button
             Button(action: {
+                heavyImpact.impactOccurred()
+
                 withAnimation(){
                     if locationViewModel.locationAccessed{
                         viewRouter.currentPage = .createInvite
