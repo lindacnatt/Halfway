@@ -36,8 +36,8 @@ struct SessionView: View {
     
     var body: some View {
         ZStack{
-            if usersViewModel.friendsDataFetched{
-                MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet)
+            if usersViewModel.friendsDataFetched && usersViewModel.halfwayPointSet{
+                MapView(usersViewModel: usersViewModel, usersHaveMet: $usersHaveMet, halfwayPoint: CLLocationCoordinate2D(latitude: usersViewModel.halfwayPoint.lat, longitude: usersViewModel.halfwayPoint.long))
                     .edgesIgnoringSafeArea(.all)
                     .sheet(isPresented: $usersHaveMet){
                         UsersHaveMetSheet(usersHaveMet: $usersHaveMet, usersViewModel: usersViewModel)

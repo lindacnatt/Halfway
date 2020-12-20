@@ -11,17 +11,16 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    //var users: [User] = []
     var usersViewModel: UsersViewModel?
     @ObservedObject private var locationViewModel = LocationViewModel()
-    @State var halfwayPointIsSet = false
-    @State var transportType: MKDirectionsTransportType = .walking //Changes to .any if the walking route could not be calculated
-    @State var halfwayPointCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var transportType: MKDirectionsTransportType = HalfwayHandler().transportType //Changes to .any if the walking route could not be calculated
+    var halfwayPointCoordinates: CLLocationCoordinate2D
     @Binding var usersHaveMet: Bool
     @ObservedObject static var profile: UserInfo = .shared
     
-    init(usersViewModel: UsersViewModel? = UsersViewModel(), usersHaveMet: Binding<Bool> = .constant(false)) {
+    init(usersViewModel: UsersViewModel? = UsersViewModel(), usersHaveMet: Binding<Bool> = .constant(false), halfwayPoint: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)) {
         self.usersViewModel = usersViewModel
+        self.halfwayPointCoordinates = halfwayPoint
         _usersHaveMet = usersHaveMet
     }
     
@@ -150,89 +149,34 @@ struct MapView: UIViewRepresentable {
         mapView.addSubview(compassBtn)
     }
     
-    //MARK: Calculate halfwaypoint
-    func getHalfWayPoint(startPosition: CLLocationCoordinate2D, endPosition: CLLocationCoordinate2D, completion: @escaping (CLLocationCoordinate2D) -> Void){
-        let startPlacemark = MKPlacemark(coordinate: startPosition, addressDictionary: nil)
-        let destinationPlacemark = MKPlacemark(coordinate: endPosition, addressDictionary: nil)
-        
-        let fullwayDirectionRequest = MKDirections.Request()
-        fullwayDirectionRequest.source = MKMapItem(placemark: startPlacemark)
-        fullwayDirectionRequest.destination = MKMapItem(placemark: destinationPlacemark)
-        
-        fullwayDirectionRequest.transportType = transportType
-        let fullwayDirections = MKDirections(request: fullwayDirectionRequest)
-        
-        var halfwayCoordinates = CLLocationCoordinate2D(latitude: 60, longitude: 18)
-        
-        let group = DispatchGroup()
-        group.enter()
-        
-        fullwayDirections.calculate(completionHandler: { response, error in
-            guard error == nil, let resp = response else {
-                print("no response when calculating halfwaypoint")
-                print(error.debugDescription)
-                transportType = .any
-                
-                return
-                
-            }
-            let route = resp.routes[0]
-            
-            //Finds the approximate midpoint in terms of distance
-            var midPolylinePointIndex = 0
-            for pointIndex in 0...route.polyline.pointCount - 1 {
-                let distanceToUser = route.polyline.points()[pointIndex].distance(to: MKMapPoint(startPosition))
-                let distanceToFriend = route.polyline.points()[pointIndex].distance(to: MKMapPoint(endPosition))
-                
-                if distanceToUser > distanceToFriend{
-                    midPolylinePointIndex = pointIndex
-                    break
-                }
-            }
-            
-            halfwayCoordinates = route.polyline.points()[midPolylinePointIndex].coordinate
-            group.leave()
-            
-        })
-        
-        group.notify(queue: .main){
-            completion(halfwayCoordinates)
-        }
-        
-    }
-    
     //MARK: Adds halfwaypoint
     //Adds the halfwaypoint and zooms to show users and halfwaypoint
     func setHalfWayPoint(on mapView: MKMapView) {
         let userAnnotations = getUsersAsAnnotations(from: usersViewModel!.users)
         let userOneCoordinate = locationViewModel.userCoordinates
         let userTwoCoordinate = userAnnotations.first(where: {$0.title == "friend"})?.coordinate
-        
-        getHalfWayPoint(startPosition: userOneCoordinate, endPosition: userTwoCoordinate!){ halfWaypointCoordinates in
-            self.halfwayPointCoordinates = halfWaypointCoordinates
-            addPolyline(to: mapView, from: userOneCoordinate, to: halfWaypointCoordinates, colorId: "blue")
-            addPolyline(to: mapView, from: userTwoCoordinate!, to: halfWaypointCoordinates, colorId: "orange")
-            let midPoint = MKPointAnnotation()
-            for annotation in mapView.annotations{
-                if annotation.title == "Halfway"{
-                    mapView.removeAnnotation(annotation)
-                }
+
+        addPolyline(to: mapView, from: userOneCoordinate, to: self.halfwayPointCoordinates, colorId: "blue")
+        addPolyline(to: mapView, from: userTwoCoordinate!, to: self.halfwayPointCoordinates, colorId: "orange")
+        let midPoint = MKPointAnnotation()
+        for annotation in mapView.annotations{
+            if annotation.title == "Halfway"{
+                mapView.removeAnnotation(annotation)
             }
-            midPoint.title = "Halfway"
-            midPoint.coordinate = halfWaypointCoordinates
-            mapView.addAnnotation(midPoint)
-            
-            var zoomRect = MKMapRect.null;
-            for annotation in mapView.annotations {
-                let annotationPoint = MKMapPoint(annotation.coordinate)
-                let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1);
-                zoomRect = zoomRect.union(pointRect);
-            }
-            
-            mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
-            halfwayPointIsSet = true
-            
         }
+        midPoint.title = "Halfway"
+        midPoint.coordinate = self.halfwayPointCoordinates
+        mapView.addAnnotation(midPoint)
+        
+        var zoomRect = MKMapRect.null;
+        for annotation in mapView.annotations {
+            let annotationPoint = MKMapPoint(annotation.coordinate)
+            let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1);
+            zoomRect = zoomRect.union(pointRect);
+        }
+        
+        mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 150, left: 100, bottom: 50, right: 100), animated: true)
+
     }
     
     //MARK: Calculate ETA
@@ -278,6 +222,7 @@ struct MapView: UIViewRepresentable {
         var lastUserLocationCoordinates = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         var userETA: String = ""
         var hasShownEndSheet = false
+        var halfwayPointIsSet = false
         @Published var friendProfileImage: Image?
         @Binding var usersHaveMet: Bool
         
@@ -377,10 +322,11 @@ struct MapView: UIViewRepresentable {
         //MARK: Location updates
         //Updates user location, polyline and eta when location changes
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-            if parent.usersViewModel!.users.count != 0{
+            if parent.usersViewModel!.users.count != 0 && parent.halfwayPointCoordinates.latitude != 0{
                 //Initial setup
-                if !parent.halfwayPointIsSet{
+                if !halfwayPointIsSet{
                     parent.setHalfWayPoint(on: mapView)
+                    halfwayPointIsSet.toggle()
                 }
                 else if self.userETA == ""{
                     parent.getHalfWayETA(startPosition: userLocation.coordinate, endPosition: parent.halfwayPointCoordinates){ halfwayETA in

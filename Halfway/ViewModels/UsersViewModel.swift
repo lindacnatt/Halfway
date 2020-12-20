@@ -16,18 +16,21 @@ class UsersViewModel: ObservableObject {
     @Published var users = [User]()
     private var database = Firestore.firestore()
     private let storage = Storage.storage()
-
+    private var halfwayHandler = HalfwayHandler()
     @Published var userDataInitilized = false
     @Published var sessionId = UUID().uuidString
     @Published var currentUser = "user1"
     @Published var userAlreadyExistsInSession = false
-    
+    @Published var halfwayPoint: (lat: Double, long: Double) = (lat: 0, long: 0)
     let userCollection = "users"
     let sessionCollection = "sessions"
+    let halfwayDocument = "halfwayPoint"
+    let halfwayCollection = "halfwayData"
     private var dbListener: ListenerRegistration? = nil
-    
+    private var halfwaydbListener: ListenerRegistration? = nil
     @Published var downloadimage:UIImage?
     @Published var friendsDataFetched = false
+    @Published var halfwayPointSet = false
     
     func fetchData(){
         dbListener = database.collection(sessionCollection).document(sessionId).collection(userCollection).addSnapshotListener{(querySnapshot, error) in
@@ -54,6 +57,7 @@ class UsersViewModel: ObservableObject {
                 if (diff.type == .removed) {
                     self.users = []
                     self.friendsDataFetched = false
+                    self.removeHalfwayPoint()
 
                 }
             }
@@ -71,10 +75,61 @@ class UsersViewModel: ObservableObject {
                         
                     }
                 }
+                
+                if !self.halfwayPointSet{
+                    self.handleHalfwayPoint()
+                }
             }
             
             print("Fetched user data")
-            
+        }
+    }
+    
+    func handleHalfwayPoint(){
+        if currentUser == "user1"{
+            halfwayHandler.getHalfWayPoint(endPosition: (Lat: self.users[0].lat, Long: self.users[0].long)){ halfwayLat, halfwayLong in
+                self.database.collection(self.sessionCollection).document(self.sessionId).collection(self.halfwayCollection).document(self.halfwayDocument).setData([
+                    "Long": halfwayLong,
+                    "Lat": halfwayLat
+                ]) { err in
+                    if let err = err {
+                        print("Error writing halfway document: \(err)")
+                    } else {
+                        self.halfwayPoint = (lat: halfwayLat, long: halfwayLong)
+                        self.halfwayPointSet = true
+                        print("Successfully saved halfwaypoint to database")
+                    }
+                }
+                
+            }
+        }
+        else if currentUser == "user2"{
+            halfwaydbListener = database.collection(sessionCollection).document(sessionId).collection(halfwayCollection).addSnapshotListener{(querySnapshot, error) in
+                guard let documents = querySnapshot?.documents else {
+                    print("No halfwaypoint on firebase")
+                    return
+                }
+                for document in documents{
+                    if document.documentID == self.halfwayDocument{
+                        self.halfwayPoint.lat = document["Lat"] as! Double
+                        self.halfwayPoint.long = document["Long"] as! Double
+                        self.halfwayPointSet = true
+                        self.halfwaydbListener?.remove()
+                    }
+                   
+                }
+            }
+        }
+    }
+    
+    func removeHalfwayPoint(){
+        database.collection(sessionCollection).document(sessionId).collection(halfwayCollection).document(halfwayDocument).delete() { err in
+            if let err = err {
+                print("Error removing halfwaypoint: \(err)")
+            } else {
+                print("halfwaypoint successfully removed!")
+                self.halfwayPointSet = false
+            }
         }
     }
     

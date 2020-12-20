@@ -44,6 +44,7 @@
 		CAF58A03258AA58F0041026F /* HighFive.json in Resources */ = {isa = PBXBuildFile; fileRef = CAF58A02258AA58F0041026F /* HighFive.json */; };
 		CAF58A08258AA5E80041026F /* HighFiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF58A07258AA5E80041026F /* HighFiveView.swift */; };
 		D77144377BF530DB639A40B5 /* Pods_HalfwayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CEBE38DEA775D726A2160F0 /* Pods_HalfwayTests.framework */; };
+		F5835DD8258F7BE4008EABB3 /* HalfwayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5835DD7258F7BE4008EABB3 /* HalfwayHandler.swift */; };
 		F5D8500F258121E00013E41B /* LinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D8500E258121E00013E41B /* LinkHandler.swift */; };
 		F5E9FF5D257BF5A500F425C7 /* UsersHaveMetSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */; };
 		F5FEED12258CA2830013A083 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FEED11258CA2830013A083 /* SplashView.swift */; };
@@ -116,6 +117,7 @@
 		CAF58A02258AA58F0041026F /* HighFive.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = HighFive.json; path = "Halfway/New Group1/HighFive.json"; sourceTree = SOURCE_ROOT; };
 		CAF58A07258AA5E80041026F /* HighFiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighFiveView.swift; sourceTree = "<group>"; };
 		E6C4A53B9B59912F8527C6E5 /* Pods-HalfwayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HalfwayTests.debug.xcconfig"; path = "Target Support Files/Pods-HalfwayTests/Pods-HalfwayTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F5835DD7258F7BE4008EABB3 /* HalfwayHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfwayHandler.swift; sourceTree = "<group>"; };
 		F5D8500E258121E00013E41B /* LinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkHandler.swift; sourceTree = "<group>"; };
 		F5E9FF5C257BF5A500F425C7 /* UsersHaveMetSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersHaveMetSheet.swift; sourceTree = "<group>"; };
 		F5FEED11258CA2830013A083 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				8F1C3357256AFF7600329A5B /* LocationViewModel.swift */,
 				8FD562D9256D52C900885E09 /* ViewRouter.swift */,
 				F5D8500E258121E00013E41B /* LinkHandler.swift */,
+				F5835DD7258F7BE4008EABB3 /* HalfwayHandler.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				F5E9FF5D257BF5A500F425C7 /* UsersHaveMetSheet.swift in Sources */,
 				CA7231C0254768B000F91D36 /* ProfileImageViewModel.swift in Sources */,
 				8F6043F625322C2300949011 /* AnnotationView.swift in Sources */,
+				F5835DD8258F7BE4008EABB3 /* HalfwayHandler.swift in Sources */,
 				8F1C3358256AFF7600329A5B /* LocationViewModel.swift in Sources */,
 				8F0C8C0C252F5F4700B595A3 /* SessionView.swift in Sources */,
 				F5FEED12258CA2830013A083 /* SplashView.swift in Sources */,
