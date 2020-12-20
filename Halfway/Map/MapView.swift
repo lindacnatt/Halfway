@@ -343,9 +343,7 @@ struct MapView: UIViewRepresentable {
                 
                 //Runs when the user has moved a certain distance
                 let walkedDistance = userLocation.location!.distance(from: CLLocation(latitude: lastUserLocationCoordinates.latitude, longitude: lastUserLocationCoordinates.longitude))
-                if walkedDistance > 50{
-                    
-                    
+                if walkedDistance > 10{
                     let userOneAnnotation = mapView.annotations.first(where: { $0.title == "My Location" })
                     parent.updateUserPolyline(for: userOneAnnotation!, withColor: "blue", on: mapView)
                     lastUserLocationCoordinates = userLocation.coordinate
@@ -368,7 +366,7 @@ struct MapView: UIViewRepresentable {
                 }
                 
                 let distanceBetweenUsers = userLocation.location!.distance(from: CLLocation(latitude: parent.usersViewModel!.users[0].lat, longitude: parent.usersViewModel!.users[0].long))
-                if distanceBetweenUsers < 50 && !self.hasShownEndSheet{
+                if distanceBetweenUsers < 10 && !self.hasShownEndSheet{
                     DispatchQueue.main.async {
                         self.usersHaveMet = true //Testing binding variable
                     }
