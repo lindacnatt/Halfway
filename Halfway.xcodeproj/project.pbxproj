@@ -34,6 +34,7 @@
 		CAA507D52555BED700A861A8 /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA507D42555BED700A861A8 /* UsersViewModel.swift */; };
 		CAAAEA0C2545BE4F00838BAC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */; };
 		CAAAEA0E2545C24900838BAC /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAAEA0D2545C24900838BAC /* UserProfileView.swift */; };
+		CAB1CFDC258E049C0093931A /* HighFiveEdit.json in Resources */ = {isa = PBXBuildFile; fileRef = CAB1CFDB258E049C0093931A /* HighFiveEdit.json */; };
 		CAB2142C2539DFD600F8290C /* CreateInviteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */; };
 		CAB2142E2539E6DB00F8290C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB2142D2539E6DB00F8290C /* UserModel.swift */; };
 		CAB77A642534DE5800E27365 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAB77A632534DE5800E27365 /* GoogleService-Info.plist */; };
@@ -108,6 +109,7 @@
 		CAA507D42555BED700A861A8 /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 		CAAAEA0B2545BE4F00838BAC /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		CAAAEA0D2545C24900838BAC /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		CAB1CFDB258E049C0093931A /* HighFiveEdit.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = HighFiveEdit.json; sourceTree = "<group>"; };
 		CAB2142B2539DFD600F8290C /* CreateInviteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInviteViewModel.swift; sourceTree = "<group>"; };
 		CAB2142D2539E6DB00F8290C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		CAB77A632534DE5800E27365 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				CAF58A02258AA58F0041026F /* HighFive.json */,
+				CAB1CFDB258E049C0093931A /* HighFiveEdit.json */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				CA553DA3252DA90B00B1BDF4 /* LaunchScreen.storyboard in Resources */,
 				CAF58A03258AA58F0041026F /* HighFive.json in Resources */,
 				CAB77A642534DE5800E27365 /* GoogleService-Info.plist in Resources */,
+				CAB1CFDC258E049C0093931A /* HighFiveEdit.json in Resources */,
 				CA553DA0252DA90B00B1BDF4 /* Preview Assets.xcassets in Resources */,
 				CA553D9D252DA90B00B1BDF4 /* Assets.xcassets in Resources */,
 			);

@@ -15,8 +15,6 @@ struct AnnotationView: View {
     var userName: String
     var timeLeft: String
     
-    @State var pulsate = false
-    
     var body: some View {
         VStack{
             VStack{
@@ -45,6 +43,6 @@ struct AnnotationView: View {
 
 struct AnnotationView_Previews: PreviewProvider {
     static var previews: some View {
-        AnnotationView(image: Image("user"), strokeColor: Color.orange, userName: "Johannes", timeLeft: "7")
+        AnnotationView(image: Image("user"), strokeColor: ColorManager.blue, userName: "Johannes", timeLeft: "7")
     }
 }

@@ -41,7 +41,7 @@ struct UserProfileView: View {
                         Circle()
                             .fill(Color.gray).opacity(0.3)
                             .overlay(Circle()
-                                        .stroke(ColorManager.blue, lineWidth: 4))
+                                        .stroke(ColorManager.blue, lineWidth: 6))
                     } else{
                         Circle()
                             .fill(ColorManager.lightBlue)
