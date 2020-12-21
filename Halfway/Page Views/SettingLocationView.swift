@@ -28,9 +28,9 @@ struct SettingLocationView: View {
                 
                 }
                 .offset(x: imageBounce ? -20 : 20)
-                .animation(Animation.easeInOut(duration: 0.6).repeatForever())
+                .animation(Animation.easeInOut(duration: 0.7).repeatForever())
                 
-                Text("Hi \(profile.name)")
+                Text("Hello \(profile.name)!")
                     .font(.headline)
                     .foregroundColor(ColorManager.blue)
                     .padding()
